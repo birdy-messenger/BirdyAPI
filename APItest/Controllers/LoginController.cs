@@ -24,7 +24,7 @@ namespace APItest.Controllers
         {
             var bdUser = _db.Users.First(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if(bdUser != null)
-                return Ok(new User{ Id = bdUser.Id, Token = bdUser.Token});
+                return Ok(new LoginAnswer {Id = bdUser.Id, Token = bdUser.Token});
 
             return BadRequest();
         }
@@ -41,7 +41,7 @@ namespace APItest.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]User user)
         {
-            if (_db.Users.Contains(user))
+            if (_db.Users != null && _db.Users.Contains(user))
                 return BadRequest();
             user.Token = new Random().Next(int.MaxValue/2, int.MaxValue);
             _db.Add(user);
