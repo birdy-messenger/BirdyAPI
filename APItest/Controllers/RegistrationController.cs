@@ -15,7 +15,7 @@ namespace APItest.Controllers
         private readonly UserContext _db;
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Post([FromBody]User user)
+        public IActionResult Post([FromQuery]User user)
         {
             if (_db.Users != null && _db.Users.Contains(user))
                 return BadRequest();

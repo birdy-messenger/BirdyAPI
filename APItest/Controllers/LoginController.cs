@@ -35,10 +35,7 @@ namespace APItest.Controllers
         [HttpGet("all")]
         public IEnumerable<User> Get()
         {
-            if (_db.Users.Any())
-                return _db.Users.ToList();
-
-            return new List<User>{new User {Email = "testLogin", PasswordHash = 0, Id = 0}};
+            return _loginService.GetAllUsers();
         }
 
         

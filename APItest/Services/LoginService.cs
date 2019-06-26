@@ -23,5 +23,13 @@ namespace APItest.Services
 
             return new LoginAnswer {ErrorMessage = "Invalid email or password"};
         }
+
+        public List<User> GetAllUsers()
+        {
+            if (_context.Users.Any())
+                return _context.Users.ToList();
+
+            return new List<User> { new User { Email = "testLogin", PasswordHash = 0, Id = 0 } };
+        }
     }
 }
