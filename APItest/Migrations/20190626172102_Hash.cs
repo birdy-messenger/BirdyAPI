@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace APItest.Migrations
+namespace BirdyAPI.Migrations
 {
     public partial class Hash : Migration
     {

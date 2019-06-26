@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APItest.Models;
-using APItest.Services;
+using BirdyAPI.Answers;
+using BirdyAPI.Models;
+using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace APItest.Controllers
+namespace BirdyAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class LoginController : Controller
+    public class AuthController : Controller
     {
-        private readonly UserContext _db;
         private readonly LoginService _loginService;
-        public LoginController(UserContext context)
+        public AuthController(UserContext context)
         {
-            _db = context;
             _loginService = new LoginService(context);
         }
         // GET: api/<controller>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace APItest.Models
+namespace BirdyAPI.Models
 {
     public class UserContext : DbContext
     {

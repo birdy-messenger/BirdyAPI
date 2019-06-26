@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APItest.Models;
+using BirdyAPI.Models;
+using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace APItest.Controllers
+namespace BirdyAPI.Controllers
 {
     [Route("api/[controller]")]
     public class RegistrationController : Controller
     {
-        private readonly UserContext _db;
-        // POST api/<controller>
-        [HttpPost]
-        public IActionResult Post([FromQuery]User user)
+        private readonly RegistrationService _registrationService;
+        public RegistrationController(UserContext context)
         {
-            if (_db.Users != null && _db.Users.Contains(user))
-                return BadRequest();
-            user.Token = new Random().Next(int.MaxValue / 2, int.MaxValue);
-            _db.Add(user);
-            _db.SaveChanges();
+            _registrationService = new RegistrationService(context);
+        }
+        // POST api/<controller>
+        [HttpGet]
+        public IActionResult Get([FromQuery]User user)
+        {
+
             return Ok();
         }
     }

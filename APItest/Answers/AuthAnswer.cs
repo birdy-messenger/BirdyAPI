@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.Answers;
 
-namespace APItest.Models
+namespace BirdyAPI.Answers
 {
-    public class LoginAnswer
+    public class LoginAnswer : Answer
     {
         public int Id { get; set; }
         public int Token { get; set; }

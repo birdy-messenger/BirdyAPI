@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BirdyAPI.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20190626172102_Hash")]
-    partial class Hash
+    [Migration("20190626225802_FirstName")]
+    partial class FirstName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,13 +20,15 @@ namespace BirdyAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("APItest.Models.User", b =>
+            modelBuilder.Entity("BirdyAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
 
                     b.Property<int>("PasswordHash");
 

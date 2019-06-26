@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdyAPI", "APItest\BirdyAPI.csproj", "{031C034A-2217-4B99-9E72-3BCFAF4A46DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdyAPI", "ApiTest\BirdyAPI.csproj", "{031C034A-2217-4B99-9E72-3BCFAF4A46DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
