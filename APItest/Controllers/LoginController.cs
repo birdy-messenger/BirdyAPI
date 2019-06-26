@@ -22,9 +22,9 @@ namespace APItest.Controllers
         [HttpGet]
         public IActionResult Get([FromBody]User user)
         {
-            var bdUser = _db.Users.Where(k => k.Login == user.Login && k.Password == user.Password);
-            if(bdUser.Any())
-                return Ok();
+            var bdUser = _db.Users.First(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
+            if(bdUser != null)
+                return Ok(new User{ Id = bdUser.Id, Token = bdUser.Token});
 
             return BadRequest();
         }
@@ -35,7 +35,7 @@ namespace APItest.Controllers
             if (_db.Users.Any())
                 return _db.Users.ToList();
 
-            return new List<User>{new User {Login = "testLogin", Password = "TestPassword", Id = 0}};
+            return new List<User>{new User {Email = "testLogin", PasswordHash = 0, Id = 0}};
         }
         // POST api/<controller>
         [HttpPost]
@@ -43,7 +43,7 @@ namespace APItest.Controllers
         {
             if (_db.Users.Contains(user))
                 return BadRequest();
-
+            user.Token = new Random().Next(int.MaxValue/2, int.MaxValue);
             _db.Add(user);
             _db.SaveChanges();
             return Ok();
