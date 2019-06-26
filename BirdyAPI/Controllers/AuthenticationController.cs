@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/[controller]")]
-    public class AuthController : Controller
+    [Route("api/auth")]
+    public class AuthenticationController : Controller
     {
         private readonly LoginService _loginService;
-        public AuthController(UserContext context)
+        public AuthenticationController(UserContext context)
         {
             _loginService = new LoginService(context);
         }
@@ -36,8 +36,5 @@ namespace BirdyAPI.Controllers
         {
             return _loginService.GetAllUsers();
         }
-
-        
-
     }
 }

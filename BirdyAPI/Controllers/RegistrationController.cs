@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.Answers;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user.reg")]
     public class RegistrationController : Controller
     {
         private readonly RegistrationService _registrationService;
@@ -22,8 +23,11 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         public IActionResult Get([FromQuery]User user)
         {
-
-            return Ok();
+            RegistrationAnswer answer = _registrationService.CreateNewAccount(user);
+            if (answer.ErrorMessage == null)
+                return BadRequest(answer);
+            else
+                return Ok(answer);
         }
     }
 }

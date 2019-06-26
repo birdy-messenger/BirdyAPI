@@ -6,7 +6,7 @@ using BirdyAPI.Answers;
 
 namespace BirdyAPI.Answers
 {
-    public class LoginAnswer : Answer
+    public class LoginAnswer
     {
         public int Id { get; set; }
         public int Token { get; set; }

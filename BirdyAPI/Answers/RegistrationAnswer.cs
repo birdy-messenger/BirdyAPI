@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace BirdyAPI.Answers
 {
-    public class RegistrationAnswer : Answer
+    public class RegistrationAnswer
     {
+        public string ErrorMessage { get; set; }
+        public string FirstName { get; set; }
     }
 }

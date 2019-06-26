@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.Answers;
 using BirdyAPI.Models;
 
 namespace BirdyAPI.Services
@@ -15,13 +16,14 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public void CreateNewAccount(User user)
+        public RegistrationAnswer CreateNewAccount(User user)
         {
-            if (_context.Users != null && _context.Users.Contains(user))
-                return;
+            if (_context.Users?.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash) != null)
+                return new RegistrationAnswer {ErrorMessage = "Duplicate account"};
             user.Token = new Random().Next(int.MaxValue / 2, int.MaxValue);
             _context.Add(user);
             _context.SaveChanges();
+            return new RegistrationAnswer { FirstName = user.FirstName};
         }
     }
 }
