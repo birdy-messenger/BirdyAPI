@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APItest.Models;
+using APItest.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
@@ -14,19 +15,21 @@ namespace APItest.Controllers
     public class LoginController : Controller
     {
         private readonly UserContext _db;
+        private readonly LoginService _loginService;
         public LoginController(UserContext context)
         {
             _db = context;
+            _loginService = new LoginService(context);
         }
         // GET: api/<controller>
         [HttpGet]
         public IActionResult Get([FromBody]User user)
         {
-            var bdUser = _db.Users.First(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
-            if(bdUser != null)
-                return Ok(new LoginAnswer {Id = bdUser.Id, Token = bdUser.Token});
-
-            return BadRequest();
+            LoginAnswer answer = _loginService.Authentication(user);
+            if (answer.ErrorMessage == null)
+                return Ok(answer);
+            else
+                return BadRequest(answer);
         }
 
         [HttpGet("all")]
@@ -37,17 +40,8 @@ namespace APItest.Controllers
 
             return new List<User>{new User {Email = "testLogin", PasswordHash = 0, Id = 0}};
         }
-        // POST api/<controller>
-        [HttpPost]
-        public IActionResult Post([FromBody]User user)
-        {
-            if (_db.Users != null && _db.Users.Contains(user))
-                return BadRequest();
-            user.Token = new Random().Next(int.MaxValue/2, int.MaxValue);
-            _db.Add(user);
-            _db.SaveChanges();
-            return Ok();
-        }
+
+        
 
     }
 }

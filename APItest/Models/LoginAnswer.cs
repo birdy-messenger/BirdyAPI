@@ -9,5 +9,6 @@ namespace APItest.Models
     {
         public int Id { get; set; }
         public int Token { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }
