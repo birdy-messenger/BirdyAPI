@@ -23,7 +23,7 @@ namespace APItest.Controllers
         }
         // GET: api/<controller>
         [HttpGet]
-        public IActionResult Get([FromBody]User user)
+        public IActionResult Get([FromQuery]User user)
         {
             LoginAnswer answer = _loginService.Authentication(user);
             if (answer.ErrorMessage == null)

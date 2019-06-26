@@ -17,7 +17,7 @@ namespace APItest.Services
         }
         public LoginAnswer Authentication(User user)
         {
-            var currentUser = _context.Users.First(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
+            var currentUser = _context.Users.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
                 return new LoginAnswer { Id = currentUser.Id, Token = currentUser.Token};
 
