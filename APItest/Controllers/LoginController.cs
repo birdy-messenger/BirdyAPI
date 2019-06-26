@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APItest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +32,10 @@ namespace APItest.Controllers
         [HttpGet("all")]
         public IEnumerable<User> Get()
         {
-           return _db.Users.ToList();
+            if (_db.Users.Any())
+                return _db.Users.ToList();
+
+            return new List<User>{new User {Login = "testLogin", Password = "TestPassword", Id = 0}};
         }
         // POST api/<controller>
         [HttpPost]
