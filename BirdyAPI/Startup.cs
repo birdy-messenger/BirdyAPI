@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BirdyAPI.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace BirdyAPI
 {
@@ -20,6 +21,8 @@ namespace BirdyAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(configuration =>
+                configuration.SwaggerDoc("Birdy", new Info {Title = "Birdy API", Version = "0.0.1"}));
             services.AddDbContext<UserContext>(options => options.UseSqlServer(Configurations.DataBaseString));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -27,6 +30,9 @@ namespace BirdyAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(configuration =>
+                configuration.SwaggerEndpoint("/swagger/Birdy/swagger.json", "Birdy API"));
             app.UseMvc();
         }
     }
