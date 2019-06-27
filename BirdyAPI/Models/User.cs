@@ -15,5 +15,7 @@ namespace BirdyAPI.Models
         public string FirstName { get; set; }
         public int PasswordHash { get; set; }
         public int Token { get; set; }
+        public string AvatarReference = "А нету пока аватарок :C";
+
     }
 }

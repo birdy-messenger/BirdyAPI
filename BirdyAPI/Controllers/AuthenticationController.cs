@@ -8,8 +8,6 @@ using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace BirdyAPI.Controllers
 {
     [Route("api/auth")]
