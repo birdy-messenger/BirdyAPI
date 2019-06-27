@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BirdyAPI.Answers;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +19,10 @@ namespace BirdyAPI.Controllers
         }
         // GET: api/<controller>
         [HttpGet]
-        public IActionResult Get([FromQuery]User user)
+        public IActionResult Get([FromQuery] User user)
         {
-            LoginAnswer answer = _loginService.Authentication(user);
-            if (answer.ErrorMessage == null)
+            string answer = _loginService.Authentication(user);
+            if (!answer.Contains("ErrorMessage"))
                 return Ok(answer);
             else
                 return BadRequest(answer);

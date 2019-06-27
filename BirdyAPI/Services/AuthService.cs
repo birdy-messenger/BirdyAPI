@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BirdyAPI.Models;
-using BirdyAPI.Answers;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BirdyAPI.Services
 {
@@ -16,13 +16,13 @@ namespace BirdyAPI.Services
         {
             _context = context;
         }
-        public LoginAnswer Authentication(User user)
+        public string Authentication(User user)
         {
             var currentUser = _context.Users.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
-                return new LoginAnswer { Id = currentUser.Id, Token = currentUser.Token};
+                return JsonConvert.SerializeObject(new { Id = currentUser.Id, Token = currentUser.Token});
 
-            return new LoginAnswer {ErrorMessage = "Invalid email or password"};
+            return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid email or password"});
         }
 
         public List<User> GetAllUsers()
