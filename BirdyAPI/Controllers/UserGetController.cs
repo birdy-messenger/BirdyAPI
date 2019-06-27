@@ -23,8 +23,8 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         public IActionResult Get([FromQuery]int id, int token)
         {
-            string answer = _getUserService.SearchUserInfo(id);
-            if (answer.Contains("ErrorMesage"))
+            string answer = _getUserService.SearchUserInfo(id, token);
+            if (answer.Contains("ErrorMessage"))
                 return BadRequest();
             else
                 return Ok(answer);

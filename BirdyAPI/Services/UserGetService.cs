@@ -16,14 +16,27 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public string SearchUserInfo(int id)
+        public string SearchUserInfo(int id, int token)
         {
             User currentUser = _context.Users.FirstOrDefault(k => k.Id == id);
             if (currentUser == null)
                 return JsonConvert.SerializeObject(new {ErrorMessage = "User Not Found"});
             else
-                return JsonConvert.SerializeObject(new
-                    {FirstName = currentUser.FirstName, AvatarReference = currentUser.AvatarReference});
+            {
+                if (IsTokenValid(currentUser, token))
+                    return JsonConvert.SerializeObject(new
+                        {FirstName = currentUser.FirstName, AvatarReference = currentUser.AvatarReference});
+                else
+                    return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid Token"});
+            }
+        }
+
+        private bool IsTokenValid(User user, int token)
+        {
+            if (user.Token == token)
+                return true;
+            else
+                return false;
         }
     }
 }
