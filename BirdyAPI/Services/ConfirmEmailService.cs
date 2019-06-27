@@ -17,7 +17,11 @@ namespace BirdyAPI.Services
 
         public void GetUserConfirmed(int id)
         {
-
+            User user = _context.Users.Find(id);
+            user.CurrentStatus = UserStatus.Status.Confirmed;
+            
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
     }
 }

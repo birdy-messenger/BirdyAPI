@@ -30,7 +30,7 @@ namespace BirdyAPI.Services
             if (_context.Users.Any())
                 return _context.Users.ToList();
 
-            return new List<User> { new User { Email = "testLogin", PasswordHash = 0, Id = 0 } };
+            return new List<User> { new User { Email = "testLogin", PasswordHash = "TEST", Id = 0 } };
         }
     }
 }

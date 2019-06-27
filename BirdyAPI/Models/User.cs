@@ -13,8 +13,11 @@ namespace BirdyAPI.Models
         public int Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
-        public int PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
         public int Token { get; set; }
-        public string AvatarReference = "А нету пока аватарок :C";
+        public DateTime RegistrationDate { get; set; }
+
+        public UserStatus.Status CurrentStatus { get; set; }
+        public string AvatarReference { get; set; } = "А нету пока аватарок :C";
     }
 }
