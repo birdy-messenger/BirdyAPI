@@ -15,6 +15,16 @@ namespace BirdyAPI
                                        "Encrypt=True;" +
                                        "TrustServerCertificate=False;" +
                                        "Connection Timeout=30;";
-        public static string LocalDataBaseString = "Server=(localdb)\\mssqllocaldb;Database=usersdbstore;Trusted_Connection=True;MultipleActiveResultSets=true";
+        public static string LocalDataBaseString = "Server=(localdb)\\mssqllocaldb;" +
+                                                   "Database=usersdbstore;" +
+                                                   "Trusted_Connection=True;" +
+                                                   "MultipleActiveResultSets=true";
+
+        public static string SendGridAPIKey = "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";
+        public static string OurEmailAddress = "birdy-noreply@birdy.com";
+
+        public static string EmailConfirmMessage =
+            "Hi! <br>You need to confirm your email to finish registration in Birdy messenger." +
+            " Click on this link : <a href=\"https://www.google.com\">example.com</a>";
     }
 }
