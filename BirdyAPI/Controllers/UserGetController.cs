@@ -23,11 +23,11 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         public IActionResult Get([FromQuery]int id, int token)
         {
-            User currentUser = _getUserService.SearchUserInfo(id);
-            if (currentUser == null)
+            string answer = _getUserService.SearchUserInfo(id);
+            if (answer.Contains("ErrorMesage"))
                 return BadRequest();
             else
-                return Ok(currentUser);
+                return Ok(answer);
         }
     }
 }
