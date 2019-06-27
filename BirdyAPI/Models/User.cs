@@ -17,7 +17,7 @@ namespace BirdyAPI.Models
         public int Token { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        public UserStatus.Status CurrentStatus { get; set; }
+        public UserStatus CurrentStatus { get; set; }
         public string AvatarReference { get; set; } = "А нету пока аватарок :C";
     }
 }

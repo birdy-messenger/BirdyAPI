@@ -20,7 +20,12 @@ namespace BirdyAPI.Services
         {
             var currentUser = _context.Users.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
-                return JsonConvert.SerializeObject(new { Id = currentUser.Id, Token = currentUser.Token});
+            {
+                if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
+                    return JsonConvert.SerializeObject(new {ErrorMessage = "Need to confirm email"});
+                else
+                    return JsonConvert.SerializeObject(new {Id = currentUser.Id, Token = currentUser.Token});
+            }
 
             return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid email or password"});
         }

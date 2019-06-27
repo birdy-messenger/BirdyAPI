@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using BirdyAPI.Models;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Newtonsoft.Json;
 using SendGrid;
@@ -25,14 +27,19 @@ namespace BirdyAPI.Services
                 return JsonConvert.SerializeObject(new {ErrorMessage = "Duplicate account"});
 
             user.Token = new Random().Next(int.MaxValue / 2, int.MaxValue);
-            EmailConfirm(user.Email);
+            user.CurrentStatus = UserStatus.Unconfirmed;
 
             _context.Add(user);
             _context.SaveChanges();
+
+            string userReference = "birdytestapi.azurewebsites.net/api/confirmemail" +
+                                   new QueryBuilder { { "id", user.Id.ToString() } }.ToQueryString();
+            EmailConfirm(user.Email, userReference);
+
             return JsonConvert.SerializeObject(new { FirstName = user.FirstName});
         }
 
-        private async void EmailConfirm(string email)
+        private async void EmailConfirm(string email, string confirmReference)
         {
             SendGridClient client = new SendGridClient(apiKey: Configurations.SendGridAPIKey);
             
@@ -40,7 +47,7 @@ namespace BirdyAPI.Services
             EmailAddress userAddress = new EmailAddress(email);
 
             string messageTopic = "Confirm your email";
-            string HTMLmessage = Configurations.EmailConfirmMessage;
+            string HTMLmessage = Configurations.EmailConfirmMessage + $"<a href =\"https://{confirmReference}\">Confirm Link</a>";
             string plainTextContent = HTMLmessage; // Когда сообщение обрастет стилями и т.д. надо будет сделать нормально
 
             SendGridMessage message = MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,

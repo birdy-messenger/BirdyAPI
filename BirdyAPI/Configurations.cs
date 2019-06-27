@@ -25,6 +25,6 @@ namespace BirdyAPI
 
         public static string EmailConfirmMessage =
             "Hi! <br>You need to confirm your email to finish registration in Birdy messenger." +
-            " Click on this link : <a href=\"https://www.google.com\">example.com</a>";
+            " Click on this link : ";
     }
 }

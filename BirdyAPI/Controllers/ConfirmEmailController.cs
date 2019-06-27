@@ -21,8 +21,11 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         public IActionResult Get([FromQuery] int id)
         {
-            _registrationService.GetUserConfirmed(id);
-            return Ok();
+            string answer = _registrationService.GetUserConfirmed(id);
+            if (answer.Contains("ErrorMessage"))
+                return BadRequest(answer);
+            else
+                return Ok(answer);
         }
     }       
 }

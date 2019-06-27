@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BirdyAPI.Models
+﻿namespace BirdyAPI.Models
 {
-    public class UserStatus
+    public enum UserStatus
     {
-        public enum Status
-        {
-            Unconfirmed = 0,
-            Confirmed = 1
-        }
+        Unconfirmed = 0,
+        Confirmed = 1
     }
 }
