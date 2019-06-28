@@ -12,12 +12,15 @@ namespace BirdyAPI.Controllers
     [Route("api/auth")]
     public class AuthenticationController : Controller
     {
+        //TODO:9 dispose UserContext and all usage
         private readonly LoginService _loginService;
         public AuthenticationController(UserContext context)
         {
             _loginService = new LoginService(context);
         }
         // GET: api/<controller>
+
+        //TODO:6 Don't use User model for transport login with password
         [HttpGet]
         public IActionResult Get([FromQuery] User user)
         {

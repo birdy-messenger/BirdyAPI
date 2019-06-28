@@ -18,6 +18,7 @@ namespace BirdyAPI.Services
         }
         public string Authentication(User user)
         {
+            //TODO:7 Use SingleOrDefault instead of FirstOrDefault
             var currentUser = _context.Users.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
             {
@@ -27,6 +28,7 @@ namespace BirdyAPI.Services
                     return JsonConvert.SerializeObject(new {Id = currentUser.Id, Token = currentUser.Token});
             }
 
+            //TODO:8 throw exceptions instead of anonymous types
             return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid email or password"});
         }
 

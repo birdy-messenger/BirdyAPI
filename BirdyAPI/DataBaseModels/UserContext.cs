@@ -2,6 +2,7 @@
 
 namespace BirdyAPI.Models
 {
+    //TODO:3 Context != Model
     public class UserContext : DbContext
     {
         public DbSet<User> Users { get; set; }

@@ -7,6 +7,8 @@ namespace BirdyAPI
 {
     public static class Configurations
     {
+        //TODO:1 Use json config for connection strings
+        //TODO:2 Don't commit connection string to CVS
         public static string DataBaseString = "Server=tcp:birdytest.database.windows.net,1433;Initial Catalog=BirdyDB;" +
                                        "Persist Security Info=False;" +
                                        "User ID=lol67;" +
