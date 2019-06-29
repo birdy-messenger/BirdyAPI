@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/user.reg")]
+    [Route("api/user/reg")]
     public class RegistrationController : Controller
     {
         private readonly RegistrationService _registrationService;
@@ -18,7 +18,7 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery]User user)
+        public IActionResult UserRegistration([FromQuery]User user)
         {
             string answer = _registrationService.CreateNewAccount(user);
             if (answer.Contains("ErrorMessage"))

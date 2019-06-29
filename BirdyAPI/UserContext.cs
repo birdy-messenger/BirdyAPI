@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BirdyAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace BirdyAPI.Models
+namespace BirdyAPI
 {
-    //TODO:3 Context != Model
     public class UserContext : DbContext
     {
         public DbSet<User> Users { get; set; }

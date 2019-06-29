@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BirdyAPI.Controllers
 {
     //TODO:4 Use try-catch in controllers
-    //TODO:5 Don't use '.' in query
-    [Route("api/user.get")]
+    [Route("api/user/get")]
     public class UserGetController : Controller
     {
         private readonly GetUserService _getUserService;
@@ -22,9 +21,8 @@ namespace BirdyAPI.Controllers
             _getUserService = new GetUserService(context);
         }
         // GET: api/<controller>
-        //TODO:10 use semantic name for methods
         [HttpGet]
-        public IActionResult Get([FromQuery]int id, int token)
+        public IActionResult GetUserInfo([FromQuery]int id, int token)
         {
             string answer = _getUserService.SearchUserInfo(id, token);
             if (answer.Contains("ErrorMessage"))

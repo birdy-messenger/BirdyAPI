@@ -19,7 +19,7 @@ namespace BirdyAPI.Controllers
             _registrationService = new ConfirmEmailService(context);
         }
         [HttpGet]
-        public IActionResult Get([FromQuery] int id)
+        public IActionResult EmailConfirming([FromQuery] int id)
         {
             string answer = _registrationService.GetUserConfirmed(id);
             if (answer.Contains("ErrorMessage"))

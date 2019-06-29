@@ -22,7 +22,7 @@ namespace BirdyAPI.Controllers
 
         //TODO:6 Don't use User model for transport login with password
         [HttpGet]
-        public IActionResult Get([FromQuery] User user)
+        public IActionResult UserAuthentication([FromQuery] User user)
         {
             string answer = _loginService.Authentication(user);
             if (!answer.Contains("ErrorMessage"))
@@ -32,7 +32,7 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet("all")]
-        public IEnumerable<User> Get()
+        public IEnumerable<User> GetUsers()
         {
             return _loginService.GetAllUsers();
         }
