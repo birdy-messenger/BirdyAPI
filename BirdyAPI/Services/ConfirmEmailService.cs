@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Models;
 using Newtonsoft.Json;
 
@@ -20,13 +21,14 @@ namespace BirdyAPI.Services
         {
             User user = _context.Users.Find(id);
             if (user == null)
-                return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid link"});
+                throw new ArgumentException("Invalid link");
 
             user.CurrentStatus = UserStatus.Confirmed;
             
             _context.Users.Update(user);
             _context.SaveChanges();
-            return JsonConvert.SerializeObject(new {Status = user.CurrentStatus});
+            return JsonConvert.SerializeObject(new {Status = user.CurrentStatus}); 
+            //Здесь вообще должна быть html страничка, пока оставлю так
         }
     }
 }

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BirdyAPI.Controllers
 {
-    //TODO:4 Use try-catch in controllers
     [Route("api/user/get")]
     public class UserGetController : Controller
     {
@@ -22,13 +23,16 @@ namespace BirdyAPI.Controllers
         }
         // GET: api/<controller>
         [HttpGet]
-        public IActionResult GetUserInfo([FromQuery]int id, int token)
+        public IActionResult GetUserInfo([FromQuery]UserSessionDto user)
         {
-            string answer = _getUserService.SearchUserInfo(id, token);
-            if (answer.Contains("ErrorMessage"))
-                return BadRequest();
-            else
-                return Ok(answer);
+            try
+            {
+                return Ok(_getUserService.SearchUserInfo(user));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
         }
     }
 }

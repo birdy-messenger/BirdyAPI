@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using Newtonsoft.Json;
 using BirdyAPI.Models;
 
@@ -16,18 +18,17 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public string SearchUserInfo(int id, int token)
+        public UserAccountDto SearchUserInfo(UserSessionDto user)
         {
-            User currentUser = _context.Users.FirstOrDefault(k => k.Id == id);
+            User currentUser = _context.Users.FirstOrDefault(k => k.Id == user.Id);
             if (currentUser == null)
-                return JsonConvert.SerializeObject(new {ErrorMessage = "User Not Found"});
+                throw new ArgumentException("User Not Found");
             else
             {
-                if (IsTokenValid(currentUser, token))
-                    return JsonConvert.SerializeObject(new
-                        {FirstName = currentUser.FirstName, AvatarReference = currentUser.AvatarReference});
+                if (IsTokenValid(currentUser, user.Token))
+                    return new UserAccountDto(currentUser.FirstName, currentUser.AvatarReference);
                 else
-                    return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid Token"});
+                    throw new ArgumentException("Invalid Token");
             }
         }
 

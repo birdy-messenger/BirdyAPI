@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -21,39 +23,43 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public string CreateNewAccount(User user)
+        public string CreateNewAccount(RegistrationDto registrationData)
         {
-            if (_context.Users?.FirstOrDefault(k => k.Email == user.Email) != null)
-                return JsonConvert.SerializeObject(new {ErrorMessage = "Duplicate account"});
+            if (_context.Users?.FirstOrDefault(k => k.Email == registrationData.Email) != null)
+                throw new ArgumentException("Duplicate account");
 
-            user.Token = new Random().Next(int.MaxValue / 2, int.MaxValue);
-            user.CurrentStatus = UserStatus.Unconfirmed;
+            User newUser = new User(registrationData);
 
-            _context.Add(user);
+            _context.Add(newUser);
             _context.SaveChanges();
 
             string userReference = "birdytestapi.azurewebsites.net/api/confirmemail" +
-                                   new QueryBuilder { { "id", user.Id.ToString() } }.ToQueryString();
-            EmailConfirm(user.Email, userReference);
+                                   new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
 
-            return JsonConvert.SerializeObject(new { FirstName = user.FirstName});
+            SendConfirmEmail(newUser.Email, userReference);
+
+            return "Message sent";
         }
 
-        private async void EmailConfirm(string email, string confirmReference)
+        private async void SendConfirmEmail(string email, string confirmReference)
         {
             SendGridClient client = new SendGridClient(apiKey: Configurations.SendGridAPIKey);
-            
+            SendGridMessage message = MessageBuilder(email, confirmReference);
+
+            await client.SendEmailAsync(message);
+        }
+
+        private SendGridMessage MessageBuilder(string email, string confirmReference)
+        {
+
             EmailAddress birdyAddress = new EmailAddress(Configurations.OurEmailAddress, "Birdy");
             EmailAddress userAddress = new EmailAddress(email);
 
             string messageTopic = "Confirm your email";
             string HTMLmessage = Configurations.EmailConfirmMessage + $"<a href =\"https://{confirmReference}\">Confirm Link</a>";
             string plainTextContent = HTMLmessage; // Когда сообщение обрастет стилями и т.д. надо будет сделать нормально
-
-            SendGridMessage message = MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,
+            return MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,
                 plainTextContent, HTMLmessage);
-
-            await client.SendEmailAsync(message);
         }
     }
 }

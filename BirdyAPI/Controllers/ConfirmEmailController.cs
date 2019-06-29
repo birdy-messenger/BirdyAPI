@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,11 +22,14 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         public IActionResult EmailConfirming([FromQuery] int id)
         {
-            string answer = _registrationService.GetUserConfirmed(id);
-            if (answer.Contains("ErrorMessage"))
-                return BadRequest(answer);
-            else
-                return Ok(answer);
+            try
+            {
+                return Ok(_registrationService.GetUserConfirmed(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
         }
     }       
 }

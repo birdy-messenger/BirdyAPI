@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
@@ -18,13 +21,16 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserRegistration([FromQuery]User user)
+        public IActionResult UserRegistration([FromQuery]RegistrationDto user)
         {
-            string answer = _registrationService.CreateNewAccount(user);
-            if (answer.Contains("ErrorMessage"))
-                return BadRequest(answer);
-            else
-                return Ok();
+            try
+            {
+                return Ok(_registrationService.CreateNewAccount(user));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
         }
     }
 }

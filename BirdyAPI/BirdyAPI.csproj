@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataBaseModels\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

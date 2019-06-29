@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
 
@@ -13,28 +16,31 @@ namespace BirdyAPI.Controllers
     public class AuthenticationController : Controller
     {
         //TODO:9 dispose UserContext and all usage
-        private readonly LoginService _loginService;
+        private readonly AuthService _authService;
         public AuthenticationController(UserContext context)
         {
-            _loginService = new LoginService(context);
+            _authService = new AuthService(context);
         }
         // GET: api/<controller>
 
         //TODO:6 Don't use User model for transport login with password
         [HttpGet]
-        public IActionResult UserAuthentication([FromQuery] User user)
+        public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {
-            string answer = _loginService.Authentication(user);
-            if (!answer.Contains("ErrorMessage"))
-                return Ok(answer);
-            else
-                return BadRequest(answer);
+            try
+            {
+                return Ok(_authService.Authentication(user));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
         }
 
         [HttpGet("all")]
         public IEnumerable<User> GetUsers()
         {
-            return _loginService.GetAllUsers();
+            return _authService.GetAllUsers();
         }
     }
 }

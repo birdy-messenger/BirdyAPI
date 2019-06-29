@@ -2,42 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Models;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace BirdyAPI.Services
 {
-    public class LoginService
+    public class AuthService
     {
         private readonly UserContext _context;
 
-        public LoginService(UserContext context)
+        public AuthService(UserContext context)
         {
             _context = context;
         }
-        public string Authentication(User user)
+        public UserSessionDto Authentication(AuthenticationDto user)
         {
-            //TODO:7 Use SingleOrDefault instead of FirstOrDefault
-            var currentUser = _context.Users.FirstOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
+            User currentUser = _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
             {
                 if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
-                    return JsonConvert.SerializeObject(new {ErrorMessage = "Need to confirm email"});
+                    throw new Exception("Need to confirm email");
                 else
-                    return JsonConvert.SerializeObject(new {Id = currentUser.Id, Token = currentUser.Token});
+                    return new UserSessionDto(currentUser.Id, currentUser.Token);
             }
 
-            //TODO:8 throw exceptions instead of anonymous types
-            return JsonConvert.SerializeObject(new {ErrorMessage = "Invalid email or password"});
+            throw new ArgumentException("Invalid email or password");
         }
 
         public List<User> GetAllUsers()
         {
-            if (_context.Users.Any())
-                return _context.Users.ToList();
-
-            return new List<User> { new User { Email = "testLogin", PasswordHash = "TEST", Id = 0 } };
-        }
+            return _context.Users.ToList();
+        }   
     }
 }
