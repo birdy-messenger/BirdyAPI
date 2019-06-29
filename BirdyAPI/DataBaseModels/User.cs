@@ -21,6 +21,11 @@ namespace BirdyAPI.DataBaseModels
             CurrentStatus = UserStatus.Unconfirmed;
         }
 
+        public User()
+        {
+
+        }
+
         [Key]
         public int Id { get; set; }
         public string Email { get; set; }

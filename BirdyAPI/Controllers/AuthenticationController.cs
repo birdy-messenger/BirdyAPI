@@ -21,9 +21,9 @@ namespace BirdyAPI.Controllers
         {
             _authService = new AuthService(context);
         }
+
         // GET: api/<controller>
 
-        //TODO:6 Don't use User model for transport login with password
         [HttpGet]
         public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {

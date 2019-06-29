@@ -8,19 +8,23 @@ using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-
+    
 namespace BirdyAPI.Services
 {
     public class RegistrationService
     {
         private readonly UserContext _context;
+        public IConfiguration Configuration;
 
-        public RegistrationService(UserContext context)
+        public RegistrationService(UserContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public string CreateNewAccount(RegistrationDto registrationData)
@@ -43,7 +47,7 @@ namespace BirdyAPI.Services
 
         private async void SendConfirmEmail(string email, string confirmReference)
         {
-            SendGridClient client = new SendGridClient(apiKey: Configurations.SendGridAPIKey);
+            SendGridClient client = new SendGridClient(apiKey: Configuration.GetConnectionString("SendGrid"));
             SendGridMessage message = MessageBuilder(email, confirmReference);
 
             await client.SendEmailAsync(message);

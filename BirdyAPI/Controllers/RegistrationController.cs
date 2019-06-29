@@ -8,6 +8,7 @@ using BirdyAPI.Models;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
@@ -15,9 +16,9 @@ namespace BirdyAPI.Controllers
     public class RegistrationController : Controller
     {
         private readonly RegistrationService _registrationService;
-        public RegistrationController(UserContext context)
+        public RegistrationController(UserContext context, IConfiguration configuration)
         {
-            _registrationService = new RegistrationService(context);
+            _registrationService = new RegistrationService(context, configuration);
         }
 
         [HttpGet]
