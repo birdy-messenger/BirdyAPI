@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BirdyAPI.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Logging;
 
 namespace BirdyAPI
 {
@@ -26,8 +27,6 @@ namespace BirdyAPI
 
             services.AddDbContext<UserContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
-
-            services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

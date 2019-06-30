@@ -15,7 +15,6 @@ namespace BirdyAPI.Controllers
     [Route("api/auth")]
     public class AuthenticationController : Controller
     {
-        //TODO:9 dispose UserContext and all usage
         private readonly AuthService _authService;
         public AuthenticationController(UserContext context)
         {
