@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Threading.Tasks;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
 

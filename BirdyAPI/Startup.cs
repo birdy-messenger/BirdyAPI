@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using BirdyAPI.Models;
 using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.Extensions.Logging;
 
 namespace BirdyAPI
 {

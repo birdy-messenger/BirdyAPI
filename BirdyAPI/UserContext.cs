@@ -1,5 +1,4 @@
 ﻿using BirdyAPI.DataBaseModels;
-using BirdyAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BirdyAPI
