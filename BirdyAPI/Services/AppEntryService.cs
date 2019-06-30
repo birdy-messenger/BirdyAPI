@@ -36,10 +36,7 @@ namespace BirdyAPI.Services
             throw new ArgumentException("Invalid email or password");
         }
 
-        public List<User> GetAllUsers()
-        {
-            return _context.Users.ToList();
-        }
+
 
         public string GetUserConfirmed(int id)
         {

@@ -61,11 +61,7 @@ namespace BirdyAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("show")]
-        public IEnumerable<User> GetUsers()
-        {
-            return _appEntryService.GetAllUsers();
-        }
+
+
     }
 }

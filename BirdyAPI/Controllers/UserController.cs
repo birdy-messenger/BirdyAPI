@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
@@ -25,6 +27,13 @@ namespace BirdyAPI.Controllers
             {
                 return BadRequest(ex.SerializeAsResponse());
             }
+        }
+
+        [HttpGet]
+        [Route("show")]
+        public IEnumerable<User> GetUsers()
+        {
+            return _userService.GetAllUsers();
         }
     }
 }
