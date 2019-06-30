@@ -54,6 +54,7 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         [Route("confirm")]
         [Produces(typeof(UserStatus))]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult EmailConfirming([FromQuery] int id)
         {
             try
