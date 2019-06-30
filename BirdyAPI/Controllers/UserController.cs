@@ -17,6 +17,9 @@ namespace BirdyAPI.Controllers
         {
             _userService = new UserService(context);
         }
+        [HttpGet]
+        [Route("get")]
+        [Produces(typeof(UserAccountDto))]
         public IActionResult GetUserInfo([FromQuery] UserSessionDto user)
         {
             try
@@ -31,6 +34,7 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("show")]
+        [Produces(typeof(List<User>))]
         public IEnumerable<User> GetUsers()
         {
             return _userService.GetAllUsers();

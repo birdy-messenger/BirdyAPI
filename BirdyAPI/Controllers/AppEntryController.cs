@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
+using BirdyAPI.Models;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("auth")]
+        [Produces(typeof(UserSessionDto))]
         public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {
             try
@@ -35,11 +37,13 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("reg")]
+        [Produces(typeof(void))]
         public IActionResult UserRegistration([FromQuery]RegistrationDto user)
         {
             try
             {
-                return Ok(_appEntryService.CreateNewAccount(user));
+                _appEntryService.CreateNewAccount(user);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -49,6 +53,7 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("confirm")]
+        [Produces(typeof(UserStatus))]
         public IActionResult EmailConfirming([FromQuery] int id)
         {
             try
@@ -60,8 +65,5 @@ namespace BirdyAPI.Controllers
                 return BadRequest(ex.SerializeAsResponse());
             }
         }
-
-
-
     }
 }
