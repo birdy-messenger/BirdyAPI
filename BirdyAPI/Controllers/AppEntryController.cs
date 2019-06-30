@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,9 +18,9 @@ namespace BirdyAPI.Controllers
     {
         private readonly AppEntryService _appEntryService;
 
-        public AppEntryController(UserContext context)
+        public AppEntryController(UserContext context, IConfiguration configuration)
         {
-            _appEntryService = new AppEntryService(context);
+            _appEntryService = new AppEntryService(context, configuration);
         }
 
         [HttpGet]
@@ -61,6 +63,13 @@ namespace BirdyAPI.Controllers
             {
                 return BadRequest(ex.SerializeAsResponse());
             }
+        }
+
+        [HttpGet]
+        [Route("show")]
+        public IEnumerable<User> GetUsers()
+        {
+            return _appEntryService.GetAllUsers();
         }
     }
 }

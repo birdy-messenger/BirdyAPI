@@ -19,12 +19,12 @@ namespace BirdyAPI.Services
     public class RegistrationService
     {
         private readonly UserContext _context;
-        public IConfiguration Configuration;
+        private readonly IConfiguration _configuration;
 
         public RegistrationService(UserContext context, IConfiguration configuration)
         {
             _context = context;
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public string CreateNewAccount(RegistrationDto registrationData)
@@ -47,7 +47,7 @@ namespace BirdyAPI.Services
 
         private async void SendConfirmEmail(string email, string confirmReference)
         {
-            SendGridClient client = new SendGridClient(apiKey: Configuration.GetConnectionString("SendGrid"));
+            SendGridClient client = new SendGridClient(apiKey: _configuration.GetConnectionString("SendGrid"));
             SendGridMessage message = MessageBuilder(email, confirmReference);
 
             await client.SendEmailAsync(message);
