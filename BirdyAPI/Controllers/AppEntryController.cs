@@ -51,6 +51,7 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         [Route("confirm")]
         [Produces(typeof(UserStatus))]
