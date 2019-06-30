@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BirdyAPI.DataBaseModels;
+using Microsoft.EntityFrameworkCore;
 
-namespace BirdyAPI.Models
+namespace BirdyAPI
 {
     public class UserContext : DbContext
     {

@@ -1,14 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Threading.Tasks;
+using BirdyAPI.Dto;
+using BirdyAPI.Models;
 
-namespace BirdyAPI.Models
+namespace BirdyAPI.DataBaseModels
 {
     public class User
     {
+        public User(RegistrationDto registrationData)
+        {
+            Email = registrationData.Email;
+            FirstName = registrationData.FirstName;
+            PasswordHash = registrationData.PasswordHash;
+            RegistrationDate = DateTime.Now;
+            Token = new Random().Next(int.MaxValue / 2, int.MaxValue);
+            CurrentStatus = UserStatus.Unconfirmed;
+        }
+
+        public User()
+        {
+
+        }
+
         [Key]
         public int Id { get; set; }
         public string Email { get; set; }
