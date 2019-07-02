@@ -22,7 +22,8 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("auth")]
-        [Produces(typeof(UserSessionDto))]
+        [ProducesResponseType(statusCode:200, type:typeof(UserSessionDto))]
+        [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {
             try
@@ -37,7 +38,8 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("reg")]
-        [Produces(typeof(void))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult UserRegistration([FromQuery]RegistrationDto user)
         {
             try

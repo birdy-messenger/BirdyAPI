@@ -19,7 +19,8 @@ namespace BirdyAPI.Controllers
         }
         [HttpGet]
         [Route("get")]
-        [Produces(typeof(UserAccountDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult GetUserInfo([FromQuery] UserSessionDto user)
         {
             try
