@@ -7,6 +7,7 @@
             Id = id;
             Token = token;  
         }
+        public UserSessionDto() { }
         public int Id { get; set; }
         public int Token { get; set; }
     }
