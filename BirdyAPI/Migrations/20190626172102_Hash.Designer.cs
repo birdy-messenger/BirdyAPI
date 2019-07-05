@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BirdyAPI.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(BirdyContext))]
     [Migration("20190626172102_Hash")]
     partial class Hash
     {

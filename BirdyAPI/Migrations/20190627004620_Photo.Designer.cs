@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BirdyAPI.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(BirdyContext))]
     [Migration("20190627004620_Photo")]
     partial class Photo
     {

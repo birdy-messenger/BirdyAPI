@@ -15,7 +15,7 @@ namespace BirdyAPI.Controllers
     {
         private readonly AppEntryService _appEntryService;
 
-        public AppEntryController(UserContext context, IConfiguration configuration)
+        public AppEntryController(BirdyContext context, IConfiguration configuration)
         {
             _appEntryService = new AppEntryService(context, configuration);
         }

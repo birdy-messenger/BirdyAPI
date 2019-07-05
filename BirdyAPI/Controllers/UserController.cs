@@ -16,7 +16,7 @@ namespace BirdyAPI.Controllers
     {
         private readonly UserService _userService;
 
-        public UserController(UserContext context, IConfiguration configuration)
+        public UserController(BirdyContext context, IConfiguration configuration)
         {
             _userService = new UserService(context, configuration);
         }

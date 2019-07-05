@@ -23,7 +23,7 @@ namespace BirdyAPI
             services.AddSwaggerGen(configuration =>
                 configuration.SwaggerDoc("Birdy", new Info {Title = "Birdy API", Version = "0.0.1"}));
 
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<BirdyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

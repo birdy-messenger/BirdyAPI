@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BirdyAPI
 {
-    public class UserContext : DbContext
+    public class BirdyContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public UserContext(DbContextOptions<UserContext> options)
+        public DbSet<Friends> Friends { get; set; }
+        public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }
     }
