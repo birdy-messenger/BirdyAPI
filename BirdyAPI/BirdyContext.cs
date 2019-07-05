@@ -10,5 +10,10 @@ namespace BirdyAPI
         public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Friends>().HasKey(k => new {k.FirstUserID, k.SecondUserID});
+        }
     }
 }

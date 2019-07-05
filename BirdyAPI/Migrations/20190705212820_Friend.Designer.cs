@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BirdyAPI.Migrations
 {
     [DbContext(typeof(BirdyContext))]
-    [Migration("20190705163843_Friends")]
-    partial class Friends
+    [Migration("20190705212820_Friend")]
+    partial class Friend
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,13 +23,11 @@ namespace BirdyAPI.Migrations
 
             modelBuilder.Entity("BirdyAPI.DataBaseModels.Friends", b =>
                 {
-                    b.Property<int>("FirstUserID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("FirstUserID");
 
                     b.Property<int>("SecondUserID");
 
-                    b.HasKey("FirstUserID");
+                    b.HasKey("FirstUserID", "SecondUserID");
 
                     b.ToTable("Friends");
                 });

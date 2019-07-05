@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BirdyAPI.Migrations
 {
-    public partial class Friends : Migration
+    public partial class Friend : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,13 +10,12 @@ namespace BirdyAPI.Migrations
                 name: "Friends",
                 columns: table => new
                 {
-                    FirstUserID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstUserID = table.Column<int>(nullable: false),
                     SecondUserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friends", x => x.FirstUserID);
+                    table.PrimaryKey("PK_Friends", x => new { x.FirstUserID, x.SecondUserID });
                 });
         }
 

@@ -21,13 +21,11 @@ namespace APItest.Migrations
 
             modelBuilder.Entity("BirdyAPI.DataBaseModels.Friends", b =>
                 {
-                    b.Property<int>("FirstUserID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("FirstUserID");
 
                     b.Property<int>("SecondUserID");
 
-                    b.HasKey("FirstUserID");
+                    b.HasKey("FirstUserID", "SecondUserID");
 
                     b.ToTable("Friends");
                 });
