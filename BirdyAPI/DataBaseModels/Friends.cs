@@ -12,5 +12,6 @@ namespace BirdyAPI.DataBaseModels
         public Friends() { }
         public int FirstUserID { get; set; }
         public int SecondUserID { get; set; }
+        public bool RequestAccepted { get; set; } 
     }
 }

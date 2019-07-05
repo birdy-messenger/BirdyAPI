@@ -7,5 +7,21 @@ namespace BirdyAPI.Services
 {
     public class FriendService
     {
+        private readonly BirdyContext _context;
+
+        public FriendService(BirdyContext context)
+        {
+            _context = context;
+        }
+
+        public void AddFriend()
+        {
+
+        }
+
+        public void GetFriends()
+        {
+
+        }
     }
 }
