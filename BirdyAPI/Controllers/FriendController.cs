@@ -22,7 +22,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _friendService.AddFriend();
+                _friendService.AddFriend(friendRequest);
                 return Ok();
             }
             catch (Exception ex)
@@ -33,11 +33,11 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("getAllFriends")]
-        public IActionResult GetFriends([FromQuery] int UserId)
+        public IActionResult GetFriends([FromQuery] int userId)
         {
             try
             {
-                return Ok(_friendService.GetFriends(UserId));
+                return Ok(_friendService.GetFriends(userId));
             }
             catch (Exception ex)
             {

@@ -18,18 +18,32 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public void AddFriend()
+        public FriendRequestAnswerDto AddFriend(FriendRequestDto friendRequest)
         {
+            Friend counterRequest = _context.Friends.Find(friendRequest.IncomingUserID, friendRequest.OutgoingUserID);
+            if (counterRequest == null)
+            {
+                _context.Add(new Friend(friendRequest.IncomingUserID, friendRequest.OutgoingUserID, false));
+                _context.SaveChanges();
+                return new FriendRequestAnswerDto("Запрос отправлен");
+            }
+            else
+            {
+                counterRequest.RequestAccepted = true;
+                _context.Update(counterRequest);
+                string newFriendName = _context.Users.Find(counterRequest.FirstUserID).FirstName;
+                return new FriendRequestAnswerDto($"{newFriendName} добавлен в друзья");
+            }
 
         }
 
         public List<FriendInfoDto> GetFriends(int userId)
         {
             //TODO :2 Сделать адекватный подзапрос/джоин
-            IQueryable<Friends> leftUserFriends =
+            IQueryable<Friend> leftUserFriends =
                 _context.Friends.Where(k => (k.FirstUserID == userId && k.RequestAccepted));
 
-            IQueryable<Friends> rightUserFriends =
+            IQueryable<Friend> rightUserFriends =
                 _context.Friends.Where(k => (k.SecondUserID == userId && k.RequestAccepted));
 
             List<FriendInfoDto> friends = new List<FriendInfoDto>();
@@ -38,7 +52,7 @@ namespace BirdyAPI.Services
                 User currentFriend = _context.Users.Find(friend.FirstUserID);
                 friends.Add(new FriendInfoDto(currentFriend.Id, currentFriend.FirstName, currentFriend.AvatarReference));
             }
-            foreach (var friend in leftUserFriends)
+            foreach (var friend in rightUserFriends)
             {
                 User currentFriend = _context.Users.Find(friend.SecondUserID);
                 friends.Add(new FriendInfoDto(currentFriend.Id, currentFriend.FirstName, currentFriend.AvatarReference));
