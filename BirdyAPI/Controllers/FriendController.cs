@@ -48,5 +48,22 @@ namespace BirdyAPI.Controllers
                 return BadRequest(ex.SerializeAsResponse());
             }
         }
+
+        [HttpGet]
+        [Route("deleteFriend")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<FriendInfoDto>))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        public IActionResult DeleteFriend([FromQuery] int userId, int friendId)
+        {
+            try
+            {
+                _friendService.DeleteFriend(userId, friendId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
     }
 }

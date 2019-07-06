@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
+using BirdyAPI.Tools;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BirdyAPI.Services
 {
@@ -42,14 +45,38 @@ namespace BirdyAPI.Services
                 _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
                     .Any(x => x.FirstUserID == k.Id)));
 
-            var t = _context.Users.Where(k =>
-                _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
-                    .Any(x => x.FirstUserID == k.Id)).ToList();
-
             List <UserFriend> userFriends = userFriendsInfo.Select(k => new UserFriend
                 {Avatar = k.AvatarReference, Id = k.Id, FirstName = k.FirstName}).ToList();
 
             return userFriends;
+        }
+
+        public void DeleteFriend(int userId, int friendId)
+        {
+            Friend currentFriend = _context.Friends.FirstOrDefault(k =>
+                (k.FirstUserID == friendId && k.SecondUserID == userId) ||
+                (k.SecondUserID == friendId && k.FirstUserID == userId));
+
+            if (currentFriend == null)
+            {
+                throw new Exception("User is not your friend");
+            }
+            else
+            {
+                if (currentFriend.FirstUserID == userId)
+                {
+                    int swapHelper = currentFriend.FirstUserID;
+                    currentFriend.FirstUserID = currentFriend.SecondUserID;
+                    currentFriend.SecondUserID = swapHelper;
+                    currentFriend.RequestAccepted = false;
+                    _context.Friends.Update(currentFriend);
+                }
+                else
+                {
+                    currentFriend.RequestAccepted = false;
+                    _context.Friends.Update(currentFriend);
+                }
+            }
         }
     }
 }
