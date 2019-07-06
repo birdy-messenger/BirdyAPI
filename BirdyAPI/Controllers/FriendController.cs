@@ -33,12 +33,11 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("getAllFriends")]
-        public IActionResult GetFriends()
+        public IActionResult GetFriends([FromQuery] int UserId)
         {
             try
             {
-                _friendService.GetFriends();
-                return Ok();
+                return Ok(_friendService.GetFriends(UserId));
             }
             catch (Exception ex)
             {

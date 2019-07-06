@@ -2,7 +2,7 @@
 {
     public static class Configurations
     {
-        //TODO:2 Don't commit connection string to CVS
+        //TODO:1 Don't commit connection string to CVS
 
         public static string OurEmailAddress = "birdy-noreply@birdy.com";
 
