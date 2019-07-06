@@ -51,7 +51,7 @@ namespace BirdyAPI.Services
             return userFriends;
         }
 
-        public void DeleteFriend(int userId, int friendId)
+        public SimpleAnswerDto DeleteFriend(int userId, int friendId)
         {
             Friend currentFriend = _context.Friends.FirstOrDefault(k =>
                 (k.FirstUserID == friendId && k.SecondUserID == userId) ||
@@ -77,6 +77,7 @@ namespace BirdyAPI.Services
                     _context.Friends.Update(currentFriend);
                 }
             }
+            return new SimpleAnswerDto("Friend removed");
         }
     }
 }

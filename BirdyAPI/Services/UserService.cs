@@ -43,7 +43,7 @@ namespace BirdyAPI.Services
                 return false;
         }
 
-        public void SetProfileAvatar(int id, byte[] imageBytes)
+        public SimpleAnswerDto SetProfileAvatar(int id, byte[] imageBytes)
         {
             CloudBlockBlob blob = InitAzureBlob(id);
 
@@ -51,6 +51,7 @@ namespace BirdyAPI.Services
             CloudBlob avatarCloudBlob = blob.Container.GetBlobReference("avatar.png");
             _context.Users.Find(id).AvatarReference = avatarCloudBlob.Uri.ToString();
             _context.SaveChanges();
+            return new SimpleAnswerDto(avatarCloudBlob.Uri.ToString());
         }
 
         private CloudBlockBlob InitAzureBlob(int id)

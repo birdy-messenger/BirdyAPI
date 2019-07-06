@@ -52,8 +52,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _userService.SetProfileAvatar(id, photoBytes);
-                return Ok();
+                return Ok(_userService.SetProfileAvatar(id, photoBytes));
             }
             catch (Exception ex)
             {

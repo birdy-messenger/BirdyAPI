@@ -52,7 +52,7 @@ namespace BirdyAPI.Services
             //Здесь вообще должна быть html страничка, пока оставлю так
         }
 
-        public void CreateNewAccount(RegistrationDto registrationData)
+        public SimpleAnswerDto CreateNewAccount(RegistrationDto registrationData)
         {
             if (_context.Users?.FirstOrDefault(k => k.Email == registrationData.Email) != null)
                 throw new ArgumentException("Duplicate account");
@@ -66,6 +66,7 @@ namespace BirdyAPI.Services
                                    new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
 
             SendConfirmEmail(newUser.Email, userReference);
+            return new SimpleAnswerDto("Confirm message sent");
         }
 
         private async void SendConfirmEmail(string email, string confirmReference)

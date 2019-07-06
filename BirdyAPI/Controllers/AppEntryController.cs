@@ -44,8 +44,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _appEntryService.CreateNewAccount(user);
-                return Ok();
+                return Ok(_appEntryService.CreateNewAccount(user));
             }
             catch (Exception ex)
             {
