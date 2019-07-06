@@ -19,7 +19,7 @@ namespace APItest.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BirdyAPI.DataBaseModels.Friends", b =>
+            modelBuilder.Entity("BirdyAPI.DataBaseModels.Friend", b =>
                 {
                     b.Property<int>("FirstUserID");
 
@@ -29,7 +29,7 @@ namespace APItest.Migrations
 
                     b.HasKey("FirstUserID", "SecondUserID");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friend");
                 });
 
             modelBuilder.Entity("BirdyAPI.DataBaseModels.User", b =>

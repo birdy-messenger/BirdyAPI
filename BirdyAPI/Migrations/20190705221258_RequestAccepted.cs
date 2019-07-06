@@ -8,7 +8,7 @@ namespace BirdyAPI.Migrations
         {
             migrationBuilder.AddColumn<bool>(
                 name: "RequestAccepted",
-                table: "Friends",
+                table: "Friend",
                 nullable: false,
                 defaultValue: false);
         }
@@ -17,7 +17,7 @@ namespace BirdyAPI.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "RequestAccepted",
-                table: "Friends");
+                table: "Friend");
         }
     }
 }
