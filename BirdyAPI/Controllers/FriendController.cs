@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
@@ -18,12 +19,13 @@ namespace BirdyAPI.Controllers
 
         [HttpPost]
         [Route("addFriend")]
+        [ProducesResponseType(statusCode: 200, type: typeof(FriendRequestAnswerDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult AddFriend([FromQuery] FriendRequestDto friendRequest)
         {
             try
             {
-                _friendService.AddFriend(friendRequest);
-                return Ok();
+                return Ok(_friendService.AddFriend(friendRequest));
             }
             catch (Exception ex)
             {
@@ -32,7 +34,9 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getAllFriends")]
+        [Route("allFriends")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<FriendInfoDto>))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult GetFriends([FromQuery] int userId)
         {
             try
