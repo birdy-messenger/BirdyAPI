@@ -4,8 +4,6 @@ using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
-using BirdyAPI.Tools;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BirdyAPI.Services
 {

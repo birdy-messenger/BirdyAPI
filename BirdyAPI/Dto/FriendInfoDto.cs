@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.SwaggerGen;
-
-namespace BirdyAPI.Dto
+﻿namespace BirdyAPI.Dto
 {
     public class FriendInfoDto
     {
