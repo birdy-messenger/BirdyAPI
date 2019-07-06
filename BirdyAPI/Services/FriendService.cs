@@ -2,6 +2,7 @@
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
+using BirdyAPI.Models;
 
 namespace BirdyAPI.Services
 {
@@ -33,28 +34,22 @@ namespace BirdyAPI.Services
 
         }
 
-        public List<FriendInfoDto> GetFriends(int userId)
+        public List<UserFriend> GetFriends(int userId)
         {
-            //TODO :2 Сделать адекватный подзапрос/джоин
-            IQueryable<Friend> leftUserFriends =
-                _context.Friends.Where(k => (k.FirstUserID == userId && k.RequestAccepted));
+            IQueryable<User> userFriendsInfo = _context.Users.Where(k =>
+                _context.Friends.Where(e => e.FirstUserID == userId && e.RequestAccepted)
+                    .Any(x => x.SecondUserID == k.Id)).Union(_context.Users.Where(k =>
+                _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
+                    .Any(x => x.FirstUserID == k.Id)));
 
-            IQueryable<Friend> rightUserFriends =
-                _context.Friends.Where(k => (k.SecondUserID == userId && k.RequestAccepted));
+            var t = _context.Users.Where(k =>
+                _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
+                    .Any(x => x.FirstUserID == k.Id)).ToList();
 
-            List<FriendInfoDto> friends = new List<FriendInfoDto>();
-            foreach (var friend in leftUserFriends)
-            {
-                User currentFriend = _context.Users.Find(friend.FirstUserID);
-                friends.Add(new FriendInfoDto(currentFriend.Id, currentFriend.FirstName, currentFriend.AvatarReference));
-            }
-            foreach (var friend in rightUserFriends)
-            {
-                User currentFriend = _context.Users.Find(friend.SecondUserID);
-                friends.Add(new FriendInfoDto(currentFriend.Id, currentFriend.FirstName, currentFriend.AvatarReference));
-            }
+            List <UserFriend> userFriends = userFriendsInfo.Select(k => new UserFriend
+                {Avatar = k.AvatarReference, Id = k.Id, FirstName = k.FirstName}).ToList();
 
-            return friends;
+            return userFriends;
         }
     }
 }
