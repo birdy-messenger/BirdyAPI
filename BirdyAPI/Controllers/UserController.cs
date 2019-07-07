@@ -46,7 +46,7 @@ namespace BirdyAPI.Controllers
 
         [HttpPost]
         [Route("setAvatar")]
-        [ProducesResponseType(statusCode: 200, type: typeof(void))]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult SetAvatar([FromQuery]int id, [FromBody] byte[] photoBytes)
         {

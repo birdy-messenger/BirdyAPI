@@ -36,9 +36,9 @@ namespace BirdyAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("reg")]
-        [ProducesResponseType(statusCode: 200, type: typeof(void))]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult UserRegistration([FromQuery]RegistrationDto user)
         {
@@ -55,12 +55,28 @@ namespace BirdyAPI.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         [Route("confirm")]
-        [Produces(typeof(UserStatus))]
+        [ProducesResponseType(statusCode: 200, type: typeof(string))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult EmailConfirming([FromQuery] int id)
         {
             try
             {
                 return Ok(_appEntryService.GetUserConfirmed(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
+
+        [HttpPut]
+        [Route("changePassword")]
+        [Produces(typeof(UserStatus))]
+        public IActionResult ChangePassword([FromQuery] int id, [FromBody] string oldPasswordHash, string newPasswordHash)
+        {
+            try
+            {
+                return Ok(_appEntryService.ChangePassword(id, oldPasswordHash, newPasswordHash));
             }
             catch (Exception ex)
             {

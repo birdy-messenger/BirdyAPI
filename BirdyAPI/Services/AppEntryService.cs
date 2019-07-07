@@ -69,6 +69,26 @@ namespace BirdyAPI.Services
             return new SimpleAnswerDto("Confirm message sent");
         }
 
+        public SimpleAnswerDto ChangePassword(int id, string oldPasswordHash, string newPasswordHash)
+        {
+            User currentUser = _context.Users.Find(id);
+            if (currentUser == null)
+            {
+                throw new Exception("User doesn't exist");
+            }
+            if (currentUser.PasswordHash == oldPasswordHash)
+            {
+                currentUser.PasswordHash = newPasswordHash;
+                _context.Users.Update(currentUser);
+                return new SimpleAnswerDto("Password changed");
+            }
+            else
+            {
+                throw new ArgumentException("Wrong password");
+            }
+
+        }
+
         private async void SendConfirmEmail(string email, string confirmReference)
         {
             SendGridClient client = new SendGridClient(apiKey: _configuration.GetConnectionString("SendGrid"));
