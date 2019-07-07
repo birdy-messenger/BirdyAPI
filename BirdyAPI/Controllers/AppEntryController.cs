@@ -71,8 +71,9 @@ namespace BirdyAPI.Controllers
 
         [HttpPut]
         [Route("changePassword")]
-        [Produces(typeof(UserStatus))]
-        public IActionResult ChangePassword([FromQuery] int id, [FromBody] string oldPasswordHash, string newPasswordHash)
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        public IActionResult ChangePassword([FromQuery] int id, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
         {
             try
             {
