@@ -39,9 +39,16 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         [Route("show")]
         [Produces(typeof(List<User>))]
-        public IEnumerable<User> GetUsers()
+        public IActionResult GetUsers()
         {
-            return _userService.GetAllUsers();
+            try
+            {
+                return Ok(_userService.GetAllUsers());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
         }
 
         [HttpPost]
