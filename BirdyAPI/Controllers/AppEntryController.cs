@@ -84,5 +84,21 @@ namespace BirdyAPI.Controllers
                 return BadRequest(ex.SerializeAsResponse());
             }
         }
+
+        [HttpDelete]
+        [Route("exit")]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        public IActionResult ExitApp([FromQuery] UserSessions currentSession)
+        {
+            try
+            {
+                return Ok(_appEntryService.ExitApp(currentSession));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
     }
 }

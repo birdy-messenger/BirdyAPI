@@ -93,6 +93,14 @@ namespace BirdyAPI.Services
 
         }
 
+        public SimpleAnswerDto ExitApp(UserSessions currentSession)
+        {
+            //TODO :1 Сделать проверку на валидность
+            _context.UserSessions.Remove(currentSession);
+            _context.SaveChanges();
+            return new SimpleAnswerDto("Session stopped");
+        }
+
         private async void SendConfirmEmail(string email, string confirmReference)
         {
             SendGridClient client = new SendGridClient(apiKey: _configuration.GetConnectionString("SendGrid"));
