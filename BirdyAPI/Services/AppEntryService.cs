@@ -30,7 +30,11 @@ namespace BirdyAPI.Services
                 if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
                     throw new Exception("Need to confirm email");
                 else
-                    return new UserSessionDto(currentUser.Id, currentUser.Token);
+                {
+                    Guid token = _context.UserSessions.Add(new UserSessions(currentUser.Id)).Entity.Token;
+                    _context.SaveChanges();
+                    return new UserSessionDto(currentUser.Id, token);
+                }
             }
 
             throw new ArgumentException("Invalid email or password");
@@ -59,7 +63,7 @@ namespace BirdyAPI.Services
 
             User newUser = new User(registrationData);
 
-            _context.Add(newUser);
+            _context.Users.Add(newUser);
             _context.SaveChanges();
 
             string userReference = "birdytestapi.azurewebsites.net/api/app/confirm" +

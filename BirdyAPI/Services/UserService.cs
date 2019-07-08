@@ -22,25 +22,28 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserAccountDto SearchUserInfo(UserSessionDto user)
+        public UserAccountDto SearchUserInfo(UserSessionDto userSession)
         {
-            User currentUser = _context.Users.FirstOrDefault(k => k.Id == user.Id);
-            if (currentUser == null)
+            User user = _context.Users.FirstOrDefault(k => k.Id == userSession.Id);
+            if (user == null)
                 throw new ArgumentException("User Not Found");
             else
             {
-                if (IsTokenValid(currentUser, user.Token))
-                    return new UserAccountDto(currentUser.FirstName, currentUser.AvatarReference);
+                if (IsTokenValid(user.Id, userSession.Token))
+                    return new UserAccountDto(user.FirstName, user.AvatarReference);
                 else
                     throw new ArgumentException("Invalid Token");
             }
         }
-        private bool IsTokenValid(User user, Guid token)
+        private bool IsTokenValid(int userId, Guid token)
         {
-            if (user.Token == token)
-                return true;
-            else
+            UserSessions currentSession = _context.UserSessions.Find(token);
+            if (currentSession == null)
                 return false;
+            else if (currentSession.Token != token)
+                return false;
+            else
+                return true;
         }
 
         public SimpleAnswerDto SetProfileAvatar(int id, byte[] imageBytes)

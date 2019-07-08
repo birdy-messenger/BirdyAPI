@@ -13,7 +13,6 @@ namespace BirdyAPI.DataBaseModels
             FirstName = registrationData.FirstName;
             PasswordHash = registrationData.PasswordHash;
             RegistrationDate = DateTime.Now;
-            Token = Guid.NewGuid();
             CurrentStatus = UserStatus.Unconfirmed;
         }
 
@@ -27,7 +26,6 @@ namespace BirdyAPI.DataBaseModels
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string PasswordHash { get; set; }
-        public Guid Token { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public UserStatus CurrentStatus { get; set; }
