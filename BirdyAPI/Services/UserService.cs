@@ -35,7 +35,7 @@ namespace BirdyAPI.Services
                     throw new ArgumentException("Invalid Token");
             }
         }
-        private bool IsTokenValid(User user, int token)
+        private bool IsTokenValid(User user, Guid token)
         {
             if (user.Token == token)
                 return true;

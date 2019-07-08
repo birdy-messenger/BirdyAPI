@@ -62,7 +62,7 @@ namespace BirdyAPI.Services
             _context.Add(newUser);
             _context.SaveChanges();
 
-            string userReference = "birdytestapi.azurewebsites.net/api/confirmemail" +
+            string userReference = "birdytestapi.azurewebsites.net/api/app/confirm" +
                                    new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
 
             SendConfirmEmail(newUser.Email, userReference);
