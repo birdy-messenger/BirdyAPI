@@ -95,10 +95,17 @@ namespace BirdyAPI.Services
 
         public SimpleAnswerDto ExitApp(UserSessions currentSession)
         {
-            //TODO :1 Сделать проверку на валидность
+            //TODO :1 Сделать проверку на валидность(не только здесь, в целом после каждого действия)
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
             return new SimpleAnswerDto("Session stopped");
+        }
+
+        public SimpleAnswerDto FullExitApp(UserSessions currentSession)
+        {
+            _context.UserSessions.RemoveRange(_context.UserSessions.Where(k => k.UserId == currentSession.UserId));
+            _context.SaveChanges();
+            return new SimpleAnswerDto("All sessions stopped");
         }
 
         private async void SendConfirmEmail(string email, string confirmReference)
