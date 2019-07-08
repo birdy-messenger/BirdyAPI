@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BirdyAPI.Migrations
 {
     [DbContext(typeof(BirdyContext))]
-    [Migration("20190705221258_RequestAccepted")]
+    [Migration("20190708215924_RequestAccepted")]
     partial class RequestAccepted
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace BirdyAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BirdyAPI.DataBaseModels.UserFriend", b =>
+            modelBuilder.Entity("BirdyAPI.DataBaseModels.Friend", b =>
                 {
                     b.Property<int>("FirstUserID");
 
@@ -31,7 +31,7 @@ namespace BirdyAPI.Migrations
 
                     b.HasKey("FirstUserID", "SecondUserID");
 
-                    b.ToTable("UserFriend");
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("BirdyAPI.DataBaseModels.User", b =>

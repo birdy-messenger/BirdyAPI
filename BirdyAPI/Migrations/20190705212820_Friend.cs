@@ -7,7 +7,7 @@ namespace BirdyAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserFriend",
+                name: "Friends",
                 columns: table => new
                 {
                     FirstUserID = table.Column<int>(nullable: false),
@@ -17,12 +17,6 @@ namespace BirdyAPI.Migrations
                 {
                     table.PrimaryKey("PK_Friends", x => new { x.FirstUserID, x.SecondUserID });
                 });
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "UserFriend");
         }
     }
 }

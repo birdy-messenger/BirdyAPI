@@ -4,14 +4,16 @@ using BirdyAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace APItest.Migrations
+namespace BirdyAPI.Migrations
 {
     [DbContext(typeof(BirdyContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20190708220421_IdGuid")]
+    partial class IdGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,18 +57,6 @@ namespace APItest.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BirdyAPI.DataBaseModels.UserSessions", b =>
-                {
-                    b.Property<Guid>("Token")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Token");
-
-                    b.ToTable("UserSessions");
                 });
 #pragma warning restore 612, 618
         }

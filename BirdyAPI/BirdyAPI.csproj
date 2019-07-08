@@ -2,11 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>58884307-153e-4c03-8d1a-0356f8f8fae9</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Migrations\20190705163843_Friends.cs" />
     <Compile Remove="Migrations\20190705163843_Friends.Designer.cs" />
+    <Compile Remove="Migrations\20190705221258_RequestAccepted.cs" />
+    <Compile Remove="Migrations\20190705221258_RequestAccepted.Designer.cs" />
+    <Compile Remove="Migrations\20190708201948_Sessions.cs" />
+    <Compile Remove="Migrations\20190708201948_Sessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708213153_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708213153_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708213332_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708213332_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708213459_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708213459_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708213537_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708213537_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708213918_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708213918_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708215216_RequestAcceptedAndUserSessions.cs" />
+    <Compile Remove="Migrations\20190708215216_RequestAcceptedAndUserSessions.Designer.cs" />
+    <Compile Remove="Migrations\20190708215715_RequestAccepted.cs" />
+    <Compile Remove="Migrations\20190708215715_RequestAccepted.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
