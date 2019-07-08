@@ -35,18 +35,15 @@ namespace BirdyAPI.Services
 
         }
 
-        public List<UserFriend> GetFriends(int userId)
+        public IQueryable<UserFriend> GetFriends(int userId)
         {
-            IQueryable<User> userFriendsInfo = _context.Users.Where(k =>
+            return _context.Users.Where(k =>
                 _context.Friends.Where(e => e.FirstUserID == userId && e.RequestAccepted)
                     .Any(x => x.SecondUserID == k.Id)).Union(_context.Users.Where(k =>
                 _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
-                    .Any(x => x.FirstUserID == k.Id)));
+                    .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriend
+                { Avatar = k.AvatarReference, Id = k.Id, FirstName = k.FirstName });
 
-            List <UserFriend> userFriends = userFriendsInfo.Select(k => new UserFriend
-                {Avatar = k.AvatarReference, Id = k.Id, FirstName = k.FirstName}).ToList();
-
-            return userFriends;
         }
 
         public SimpleAnswerDto DeleteFriend(int userId, int friendId)
