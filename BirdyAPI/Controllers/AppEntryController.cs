@@ -59,8 +59,6 @@ namespace BirdyAPI.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         [Route("confirm")]
-        [ProducesResponseType(statusCode: 200, type: typeof(string))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult EmailConfirming([FromQuery] int id)
         {
             try
@@ -77,6 +75,7 @@ namespace BirdyAPI.Controllers
         [Route("changePassword")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ChangePassword([FromQuery] UserSessions currentSession, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
         {
             try
@@ -98,6 +97,7 @@ namespace BirdyAPI.Controllers
         [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ExitApp([FromQuery] UserSessions currentSession)
         {
             try
@@ -119,6 +119,7 @@ namespace BirdyAPI.Controllers
         [Route("exitAll")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult FullExitApp([FromQuery] UserSessions currentSession)
         {
             try

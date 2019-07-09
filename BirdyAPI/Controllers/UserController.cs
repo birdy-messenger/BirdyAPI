@@ -27,6 +27,7 @@ namespace BirdyAPI.Controllers
         [Route("get")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetUserInfo([FromQuery] UserSessions currentSession)
         {
             try
@@ -67,6 +68,7 @@ namespace BirdyAPI.Controllers
         [Route("setAvatar")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult SetAvatar([FromQuery]UserSessions currentSession, [FromBody] byte[] photoBytes)
         {
             try

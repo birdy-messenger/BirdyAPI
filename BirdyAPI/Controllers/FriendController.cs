@@ -26,6 +26,7 @@ namespace BirdyAPI.Controllers
         [Route("addFriend")]
         [ProducesResponseType(statusCode: 200, type: typeof(FriendRequestAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult AddFriend([FromBody] FriendRequestDto friendRequest, [FromQuery] Guid token)
         {
             try
@@ -47,6 +48,7 @@ namespace BirdyAPI.Controllers
         [Route("allFriends")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetFriends([FromQuery] UserSessions currentSession)
         {
             try
@@ -68,6 +70,7 @@ namespace BirdyAPI.Controllers
         [Route("deleteFriend")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult DeleteFriend([FromQuery] int userId, int friendId, Guid token)
         {
             try
