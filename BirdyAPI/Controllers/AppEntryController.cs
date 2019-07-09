@@ -23,10 +23,10 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
-        //TODO :2 Определиться и сделать адекватные [FromBody] и [FromQuery]
+        //TODO :1 Decide on formats [FromBody], [FromQuery] in arguments
         [HttpGet]
         [Route("auth")]
-        [ProducesResponseType(statusCode:200, type:typeof(UserSessionDto))]
+        [ProducesResponseType(statusCode:200, type:typeof(UserSessions))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {

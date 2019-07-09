@@ -22,7 +22,7 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserSessionDto Authentication(AuthenticationDto user)
+        public UserSessions Authentication(AuthenticationDto user)
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
@@ -31,9 +31,9 @@ namespace BirdyAPI.Services
                     throw new Exception("Need to confirm email");
                 else
                 {
-                    Guid token = _context.UserSessions.Add(new UserSessions(currentUser.Id)).Entity.Token;
+                    UserSessions currentSession = _context.UserSessions.Add(new UserSessions(currentUser.Id)).Entity;
                     _context.SaveChanges();
-                    return new UserSessionDto(currentUser.Id, token);
+                    return currentSession;
                 }
             }
 
@@ -95,7 +95,6 @@ namespace BirdyAPI.Services
 
         public SimpleAnswerDto ExitApp(UserSessions currentSession)
         {
-            //TODO :1 Сделать проверку на валидность(не только здесь, в целом после каждого действия)
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
             return new SimpleAnswerDto("Session stopped");
