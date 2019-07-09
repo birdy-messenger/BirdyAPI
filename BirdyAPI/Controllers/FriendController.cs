@@ -12,10 +12,12 @@ namespace BirdyAPI.Controllers
     public class FriendController : Controller
     {
         private readonly FriendService _friendService;
+        private readonly ToolService _toolService;
 
         public FriendController(BirdyContext context)
         {
             _friendService = new FriendService(context);
+            _toolService = new ToolService(context);
         }
 
         [HttpPost]

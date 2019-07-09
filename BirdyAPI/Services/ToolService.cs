@@ -19,9 +19,9 @@ namespace BirdyAPI.Services
         {
             UserSessions currentSession = _context.UserSessions.Find(token);
             if (currentSession == null)
-                return false;
-            else if (currentSession.Token != token)
-                return false;
+                throw new Exception("Invalid session");
+            else if (currentSession.UserId != userId)
+                throw new Exception("Invalid token");
             else
                 return true;
         }

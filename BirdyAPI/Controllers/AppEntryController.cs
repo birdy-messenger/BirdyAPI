@@ -14,10 +14,12 @@ namespace BirdyAPI.Controllers
     public class AppEntryController : Controller
     {
         private readonly AppEntryService _appEntryService;
+        private readonly ToolService _toolService;
 
         public AppEntryController(BirdyContext context, IConfiguration configuration)
         {
             _appEntryService = new AppEntryService(context, configuration);
+            _toolService = new ToolService(context);
         }
 
         [HttpGet]

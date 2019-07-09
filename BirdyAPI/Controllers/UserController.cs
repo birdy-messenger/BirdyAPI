@@ -15,10 +15,12 @@ namespace BirdyAPI.Controllers
     public class UserController : Controller
     {
         private readonly UserService _userService;
+        private readonly ToolService _toolService;
 
         public UserController(BirdyContext context, IConfiguration configuration)
         {
             _userService = new UserService(context, configuration);
+            _toolService = new ToolService(context);
         }
         [HttpGet]
         [Route("get")]
