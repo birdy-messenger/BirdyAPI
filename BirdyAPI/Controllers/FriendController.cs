@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BirdyAPI.Dto;
+using BirdyAPI.Models;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace BirdyAPI.Controllers
 
         [HttpGet]
         [Route("allFriends")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<FriendInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         public IActionResult GetFriends([FromQuery] int userId)
         {

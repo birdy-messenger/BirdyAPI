@@ -29,22 +29,10 @@ namespace BirdyAPI.Services
                 throw new ArgumentException("User Not Found");
             else
             {
-                if (IsTokenValid(user.Id, userSession.Token))
-                    return new UserAccountDto(user.FirstName, user.AvatarReference);
-                else
-                    throw new ArgumentException("Invalid Token");
+                return new UserAccountDto(user.FirstName, user.AvatarReference);
             }
         }
-        private bool IsTokenValid(int userId, Guid token)
-        {
-            UserSessions currentSession = _context.UserSessions.Find(token);
-            if (currentSession == null)
-                return false;
-            else if (currentSession.Token != token)
-                return false;
-            else
-                return true;
-        }
+        
 
         public SimpleAnswerDto SetProfileAvatar(int id, byte[] imageBytes)
         {
