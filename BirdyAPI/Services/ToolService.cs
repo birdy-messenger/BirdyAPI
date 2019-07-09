@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using BirdyAPI.DataBaseModels;
 
@@ -15,15 +16,18 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        private bool IsTokenValid(int userId, Guid token)
+        public void ValidateToken(int userId, Guid token)
         {
             UserSessions currentSession = _context.UserSessions.Find(token);
             if (currentSession == null)
-                throw new Exception("Invalid session");
+                throw new AuthenticationException("Invalid session");
             else if (currentSession.UserId != userId)
-                throw new Exception("Invalid token");
-            else
-                return true;
+                throw new AuthenticationException("Invalid token");
+        }
+
+        public void ValidateToken(UserSessions session)
+        {
+            ValidateToken(session.UserId, session.Token);
         }
     }
 }

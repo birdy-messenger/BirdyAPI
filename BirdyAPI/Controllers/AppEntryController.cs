@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
@@ -22,6 +23,7 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
+        //TODO :2 Определиться и сделать адекватные [FromBody] и [FromQuery]
         [HttpGet]
         [Route("auth")]
         [ProducesResponseType(statusCode:200, type:typeof(UserSessionDto))]
@@ -75,11 +77,16 @@ namespace BirdyAPI.Controllers
         [Route("changePassword")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult ChangePassword([FromQuery] int id, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
+        public IActionResult ChangePassword([FromQuery] UserSessions currentSession, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
         {
             try
             {
-                return Ok(_appEntryService.ChangePassword(id, oldPasswordHash, newPasswordHash));
+                _toolService.ValidateToken(currentSession);
+                return Ok(_appEntryService.ChangePassword(currentSession.UserId, oldPasswordHash, newPasswordHash));
+            }
+            catch(AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -95,7 +102,12 @@ namespace BirdyAPI.Controllers
         {
             try
             {
+                _toolService.ValidateToken(currentSession);
                 return Ok(_appEntryService.ExitApp(currentSession));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -111,7 +123,12 @@ namespace BirdyAPI.Controllers
         {
             try
             {
+                _toolService.ValidateToken(currentSession);
                 return Ok(_appEntryService.ExitApp(currentSession));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {

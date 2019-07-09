@@ -22,9 +22,9 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserAccountDto SearchUserInfo(UserSessionDto userSession)
+        public UserAccountDto SearchUserInfo(UserSessions userSession)
         {
-            User user = _context.Users.FirstOrDefault(k => k.Id == userSession.Id);
+            User user = _context.Users.FirstOrDefault(k => k.Id == userSession.UserId);
             if (user == null)
                 throw new ArgumentException("User Not Found");
             else

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
+using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
@@ -26,11 +27,16 @@ namespace BirdyAPI.Controllers
         [Route("get")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult GetUserInfo([FromQuery] UserSessionDto user)
+        public IActionResult GetUserInfo([FromQuery] UserSessions currentSession)
         {
             try
             {
-                return Ok(_userService.SearchUserInfo(user));
+                _toolService.ValidateToken(currentSession);
+                return Ok(_userService.SearchUserInfo(currentSession));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -41,11 +47,15 @@ namespace BirdyAPI.Controllers
         [HttpGet]
         [Route("show")]
         [Produces(typeof(List<User>))]
-        public IActionResult GetUsers()
+        public IActionResult GetUsers() //Чисто для тестов/проверки/чека бд, так что никакх проверок на токены и т.д.
         {
             try
             {
                 return Ok(_userService.GetAllUsers());
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -57,11 +67,16 @@ namespace BirdyAPI.Controllers
         [Route("setAvatar")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult SetAvatar([FromQuery]int id, [FromBody] byte[] photoBytes)
+        public IActionResult SetAvatar([FromQuery]UserSessions currentSession, [FromBody] byte[] photoBytes)
         {
             try
             {
-                return Ok(_userService.SetProfileAvatar(id, photoBytes));
+                _toolService.ValidateToken(currentSession);
+                return Ok(_userService.SetProfileAvatar(currentSession.UserId, photoBytes));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {

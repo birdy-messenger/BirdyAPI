@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
 using BirdyAPI.Services;
@@ -24,11 +26,16 @@ namespace BirdyAPI.Controllers
         [Route("addFriend")]
         [ProducesResponseType(statusCode: 200, type: typeof(FriendRequestAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult AddFriend([FromQuery] FriendRequestDto friendRequest)
+        public IActionResult AddFriend([FromBody] FriendRequestDto friendRequest, [FromQuery] Guid token)
         {
             try
             {
+                _toolService.ValidateToken(friendRequest.OutgoingUserID, token);
                 return Ok(_friendService.AddFriend(friendRequest));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -40,11 +47,16 @@ namespace BirdyAPI.Controllers
         [Route("allFriends")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult GetFriends([FromQuery] int userId)
+        public IActionResult GetFriends([FromQuery] UserSessions currentSession)
         {
             try
             {
-                return Ok(_friendService.GetFriends(userId));
+                _toolService.ValidateToken(currentSession);
+                return Ok(_friendService.GetFriends(currentSession.UserId));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -56,11 +68,16 @@ namespace BirdyAPI.Controllers
         [Route("deleteFriend")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult DeleteFriend([FromQuery] int userId, int friendId)
+        public IActionResult DeleteFriend([FromQuery] int userId, int friendId, Guid token)
         {
             try
             {
+                _toolService.ValidateToken(userId, token);
                 return Ok(_friendService.DeleteFriend(userId, friendId));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
