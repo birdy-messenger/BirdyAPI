@@ -26,6 +26,8 @@
     <Compile Remove="Migrations\20190708215216_RequestAcceptedAndUserSessions.Designer.cs" />
     <Compile Remove="Migrations\20190708215715_RequestAccepted.cs" />
     <Compile Remove="Migrations\20190708215715_RequestAccepted.Designer.cs" />
+    <Compile Remove="Migrations\20190710214306_fixChat.cs" />
+    <Compile Remove="Migrations\20190710214306_fixChat.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

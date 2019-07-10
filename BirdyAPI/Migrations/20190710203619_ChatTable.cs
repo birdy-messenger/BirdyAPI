@@ -19,11 +19,5 @@ namespace BirdyAPI.Migrations
                     table.PrimaryKey("PK_Chat", x => new { x.ChatID, x.UserinChatID });
                 });
         }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Chat");
-        }
     }
 }
