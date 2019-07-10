@@ -45,7 +45,7 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/getChat")]
+        [Route("getChat")]
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
