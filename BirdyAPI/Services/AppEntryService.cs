@@ -58,7 +58,7 @@ namespace BirdyAPI.Services
 
         public SimpleAnswerDto CreateNewAccount(RegistrationDto registrationData)
         {
-            if (_context.Users?.FirstOrDefault(k => k.Email == registrationData.Email) != null)
+            if (_context.Users?.SingleOrDefault(k => k.Email == registrationData.Email) != null)
                 throw new ArgumentException("Duplicate account");
 
             User newUser = new User(registrationData);

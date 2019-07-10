@@ -15,6 +15,7 @@ namespace BirdyAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Friend>().HasKey(k => new {k.FirstUserID, k.SecondUserID});
+            modelBuilder.Entity<Chat>().HasKey(k => new {k.ChatID, k.UserinChatID});
         }
     }
 }
