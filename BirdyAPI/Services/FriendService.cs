@@ -23,14 +23,14 @@ namespace BirdyAPI.Services
             {
                 _context.Add(new Friend(friendRequest.IncomingUserID, friendRequest.OutgoingUserID, false));
                 _context.SaveChanges();
-                return new FriendRequestAnswerDto("Запрос отправлен");
+                return new FriendRequestAnswerDto("Request sent");
             }
             else
             {
                 counterRequest.RequestAccepted = true;
-                _context.Update(counterRequest);
+                _context.Friends.Update(counterRequest);
                 string newFriendName = _context.Users.Find(counterRequest.FirstUserID).FirstName;
-                return new FriendRequestAnswerDto($"{newFriendName} добавлен в друзья");
+                return new FriendRequestAnswerDto($"{newFriendName} added as friend");
             }
 
         }

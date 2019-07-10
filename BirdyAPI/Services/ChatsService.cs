@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BirdyAPI.Dto;
 
 namespace BirdyAPI.Services
 {
@@ -11,6 +12,11 @@ namespace BirdyAPI.Services
         public ChatsService(BirdyContext context)
         {
             _context = context;
+        }
+
+        public List<ChatInfoDto> GetAllChats(int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

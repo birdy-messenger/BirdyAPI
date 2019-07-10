@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BirdyAPI.Controllers
 {
@@ -13,9 +15,33 @@ namespace BirdyAPI.Controllers
     public class ChatsController : Controller
     {
         private readonly ChatsService _chatsService;
+        private readonly ToolService _toolService;
         public ChatsController(BirdyContext context)
         {
             _chatsService = new ChatsService(context);
+            _toolService = new ToolService(context);
         }
+
+        [HttpGet]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        public IActionResult GetChats([FromQuery] UserSessions currentSession)
+        {
+            try
+            {
+                _toolService.ValidateToken(currentSession);
+                return Ok(_chatsService.GetAllChats(currentSession.UserId));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
+
     }
 }
