@@ -24,7 +24,7 @@ namespace BirdyAPI.Controllers
         //TODO :1 Decide on formats [FromBody], [FromQuery] in arguments
         [HttpGet]
         [Route("auth")]
-        [ProducesResponseType(statusCode:200, type:typeof(UserSessions))]
+        [ProducesResponseType(statusCode:200, type:typeof(UserSession))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
         {
@@ -74,12 +74,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ChangePassword([FromQuery] UserSessions currentSession, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
+        public IActionResult ChangePassword([FromQuery] Guid token, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_appEntryService.ChangePassword(currentSession.UserId, oldPasswordHash, newPasswordHash));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_appEntryService.ChangePassword(currentUserId, oldPasswordHash, newPasswordHash));
             }
             catch(AuthenticationException)
             {
@@ -96,12 +96,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ExitApp([FromQuery] UserSessions currentSession)
+        public IActionResult ExitApp([FromQuery] Guid token)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_appEntryService.ExitApp(currentSession));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_appEntryService.ExitApp(token, currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -118,12 +118,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult FullExitApp([FromQuery] UserSessions currentSession)
+        public IActionResult FullExitApp([FromQuery] Guid token)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_appEntryService.ExitApp(currentSession));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_appEntryService.ExitApp(token, currentUserId));
             }
             catch (AuthenticationException)
             {

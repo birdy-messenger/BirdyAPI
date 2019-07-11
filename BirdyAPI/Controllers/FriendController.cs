@@ -31,7 +31,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _toolService.ValidateToken(friendRequest.OutgoingUserID, token);
+                _toolService.ValidateToken(token);
                 return Ok(_friendService.AddFriend(friendRequest));
             }
             catch (AuthenticationException)
@@ -49,12 +49,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetFriends([FromQuery] UserSessions currentSession)
+        public IActionResult GetFriends([FromQuery] Guid token)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_friendService.GetFriends(currentSession.UserId));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_friendService.GetFriends(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -71,12 +71,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult DeleteFriend([FromQuery] int userId, int friendId, Guid token)
+        public IActionResult DeleteFriend([FromQuery] int friendId, Guid token)
         {
             try
             {
-                _toolService.ValidateToken(userId, token);
-                return Ok(_friendService.DeleteFriend(userId, friendId));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_friendService.DeleteFriend(currentUserId, friendId));
             }
             catch (AuthenticationException)
             {

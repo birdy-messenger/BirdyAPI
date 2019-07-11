@@ -26,12 +26,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetUserInfo([FromQuery] UserSessions currentSession)
+        public IActionResult GetUserInfo([FromQuery] Guid token)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_userService.SearchUserInfo(currentSession));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_userService.SearchUserInfo(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -67,12 +67,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult SetAvatar([FromQuery]UserSessions currentSession, [FromBody] byte[] photoBytes)
+        public IActionResult SetAvatar([FromQuery] Guid token, [FromBody] byte[] photoBytes)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_userService.SetProfileAvatar(currentSession.UserId, photoBytes));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_userService.SetProfileAvatar(currentUserId, photoBytes));
             }
             catch (AuthenticationException)
             {

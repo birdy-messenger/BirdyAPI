@@ -7,7 +7,7 @@ namespace BirdyAPI
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
-        public DbSet<UserSessions> UserSessions { get; set; }
+        public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<ChatUsers> ChatUsers { get; set; }
         public DbSet<ChatInfo> ChatInfo { get; set; }
         public DbSet<Message> Messages { get; set; }

@@ -25,12 +25,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetChats([FromQuery] UserSessions currentSession)
+        public IActionResult GetChats([FromQuery] Guid token)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_chatsService.GetAllChats(currentSession.UserId));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_chatsService.GetAllChats(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -47,12 +47,12 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetChat([FromQuery] UserSessions currentSession, [FromQuery] Guid chatId)
+        public IActionResult GetChat([FromQuery] Guid token, [FromQuery] Guid chatId)
         {
             try
             {
-                _toolService.ValidateToken(currentSession);
-                return Ok(_chatsService.GetChat(currentSession.UserId, chatId));
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_chatsService.GetChat(currentUserId, chatId));
             }
             catch (AuthenticationException)
             {

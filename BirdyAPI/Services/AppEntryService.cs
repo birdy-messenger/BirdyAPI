@@ -21,7 +21,7 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserSessions Authentication(AuthenticationDto user)
+        public UserSession Authentication(AuthenticationDto user)
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
             if (currentUser != null)
@@ -30,7 +30,7 @@ namespace BirdyAPI.Services
                     throw new Exception("Need to confirm email");
                 else
                 {
-                    UserSessions currentSession = _context.UserSessions.Add(new UserSessions(currentUser.Id)).Entity;
+                    UserSession currentSession = _context.UserSessions.Add(new UserSession(currentUser.Id)).Entity;
                     _context.SaveChanges();
                     return currentSession;
                 }
@@ -92,14 +92,15 @@ namespace BirdyAPI.Services
 
         }
 
-        public SimpleAnswerDto ExitApp(UserSessions currentSession)
+        public SimpleAnswerDto ExitApp(Guid token, int userId)
         {
+            UserSession currentSession = new UserSession{Token = token, UserId = userId};
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
             return new SimpleAnswerDto("Session stopped");
         }
 
-        public SimpleAnswerDto FullExitApp(UserSessions currentSession)
+        public SimpleAnswerDto FullExitApp(UserSession currentSession)
         {
             _context.UserSessions.RemoveRange(_context.UserSessions.Where(k => k.UserId == currentSession.UserId));
             _context.SaveChanges();

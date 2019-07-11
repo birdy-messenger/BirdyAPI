@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BirdyAPI.DataBaseModels
 {
-    public class UserSessions
+    public class UserSession
     {
-        public UserSessions() { }
+        public UserSession() { }
 
-        public UserSessions(int userId)
+        public UserSession(int userId)
         {
             Token = Guid.NewGuid();
             UserId = userId;

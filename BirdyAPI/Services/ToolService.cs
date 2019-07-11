@@ -13,18 +13,13 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public void ValidateToken(int userId, Guid token)
+        public int ValidateToken(Guid token)
         {
-            UserSessions currentSession = _context.UserSessions.Find(token);
+            UserSession currentSession = _context.UserSessions.Find(token);
             if (currentSession == null)
-                throw new AuthenticationException("Invalid session");
-            else if (currentSession.UserId != userId)
                 throw new AuthenticationException("Invalid token");
-        }
-
-        public void ValidateToken(UserSessions session)
-        {
-            ValidateToken(session.UserId, session.Token);
+            else
+                return currentSession.UserId;
         }
     }
 }
