@@ -23,10 +23,9 @@ namespace BirdyAPI.Controllers
 
         //TODO :1 Decide on formats [FromBody], [FromQuery] in arguments
         [HttpGet]
-        [Route("auth")]
         [ProducesResponseType(statusCode:200, type:typeof(UserSession))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
-        public IActionResult UserAuthentication([FromQuery] AuthenticationDto user)
+        public IActionResult UserAuthentication([FromBody] AuthenticationDto user)
         {
             try
             {
@@ -39,10 +38,9 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpPost]
-        [Route("reg")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        public IActionResult UserRegistration([FromQuery]RegistrationDto user)
+        public IActionResult UserRegistration([FromBody]RegistrationDto user)
         {
             try
             {
@@ -70,16 +68,16 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpPut]
-        [Route("changePassword")]
+        [Route("password")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ChangePassword([FromQuery] Guid token, [FromBody] string oldPasswordHash, [FromBody] string newPasswordHash)
+        public IActionResult ChangePassword([FromQuery] Guid token, [FromBody] ChangePasswordDto passwordChanges)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_appEntryService.ChangePassword(currentUserId, oldPasswordHash, newPasswordHash));
+                return Ok(_appEntryService.ChangePassword(currentUserId, passwordChanges));
             }
             catch(AuthenticationException)
             {
@@ -92,7 +90,7 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("exit")]
+        [Route("exit/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
@@ -114,7 +112,7 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("exitAll")]
+        [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
