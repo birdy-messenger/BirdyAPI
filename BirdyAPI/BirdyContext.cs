@@ -10,6 +10,7 @@ namespace BirdyAPI
         public DbSet<UserSessions> UserSessions { get; set; }
         public DbSet<ChatUsers> ChatUsers { get; set; }
         public DbSet<ChatInfo> ChatInfo { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }
