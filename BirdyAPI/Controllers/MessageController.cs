@@ -1,46 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Authentication;
+using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
+using BirdyAPI.Services;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/messages")]
     public class MessageController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private readonly MessageService _messageService;
+        private readonly ToolService _toolService;
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public MessageController(BirdyContext context)
         {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            _messageService = new MessageService(context);
+            _toolService = new ToolService(context);
         }
     }
 }

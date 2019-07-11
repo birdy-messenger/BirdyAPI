@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BirdyAPI.Dto
 {
@@ -10,5 +7,6 @@ namespace BirdyAPI.Dto
         public Guid ChatID { get; set; }
         public string ChatName { get; set; }
         public string LastMessage { get; set; }
+        public DateTime LastMessageTime { get; set; }
     }
 }

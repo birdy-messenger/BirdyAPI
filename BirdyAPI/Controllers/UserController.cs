@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Mime;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
