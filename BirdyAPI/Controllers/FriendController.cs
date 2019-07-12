@@ -24,7 +24,7 @@ namespace BirdyAPI.Controllers
 
         [HttpPost]
         [Route("{token}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult SendFriendRequest([FromBody] string userUniqueTag, Guid token)
@@ -33,6 +33,29 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _toolService.ValidateToken(token);
                 _friendService.SendFriendRequest(userUniqueTag, currentUserId);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
+
+        [HttpPatch]
+        [Route("{token}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        public IActionResult AcceptFriendRequest([FromBody] string userUniqueTag, Guid token)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _friendService.AcceptFriendRequest(userUniqueTag, currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)

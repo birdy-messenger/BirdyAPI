@@ -21,9 +21,9 @@ namespace BirdyAPI.Services
             if (userRequest == null)
                 throw new Exception();
 
-            Friend inverseRequest = _context.Friends.SingleOrDefault(k => k.FirstUserID == userRequest.Id && k.SecondUserID == currentUserId);
-            if(inverseRequest != null)
-                AcceptFriendRequest();
+            Friend inverseRequest = _context.Friends.Find(userRequest.Id, currentUserId);
+            if(inverseRequest != null) //Не уверен что это нужно, но пусть пока будет
+                AcceptFriendRequest(inverseRequest);
             else
             {
                 _context.Friends.Add(new Friend
@@ -32,9 +32,25 @@ namespace BirdyAPI.Services
             }
         }
 
-        public void AcceptFriendRequest()
+        public void AcceptFriendRequest(string userUniqueTag, int currentUserId)
         {
+            User userRequest = _context.Users.SingleOrDefault(k => k.UniqueTag == userUniqueTag);
+            if (userRequest == null)
+                throw new Exception();
 
+            Friend inverseRequest = _context.Friends.Find(userRequest.Id, currentUserId);
+            AcceptFriendRequest(inverseRequest);
+        }
+
+        private void AcceptFriendRequest(Friend inverseRequest)
+        {
+            if (inverseRequest == null)
+                throw new Exception();
+            else
+            {
+                inverseRequest.RequestAccepted = true;
+                _context.Friends.Update(inverseRequest);
+            }
         }
 
         public IQueryable<UserFriend> GetFriends(int userId)
