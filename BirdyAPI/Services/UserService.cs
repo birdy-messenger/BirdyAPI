@@ -13,12 +13,10 @@ namespace BirdyAPI.Services
     public class UserService
     {
         private readonly BirdyContext _context;
-        private readonly IConfiguration _configuration;
 
-        public UserService(BirdyContext context, IConfiguration configuration)   
+        public UserService(BirdyContext context)   
         {
             _context = context;
-            _configuration = configuration;
         }
         public UserAccountDto GetUserInfo(int userId)
         {

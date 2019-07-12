@@ -20,7 +20,7 @@ namespace BirdyAPI.Services
 
             foreach (var chat in _context.ChatUsers.Where(k => k.UserInChatID == userId))
             {
-                chats.Add(GetChat(chat.UserInChatID, chat.ChatID));
+                chats.Add(GetChat(chat.ChatID));
             }
 
             return chats;
@@ -30,15 +30,22 @@ namespace BirdyAPI.Services
         {
             ChatUsers userChat = _context.ChatUsers.Find( userId, chatId);
             if(userChat == null)
-                throw new ArgumentException("Chat wasn't found");
+                throw new ArgumentException();
 
-            ChatInfo currentChat = _context.ChatInfo.Find(userChat.ChatID);
+            return GetChat(chatId);
+        }
+
+        private ChatInfoDto GetChat(Guid chatId)
+        {
+            ChatInfo currentChat = _context.ChatInfo.Find(chatId);
 
             Message chatLastMessage = _context.Messages.Where(k => k.ChatID == currentChat.ChatID)
                 .OrderByDescending(k => k.SendDate).FirstOrDefault();
             return new ChatInfoDto
             {
-                ChatID = currentChat.ChatID, ChatName = currentChat.ChatName, LastMessage = chatLastMessage?.Text,
+                ChatID = currentChat.ChatID,
+                ChatName = currentChat.ChatName,
+                LastMessage = chatLastMessage?.Text,
                 LastMessageTime = chatLastMessage?.SendDate ?? DateTime.MinValue
             };
         }

@@ -39,7 +39,7 @@ namespace BirdyAPI.Services
                 }
             }
 
-            throw new ArgumentException("Invalid email or password");
+            throw new ArgumentException();
         }
 
 
@@ -61,7 +61,7 @@ namespace BirdyAPI.Services
         public void CreateNewAccount(RegistrationDto registrationData)
         {
             if (_context.Users.SingleOrDefault(k => k.Email == registrationData.Email) != null)
-                throw new DuplicateAccountException("Duplicate account");
+                throw new DuplicateAccountException();
 
             User newUser = new User
             {
@@ -94,7 +94,7 @@ namespace BirdyAPI.Services
             }
             else
             {
-                throw new ArgumentException("Wrong password");
+                throw new ArgumentException();
             }
         }
 
