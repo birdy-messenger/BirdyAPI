@@ -12,8 +12,7 @@ namespace BirdyAPI.DataBaseModels
             Email = registrationData.Email;
             FirstName = registrationData.FirstName;
             PasswordHash = registrationData.PasswordHash;
-            RegistrationDate = DateTime.Now;
-            CurrentStatus = UserStatus.Unconfirmed;
+
         }
 
         public User()

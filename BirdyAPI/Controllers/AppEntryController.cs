@@ -26,8 +26,8 @@ namespace BirdyAPI.Controllers
         /// User authentication
         /// </summary>
         /// <response code = "200">Return user token</response>
-        /// <response code = "400">Return exception message</response>
-        /// 
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">User need to confirm email</response>
         [HttpGet]
         [ProducesResponseType(statusCode:200, type:typeof(UserSession))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
@@ -36,6 +36,10 @@ namespace BirdyAPI.Controllers
             try
             {
                 return Ok(_appEntryService.Authentication(user));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -46,8 +50,9 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// User registration
         /// </summary>
-        /// <response code = "200">Return "Confirm message sent"</response>
-        /// <response code = "400">Return exception message</response>
+        /// <response code = "200">Confirm message sent</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "409">Duplicate account</response>
         [HttpPost]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
@@ -56,6 +61,10 @@ namespace BirdyAPI.Controllers
             try
             {
                 return Ok(_appEntryService.CreateNewAccount(user));
+            }
+            catch(DuplicateAccountException ex)
+            {
+                return Conflict(ex.SerializeAsResponse());
             }
             catch (Exception ex)
             {
@@ -81,8 +90,8 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Change user password
         /// </summary>
-        /// <response code = "200">Return "Password changed"</response>
-        /// <response code = "400">Return exception message</response>
+        /// <response code = "200">Password changed</response>
+        /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpPut]
         [Route("password")]
@@ -109,8 +118,8 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Terminate all sessions
         /// </summary>
-        /// <response code = "200">Return "All sessions stopped"</response>
-        /// <response code = "400">Return exception message</response>
+        /// <response code = "200">All sessions stopped</response>
+        /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit/all")]
@@ -137,8 +146,8 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Terminate current session
         /// </summary>
-        /// <response code = "200">Return "Session stopped"</response>
-        /// <response code = "400">Return exception message</response>
+        /// <response code = "200">Current session stopped"</response>
+        /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit")]

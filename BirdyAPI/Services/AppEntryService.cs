@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Models;
+using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -21,18 +23,19 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserSession Authentication(AuthenticationDto user)
+        public SimpleAnswerDto Authentication(AuthenticationDto user)
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
+
             if (currentUser != null)
             {
                 if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
-                    throw new Exception("Need to confirm email");
+                    throw new AuthenticationException();
                 else
                 {
                     UserSession currentSession = _context.UserSessions.Add(new UserSession(currentUser.Id)).Entity;
                     _context.SaveChanges();
-                    return currentSession;
+                    return new SimpleAnswerDto(currentSession.Token.ToString());
                 }
             }
 
@@ -52,20 +55,28 @@ namespace BirdyAPI.Services
             _context.Users.Update(user);
             _context.SaveChanges();
             return JsonConvert.SerializeObject(new { Status = user.CurrentStatus });
-            //Здесь вообще должна быть html страничка, пока оставлю так
+            //Здесь вообще должно быть что-то другое, пока оставлю так
         }
 
         public SimpleAnswerDto CreateNewAccount(RegistrationDto registrationData)
         {
-            if (_context.Users?.SingleOrDefault(k => k.Email == registrationData.Email) != null)
-                throw new ArgumentException("Duplicate account");
+            if (_context.Users.SingleOrDefault(k => k.Email == registrationData.Email) != null)
+                throw new DuplicateAccountException("Duplicate account");
 
-            User newUser = new User(registrationData);
+            User newUser = new User
+            {
+                Email = registrationData.Email,
+                PasswordHash = registrationData.PasswordHash,
+                FirstName = registrationData.FirstName,
+                UniqueTag = registrationData.UniqueTag,
+                RegistrationDate = DateTime.Now,
+                CurrentStatus = UserStatus.Unconfirmed
+        };
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            string userReference = "birdytestapi.azurewebsites.net/api/app/confirm" +
+            string userReference = "birdytestapi.azurewebsites.net/app/confirm" +
                                    new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
 
             SendConfirmEmail(newUser.Email, userReference);
