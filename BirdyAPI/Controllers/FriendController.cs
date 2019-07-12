@@ -38,7 +38,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _friendService.SendFriendRequest(userUniqueTag, currentUserId);
+                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                _friendService.SendFriendRequest(userId, currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)
@@ -66,7 +67,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _friendService.AcceptFriendRequest(userUniqueTag, currentUserId);
+                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                _friendService.AcceptFriendRequest(userId, currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)
@@ -80,7 +82,7 @@ namespace BirdyAPI.Controllers
         }
 
         /// <summary>
-        /// Get friends
+        /// Get current user friends
         /// </summary>
         /// <response code = "200">Return list of friends</response>
         /// <response code = "400">Exception message</response>
@@ -106,9 +108,38 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get user friends
+        /// </summary>
+        /// <response code = "200">Return list of friends</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
+        [HttpGet]
+        [Route("{userUniqueTag}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        public IActionResult GetUserFriends([FromHeader] Guid token, string userUniqueTag)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                return Ok(_friendService.GetFriends(userId));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
+
 
         /// <summary>
-        /// Delete user for friend
+        /// Delete user from friend
         /// </summary>
         /// <response code = "200">Friend deleted</response>
         /// <response code = "400">Exception message</response>
@@ -123,7 +154,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _friendService.DeleteFriend(currentUserId, friendUniqueTag);
+                int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
+                _friendService.DeleteFriend(currentUserId, friendId);
                 return Ok();
             }
             catch (AuthenticationException)

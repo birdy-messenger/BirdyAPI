@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 
@@ -20,6 +21,15 @@ namespace BirdyAPI.Services
                 throw new AuthenticationException("Invalid token");
             else
                 return currentSession.UserId;
+        }
+
+        public int GetUserIdByUniqueTag(string uniqueTag)
+        {
+            User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
+            if(currentUser == null)
+                throw new Exception();
+
+            return currentUser.Id;
         }
     }
 }

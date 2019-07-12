@@ -15,30 +15,22 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public void SendFriendRequest(string userUniqueTag, int currentUserId)
+        public void SendFriendRequest(int userId, int currentUserId)
         {
-            User userRequest = _context.Users.SingleOrDefault(k => k.UniqueTag == userUniqueTag);
-            if (userRequest == null)
-                throw new Exception();
-
-            Friend inverseRequest = _context.Friends.Find(userRequest.Id, currentUserId);
+            Friend inverseRequest = _context.Friends.Find(userId, currentUserId);
             if(inverseRequest != null) //Не уверен что это нужно, но пусть пока будет
                 AcceptFriendRequest(inverseRequest);
             else
             {
                 _context.Friends.Add(new Friend
-                    {FirstUserID = currentUserId, SecondUserID = userRequest.Id, RequestAccepted = false});
+                    {FirstUserID = currentUserId, SecondUserID = userId, RequestAccepted = false});
                 _context.SaveChanges();
             }
         }
 
-        public void AcceptFriendRequest(string userUniqueTag, int currentUserId)
+        public void AcceptFriendRequest(int userId, int currentUserId)
         {
-            User userRequest = _context.Users.SingleOrDefault(k => k.UniqueTag == userUniqueTag);
-            if (userRequest == null)
-                throw new Exception();
-
-            Friend inverseRequest = _context.Friends.Find(userRequest.Id, currentUserId);
+            Friend inverseRequest = _context.Friends.Find(userId, currentUserId);
             AcceptFriendRequest(inverseRequest);
         }
 
@@ -64,17 +56,13 @@ namespace BirdyAPI.Services
         }
 
         //TODO :1 Make exception logic and messages
-        public void DeleteFriend(int userId, string friendUniqueTag)
+        public void DeleteFriend(int userId, int friendId)
         {
-            User friend = _context.Users.SingleOrDefault(k => k.UniqueTag == friendUniqueTag);
-            if (friend == null)
-                throw new Exception();
-
             bool isItInversedRequest = false;
-            Friend acceptedRequest = _context.Friends.Find(userId, friend.Id);
+            Friend acceptedRequest = _context.Friends.Find(userId, friendId);
             if (acceptedRequest == null)
             {
-                acceptedRequest = _context.Friends.Find(friend.Id, userId);
+                acceptedRequest = _context.Friends.Find(friendId, userId);
                 isItInversedRequest = true;
             }
 

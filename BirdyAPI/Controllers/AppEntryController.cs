@@ -28,8 +28,8 @@ namespace BirdyAPI.Controllers
         /// <response code = "200">Return user token</response>
         /// <response code = "400">Exception message</response>
         /// <response code = "401">User need to confirm email</response>
-        [HttpPost]
-        [Route("authentication")]
+        [HttpGet]
+        [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type:typeof(void))]
@@ -56,7 +56,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "409">Duplicate account</response>
         [HttpPost]
-        [Route("registration")]
+        [Route("reg")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 409, type: typeof(void))]
