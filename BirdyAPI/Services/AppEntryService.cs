@@ -33,7 +33,7 @@ namespace BirdyAPI.Services
                     throw new AuthenticationException();
                 else
                 {
-                    UserSession currentSession = _context.UserSessions.Add(new UserSession(currentUser.Id)).Entity;
+                    UserSession currentSession = _context.UserSessions.Add(new UserSession{Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
                     _context.SaveChanges();
                     return new SimpleAnswerDto{Result = currentSession.Token.ToString()};
                 }

@@ -7,7 +7,7 @@ namespace BirdyAPI.Tools
     {
         public static ExceptionDto SerializeAsResponse(this Exception exception)
         {
-            return new ExceptionDto(exception.Message);
+            return new ExceptionDto{ErrorMessage = exception.Message};
         }
     }
 }

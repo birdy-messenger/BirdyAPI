@@ -1,11 +1,8 @@
 ﻿namespace BirdyAPI.Dto
 {
+    //TODO :3 Think about combining ExceptionDto and SimpleAnswerDto
     public class ExceptionDto
     {
-        public ExceptionDto(string message)
-        {
-            ErrorMessage = message;
-        }
         public string ErrorMessage { get; set; }
     }
 }

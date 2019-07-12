@@ -5,21 +5,9 @@ using BirdyAPI.Models;
 
 namespace BirdyAPI.DataBaseModels
 {
+    //TODO :4 fix set in dbModels, models and Dto
     public class User
     {
-        public User(RegistrationDto registrationData)
-        {
-            Email = registrationData.Email;
-            FirstName = registrationData.FirstName;
-            PasswordHash = registrationData.PasswordHash;
-
-        }
-
-        public User()
-        {
-            
-        }
-
         [Key]
         public int Id { get; set; }
         public string Email { get; set; }
@@ -29,6 +17,6 @@ namespace BirdyAPI.DataBaseModels
         public DateTime RegistrationDate { get; set; }
 
         public UserStatus CurrentStatus { get; set; }
-        public string AvatarReference { get; set; } = "А нету пока аватарок :C";
+        public string AvatarReference { get; set; }
     }
 }

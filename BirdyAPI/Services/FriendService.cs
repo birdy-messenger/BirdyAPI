@@ -51,7 +51,7 @@ namespace BirdyAPI.Services
                 _context.Friends.Where(e => e.FirstUserID == userId && e.RequestAccepted)
                     .Any(x => x.SecondUserID == k.Id)).Union(_context.Users.Where(k =>
                 _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
-                    .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriend(k.Id, k.FirstName, k.AvatarReference));
+                    .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriend{Id = k.Id, FirstName = k.FirstName, Avatar = k.AvatarReference});
 
         }
 
