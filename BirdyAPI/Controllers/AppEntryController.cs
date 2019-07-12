@@ -29,7 +29,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">User need to confirm email</response>
         [HttpGet]
-        [ProducesResponseType(statusCode:200, type:typeof(UserSession))]
+        [ProducesResponseType(statusCode:200, type:typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromBody] AuthenticationDto user)
         {
@@ -60,11 +60,12 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                return Ok(_appEntryService.CreateNewAccount(user));
+                _appEntryService.CreateNewAccount(user);
+                return Ok();
             }
-            catch(DuplicateAccountException ex)
+            catch(DuplicateAccountException)
             {
-                return Conflict(ex.SerializeAsResponse());
+                return Conflict();
             }
             catch (Exception ex)
             {
@@ -103,7 +104,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_appEntryService.ChangePassword(currentUserId, passwordChanges));
+                _appEntryService.ChangePassword(currentUserId, passwordChanges);
+                return Ok();
             }
             catch(AuthenticationException)
             {
@@ -131,7 +133,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_appEntryService.FullExitApp(token, currentUserId));
+                _appEntryService.FullExitApp(token, currentUserId);
+                return Ok();
             }
             catch (AuthenticationException)
             {
@@ -159,7 +162,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_appEntryService.ExitApp(token, currentUserId));
+                _appEntryService.ExitApp(token, currentUserId);
+                return Ok();
             }
             catch (AuthenticationException)
             {

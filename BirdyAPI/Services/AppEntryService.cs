@@ -58,7 +58,7 @@ namespace BirdyAPI.Services
             //Здесь вообще должно быть что-то другое, пока оставлю так
         }
 
-        public SimpleAnswerDto CreateNewAccount(RegistrationDto registrationData)
+        public void CreateNewAccount(RegistrationDto registrationData)
         {
             if (_context.Users.SingleOrDefault(k => k.Email == registrationData.Email) != null)
                 throw new DuplicateAccountException("Duplicate account");
@@ -80,10 +80,9 @@ namespace BirdyAPI.Services
                                    new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
 
             SendConfirmEmail(newUser.Email, userReference);
-            return new SimpleAnswerDto("Confirm message sent");
         }
 
-        public SimpleAnswerDto ChangePassword(int id, ChangePasswordDto passwordChanges)
+        public void ChangePassword(int id, ChangePasswordDto passwordChanges)
         {
             User currentUser = _context.Users.Find(id);
             if (currentUser == null)
@@ -94,7 +93,7 @@ namespace BirdyAPI.Services
             {
                 currentUser.PasswordHash = passwordChanges.NewPasswordHash;
                 _context.Users.Update(currentUser);
-                return new SimpleAnswerDto("Password changed");
+                return;
             }
             else
             {
@@ -103,20 +102,18 @@ namespace BirdyAPI.Services
 
         }
 
-        public SimpleAnswerDto ExitApp(Guid token, int userId)
+        public void ExitApp(Guid token, int userId)
         {
             UserSession currentSession = new UserSession{Token = token, UserId = userId};
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
-            return new SimpleAnswerDto("Session stopped");
         }
 
-        public SimpleAnswerDto FullExitApp(Guid token, int userId)
+        public void FullExitApp(Guid token, int userId)
         {
             UserSession currentSession = new UserSession{Token = token, UserId = userId};
             _context.UserSessions.RemoveRange(_context.UserSessions.Where(k => k.UserId == currentSession.UserId));
             _context.SaveChanges();
-            return new SimpleAnswerDto("All sessions stopped");
         }
 
         private async void SendConfirmEmail(string email, string confirmReference)
