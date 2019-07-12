@@ -27,7 +27,7 @@ namespace BirdyAPI.Services
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
             if(currentUser == null)
-                throw new Exception();
+                throw new ArgumentException();
 
             return currentUser.Id;
         }

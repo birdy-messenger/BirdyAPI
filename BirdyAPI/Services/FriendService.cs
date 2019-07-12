@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
@@ -31,18 +32,17 @@ namespace BirdyAPI.Services
         public void AcceptFriendRequest(int userId, int currentUserId)
         {
             Friend inverseRequest = _context.Friends.Find(userId, currentUserId);
+
+            if (inverseRequest == null)
+                throw new NullReferenceException();
+
             AcceptFriendRequest(inverseRequest);
         }
 
         private void AcceptFriendRequest(Friend inverseRequest)
         {
-            if (inverseRequest == null)
-                throw new Exception();
-            else
-            {
-                inverseRequest.RequestAccepted = true;
-                _context.Friends.Update(inverseRequest);
-            }
+            inverseRequest.RequestAccepted = true;
+            _context.Friends.Update(inverseRequest);
         }
 
         public IQueryable<UserFriend> GetFriends(int userId)
@@ -66,11 +66,8 @@ namespace BirdyAPI.Services
                 isItInversedRequest = true;
             }
 
-            if (acceptedRequest == null)
-                throw new Exception();
-
-            if(acceptedRequest.RequestAccepted == false)
-                throw new Exception();
+            if(acceptedRequest == null || acceptedRequest.RequestAccepted == false)
+                throw new DataException();
 
             if (isItInversedRequest)
             {
