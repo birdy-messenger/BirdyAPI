@@ -63,33 +63,40 @@ namespace BirdyAPI.Services
 
         }
 
-        public SimpleAnswerDto DeleteFriend(int userId, int friendId)
+        //TODO :1 Make exception logic and messages
+        public void DeleteFriend(int userId, string friendUniqueTag)
         {
-            Friend currentFriend = _context.Friends.FirstOrDefault(k =>
-                (k.FirstUserID == friendId && k.SecondUserID == userId) ||
-                (k.SecondUserID == friendId && k.FirstUserID == userId));
+            User friend = _context.Users.SingleOrDefault(k => k.UniqueTag == friendUniqueTag);
+            if (friend == null)
+                throw new Exception();
 
-            if (currentFriend == null)
+            bool isItInversedRequest = false;
+            Friend acceptedRequest = _context.Friends.Find(userId, friend.Id);
+            if (acceptedRequest == null)
             {
-                throw new Exception("User is not your friend");
+                acceptedRequest = _context.Friends.Find(friend.Id, userId);
+                isItInversedRequest = true;
+            }
+
+            if (acceptedRequest == null)
+                throw new Exception();
+
+            if(acceptedRequest.RequestAccepted == false)
+                throw new Exception();
+
+            if (isItInversedRequest)
+            {
+                int swapHelper = acceptedRequest.FirstUserID;
+                acceptedRequest.FirstUserID = acceptedRequest.SecondUserID;
+                acceptedRequest.SecondUserID = swapHelper;
+                acceptedRequest.RequestAccepted = false;
+                _context.Friends.Update(acceptedRequest);
             }
             else
             {
-                if (currentFriend.FirstUserID == userId)
-                {
-                    int swapHelper = currentFriend.FirstUserID;
-                    currentFriend.FirstUserID = currentFriend.SecondUserID;
-                    currentFriend.SecondUserID = swapHelper;
-                    currentFriend.RequestAccepted = false;
-                    _context.Friends.Update(currentFriend);
-                }
-                else
-                {
-                    currentFriend.RequestAccepted = false;
-                    _context.Friends.Update(currentFriend);
-                }
+                acceptedRequest.RequestAccepted = false;
+                _context.Friends.Update(acceptedRequest);
             }
-            return new SimpleAnswerDto{Result = "Friend removed"};
         }
     }
 }

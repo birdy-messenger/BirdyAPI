@@ -67,7 +67,6 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpGet]
-        [Route("allFriends")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
@@ -89,16 +88,17 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteFriend")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [Route("{friendUniqueTag}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult DeleteFriend([FromQuery] int friendId, [FromHeader] Guid token)
+        public IActionResult DeleteFriend(string friendUniqueTag, [FromHeader] Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_friendService.DeleteFriend(currentUserId, friendId));
+                _friendService.DeleteFriend(currentUserId, friendUniqueTag);
+                return Ok();
             }
             catch (AuthenticationException)
             {
