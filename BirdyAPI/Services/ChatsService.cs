@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
@@ -13,19 +14,23 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public IQueryable<ChatInfoDto> GetAllChats(int userId)
+        public List<ChatInfoDto> GetChats(int userId)
         {
-            return  _context.ChatUsers.Where(k => k.UserInChatID == userId)
-                .Join(_context.ChatInfo, k => k.ChatID, e => e.ChatID,
-                    (k, e) => new ChatInfoDto {ChatID = e.ChatID, ChatName = e.ChatName});
-            //Доделать
+            List<ChatInfoDto> chats = new List<ChatInfoDto>();
+
+            foreach (var chat in _context.ChatUsers.Where(k => k.UserInChatID == userId))
+            {
+                chats.Add(GetChat(chat.UserInChatID, chat.ChatID));
+            }
+
+            return chats;
         }
 
         public ChatInfoDto GetChat(int userId, Guid chatId)
         {
-            ChatUsers userChat = _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId);
+            ChatUsers userChat = _context.ChatUsers.Find( userId, chatId);
             if(userChat == null)
-                throw new Exception("Chat wasn't found");
+                throw new ArgumentException("Chat wasn't found");
 
             ChatInfo currentChat = _context.ChatInfo.Find(userChat.ChatID);
 

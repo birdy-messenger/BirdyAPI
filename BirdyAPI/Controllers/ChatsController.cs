@@ -26,18 +26,18 @@ namespace BirdyAPI.Controllers
         /// Get all user chats
         /// </summary>
         /// <response code = "200">Return chats info</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetChats([FromHeader] Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_chatsService.GetAllChats(currentUserId));
+                return Ok(_chatsService.GetChats(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -45,7 +45,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
@@ -53,13 +53,15 @@ namespace BirdyAPI.Controllers
         /// Get chat info
         /// </summary>
         /// <response code = "200">Return chat info</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "403">User isn't in this chat</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
         [Route("{chatId}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         public IActionResult GetChat([FromHeader] Guid token, Guid chatId)
         {
             try
@@ -71,9 +73,13 @@ namespace BirdyAPI.Controllers
             {
                 return Unauthorized();
             }
+            catch (ArgumentException)
+            {
+                return Forbid();
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
