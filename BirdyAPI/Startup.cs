@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +24,16 @@ namespace BirdyAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSwaggerGen(configuration =>
-                configuration.SwaggerDoc("Birdy", new Info {Title = "Birdy API", Version = "0.0.1"}));
+            {
+                configuration.SwaggerDoc("Birdy", new Info
+                {
+                    Title = "Birdy API",
+                    Version = "0.0.1"
+                });
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                configuration.IncludeXmlComments(xmlPath);
+            });
 
             services.AddDbContext<BirdyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));

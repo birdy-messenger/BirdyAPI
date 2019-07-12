@@ -9,7 +9,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/app")]
+    [Produces("application/json")]
+    [Route("app")]
     public class AppEntryController : Controller
     {
         private readonly AppEntryService _appEntryService;
@@ -21,7 +22,12 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
-        //TODO :1 Decide on formats [FromBody], [FromQuery] in arguments
+        /// <summary>
+        /// User authentication
+        /// </summary>
+        /// <response code = "200">Return user token</response>
+        /// <response code = "400">Return exception message</response>
+        /// 
         [HttpGet]
         [ProducesResponseType(statusCode:200, type:typeof(UserSession))]
         [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
@@ -37,6 +43,11 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// User registration
+        /// </summary>
+        /// <response code = "200">Return "Confirm message sent"</response>
+        /// <response code = "400">Return exception message</response>
         [HttpPost]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
@@ -67,6 +78,12 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Change user password
+        /// </summary>
+        /// <response code = "200">Return "Password changed"</response>
+        /// <response code = "400">Return exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpPut]
         [Route("password")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
@@ -89,6 +106,12 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Terminate all sessions
+        /// </summary>
+        /// <response code = "200">Return "All sessions stopped"</response>
+        /// <response code = "400">Return exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
@@ -99,7 +122,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_appEntryService.ExitApp(token, currentUserId));
+                return Ok(_appEntryService.FullExitApp(token, currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -111,6 +134,12 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Terminate current session
+        /// </summary>
+        /// <response code = "200">Return "Session stopped"</response>
+        /// <response code = "400">Return exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]

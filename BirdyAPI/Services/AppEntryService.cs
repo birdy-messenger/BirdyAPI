@@ -100,8 +100,9 @@ namespace BirdyAPI.Services
             return new SimpleAnswerDto("Session stopped");
         }
 
-        public SimpleAnswerDto FullExitApp(UserSession currentSession)
+        public SimpleAnswerDto FullExitApp(Guid token, int userId)
         {
+            UserSession currentSession = new UserSession{Token = token, UserId = userId};
             _context.UserSessions.RemoveRange(_context.UserSessions.Where(k => k.UserId == currentSession.UserId));
             _context.SaveChanges();
             return new SimpleAnswerDto("All sessions stopped");
