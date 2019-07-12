@@ -27,12 +27,13 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult AddFriend([FromBody] FriendRequestDto friendRequest, Guid token)
+        public IActionResult SendFriendRequest([FromBody] string userUniqueTag, Guid token)
         {
             try
             {
-                _toolService.ValidateToken(token);
-                return Ok(_friendService.AddFriend(friendRequest));
+                int currentUserId = _toolService.ValidateToken(token);
+                _friendService.SendFriendRequest(userUniqueTag, currentUserId);
+                return Ok();
             }
             catch (AuthenticationException)
             {

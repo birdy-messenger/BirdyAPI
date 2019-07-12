@@ -15,22 +15,25 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public SimpleAnswerDto AddFriend(FriendRequestDto friendRequest)
+        public void SendFriendRequest(string userUniqueTag, int currentUserId)
         {
-            Friend counterRequest = _context.Friends.Find(friendRequest.IncomingUserID, friendRequest.OutgoingUserID);
-            if (counterRequest == null)
-            {
-                _context.Add(new Friend(friendRequest.IncomingUserID, friendRequest.OutgoingUserID, false));
-                _context.SaveChanges();
-                return new SimpleAnswerDto{Result = "Request sent"};
-            }
+            User userRequest = _context.Users.SingleOrDefault(k => k.UniqueTag == userUniqueTag);
+            if (userRequest == null)
+                throw new Exception();
+
+            Friend inverseRequest = _context.Friends.SingleOrDefault(k => k.FirstUserID == userRequest.Id && k.SecondUserID == currentUserId);
+            if(inverseRequest != null)
+                AcceptFriendRequest();
             else
             {
-                counterRequest.RequestAccepted = true;
-                _context.Friends.Update(counterRequest);
-                string newFriendName = _context.Users.Find(counterRequest.FirstUserID).FirstName;
-                return new SimpleAnswerDto {Result = $"{newFriendName} added as friend"};
+                _context.Friends.Add(new Friend
+                    {FirstUserID = currentUserId, SecondUserID = userRequest.Id, RequestAccepted = false});
+                _context.SaveChanges();
             }
+        }
+
+        public void AcceptFriendRequest()
+        {
 
         }
 
