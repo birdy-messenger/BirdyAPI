@@ -21,13 +21,13 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public SimpleAnswerDto SetProfileAvatar(int id, byte[] imageBytes)
+        public SimpleAnswerDto SetProfileAvatar(int userId, byte[] imageBytes)
         {
-            CloudBlockBlob blob = InitAzureBlob(id);
+            CloudBlockBlob blob = InitAzureBlob(userId);
 
             blob.UploadFromByteArray(imageBytes, 0, imageBytes.Length);
             CloudBlob avatarCloudBlob = blob.Container.GetBlobReference("avatar.png");
-            _context.Users.Find(id).AvatarReference = avatarCloudBlob.Uri.ToString();
+            _context.Users.Find(userId).AvatarReference = avatarCloudBlob.Uri.ToString();
             _context.SaveChanges();
             return new SimpleAnswerDto {Result = avatarCloudBlob.Uri.ToString()};
         }

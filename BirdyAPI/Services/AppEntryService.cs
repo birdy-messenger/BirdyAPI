@@ -68,10 +68,11 @@ namespace BirdyAPI.Services
                 Email = registrationData.Email,
                 PasswordHash = registrationData.PasswordHash,
                 FirstName = registrationData.FirstName,
-                UniqueTag = registrationData.UniqueTag,
+                UniqueTag = null,
                 RegistrationDate = DateTime.Now,
-                CurrentStatus = UserStatus.Unconfirmed
-        };
+                CurrentStatus = UserStatus.Unconfirmed,
+                AvatarReference = null
+            };
 
             _context.Users.Add(newUser);
             _context.SaveChanges();

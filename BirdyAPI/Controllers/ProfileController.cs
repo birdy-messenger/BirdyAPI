@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
-using System.Threading.Tasks;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace BirdyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("profile")]
     public class ProfileController : Controller
     {
         private readonly ToolService _toolService;
@@ -25,8 +20,15 @@ namespace BirdyAPI.Controllers
             _profileService = new ProfileService(context, configuration);
         }
 
-        [HttpPost]
-        [Route("setAvatar")]
+
+        /// <summary>
+        /// Set user avatar
+        /// </summary>
+        /// <response code = "200">Return reference to avatar</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
+        [HttpPut]
+        [Route("avatar")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
