@@ -27,13 +27,15 @@ namespace BirdyAPI.Controllers
         /// User authentication
         /// </summary>
         /// <response code = "200">Return user token</response>
-        /// <response code = "400">Exception message</response>
         /// <response code = "401">User need to confirm email</response>
+        /// <response code = "404">Invalid login or password</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
         [HttpGet]
         [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        [ProducesResponseType(statusCode: 401, type:typeof(void))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 404, type: typeof(void))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromBody] AuthenticationDto user)
         {
             try
@@ -44,9 +46,13 @@ namespace BirdyAPI.Controllers
             {
                 return Unauthorized();
             }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
@@ -54,12 +60,12 @@ namespace BirdyAPI.Controllers
         /// User registration
         /// </summary>
         /// <response code = "200">Confirm message sent</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
         /// <response code = "409">Duplicate account</response>
         [HttpPost]
         [Route("reg")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 409, type: typeof(void))]
         public IActionResult UserRegistration([FromBody]RegistrationDto user)
         {
@@ -74,10 +80,12 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
+
+        //TODO :2 Rewrite without userId in url
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         [Route("confirm")]
@@ -97,13 +105,15 @@ namespace BirdyAPI.Controllers
         /// Change user password
         /// </summary>
         /// <response code = "200">Password changed</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "400">Wrong password</response>
         /// <response code = "401">Invalid token</response>
         [HttpPut]
         [Route("password")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         public IActionResult ChangePassword([FromHeader] Guid token, [FromBody] ChangePasswordDto passwordChanges)
         {
             try
@@ -112,13 +122,17 @@ namespace BirdyAPI.Controllers
                 _appEntryService.ChangePassword(currentUserId, passwordChanges);
                 return Ok();
             }
-            catch(AuthenticationException)
+            catch (AuthenticationException)
             {
                 return Unauthorized();
             }
+            catch (ArgumentException)
+            {
+                return BadRequest();
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
@@ -126,19 +140,19 @@ namespace BirdyAPI.Controllers
         /// Terminate all sessions
         /// </summary>
         /// <response code = "200">All sessions stopped</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ExitApp([FromHeader] Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _appEntryService.FullExitApp(token, currentUserId);
+                _appEntryService.TerminateSession(currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)
@@ -147,7 +161,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
 
@@ -155,19 +169,19 @@ namespace BirdyAPI.Controllers
         /// Terminate current session
         /// </summary>
         /// <response code = "200">Current session stopped</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult FullExitApp([FromHeader] Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _appEntryService.ExitApp(token, currentUserId);
+                _appEntryService.TerminateSession(token, currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)
@@ -176,7 +190,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return Teapot(ex.SerializeAsResponse());
             }
         }
     }

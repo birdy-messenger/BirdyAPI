@@ -86,35 +86,31 @@ namespace BirdyAPI.Services
         public void ChangePassword(int id, ChangePasswordDto passwordChanges)
         {
             User currentUser = _context.Users.Find(id);
-            if (currentUser == null)
-            {
-                throw new Exception("User doesn't exist");
-            }
+
             if (currentUser.PasswordHash == passwordChanges.OldPassorwdHash)
             {
                 currentUser.PasswordHash = passwordChanges.NewPasswordHash;
                 _context.Users.Update(currentUser);
-                return;
             }
             else
             {
                 throw new ArgumentException("Wrong password");
             }
-
         }
 
-        public void ExitApp(Guid token, int userId)
+        public void TerminateSession(Guid token, int userId)
         {
             UserSession currentSession = new UserSession{Token = token, UserId = userId};
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
         }
 
-        public void FullExitApp(Guid token, int userId)
+        public void TerminateSession(int userId)
         {
-            UserSession currentSession = new UserSession{Token = token, UserId = userId};
-            _context.UserSessions.RemoveRange(_context.UserSessions.Where(k => k.UserId == currentSession.UserId));
-            _context.SaveChanges();
+            foreach (var session in _context.UserSessions.Where(k => k.UserId == userId))
+            {
+                TerminateSession(session.Token, session.UserId);
+            }
         }
 
         private async void SendConfirmEmail(string email, string confirmReference)
