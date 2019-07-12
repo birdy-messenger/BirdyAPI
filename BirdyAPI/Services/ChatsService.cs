@@ -23,12 +23,19 @@ namespace BirdyAPI.Services
 
         public ChatInfoDto GetChat(int userId, Guid chatId)
         {
-            ChatInfo currentChat =  _context.ChatInfo.Find(
-                _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId));
+            ChatUsers userChat = _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId);
+            if(userChat == null)
+                throw new Exception("Chat wasn't found");
+
+            ChatInfo currentChat = _context.ChatInfo.Find(userChat.ChatID);
+
             Message chatLastMessage = _context.Messages.Where(k => k.ChatID == currentChat.ChatID)
                 .OrderByDescending(k => k.SendDate).FirstOrDefault();
             return new ChatInfoDto
-                {ChatID = currentChat.ChatID, ChatName = currentChat.ChatName, LastMessage = chatLastMessage.Text, LastMessageTime = chatLastMessage.SendDate};
+            {
+                ChatID = currentChat.ChatID, ChatName = currentChat.ChatName, LastMessage = chatLastMessage?.Text,
+                LastMessageTime = chatLastMessage?.SendDate ?? DateTime.MinValue
+            };
         }
     }
 }
