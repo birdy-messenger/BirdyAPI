@@ -21,17 +21,53 @@ namespace BirdyAPI.Controllers
             _userService = new UserService(context, configuration);
             _toolService = new ToolService(context);
         }
+
+
+        /// <summary>
+        /// Current user data
+        /// </summary>
+        /// <response code = "200">Return current user data in JSON</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpGet]
         [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetUserInfo(Guid token)
+        public IActionResult GetMySelfInfo(Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_userService.SearchUserInfo(currentUserId));
+                return Ok(_userService.SearchMySelfInfo(currentUserId));
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// User data
+        /// </summary>
+        /// <response code = "200">Return user data in JSON</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
+        [HttpGet]
+        [Route("{token}&{uniqueTag}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        public IActionResult GetUserInfo(Guid token, string uniqueTag)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                return Ok(_userService.SearchUserInfo(uniqueTag));
             }
             catch (AuthenticationException)
             {

@@ -153,7 +153,7 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Terminate current session
         /// </summary>
-        /// <response code = "200">Current session stopped"</response>
+        /// <response code = "200">Current session stopped</response>
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]

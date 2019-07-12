@@ -21,9 +21,9 @@ namespace BirdyAPI.Services
             _configuration = configuration;
         }
 
-        public UserAccountDto SearchUserInfo(int userId)
+        public UserAccountDto SearchMySelfInfo(int userId)
         {
-            User user = _context.Users.FirstOrDefault(k => k.Id == userId);
+            User user = _context.Users.Find(userId);
             if (user == null)
                 throw new ArgumentException("User Not Found");
             else
@@ -32,13 +32,28 @@ namespace BirdyAPI.Services
                 {
                     AvatarReference = user.AvatarReference,
                     FirstName = user.FirstName,
-                    UniqueTag = user.UniqueTag
+                    UniqueTag = user.UniqueTag,
+                    RegistrationDate = user.RegistrationDate
                 };
             }
         }
-        
+        public UserAccountDto SearchUserInfo(string uniqueTag)
+        {
+            User user = _context.Users.FirstOrDefault(k => k.UniqueTag == uniqueTag);
+            if (user == null)
+                throw new ArgumentException("User Not Found");
+            else
+            {
+                return new UserAccountDto
+                {
+                    AvatarReference = user.AvatarReference,
+                    FirstName = user.FirstName,
+                    UniqueTag = user.UniqueTag,
+                    RegistrationDate = user.RegistrationDate
+                };
+            }
+        }
 
-        
         public List<User> GetAllUsers()
         {
             return _context.Users.ToList();
