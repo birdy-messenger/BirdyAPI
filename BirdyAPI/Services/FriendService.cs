@@ -15,21 +15,21 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public FriendRequestAnswerDto AddFriend(FriendRequestDto friendRequest)
+        public SimpleAnswerDto AddFriend(FriendRequestDto friendRequest)
         {
             Friend counterRequest = _context.Friends.Find(friendRequest.IncomingUserID, friendRequest.OutgoingUserID);
             if (counterRequest == null)
             {
                 _context.Add(new Friend(friendRequest.IncomingUserID, friendRequest.OutgoingUserID, false));
                 _context.SaveChanges();
-                return new FriendRequestAnswerDto("Request sent");
+                return new SimpleAnswerDto{Result = "Request sent"};
             }
             else
             {
                 counterRequest.RequestAccepted = true;
                 _context.Friends.Update(counterRequest);
                 string newFriendName = _context.Users.Find(counterRequest.FirstUserID).FirstName;
-                return new FriendRequestAnswerDto($"{newFriendName} added as friend");
+                return new SimpleAnswerDto {Result = $"{newFriendName} added as friend"};
             }
 
         }
@@ -70,7 +70,7 @@ namespace BirdyAPI.Services
                     _context.Friends.Update(currentFriend);
                 }
             }
-            return new SimpleAnswerDto("Friend removed");
+            return new SimpleAnswerDto{Result = "Friend removed"};
         }
     }
 }

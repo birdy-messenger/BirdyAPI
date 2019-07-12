@@ -35,7 +35,7 @@ namespace BirdyAPI.Services
                 {
                     UserSession currentSession = _context.UserSessions.Add(new UserSession(currentUser.Id)).Entity;
                     _context.SaveChanges();
-                    return new SimpleAnswerDto(currentSession.Token.ToString());
+                    return new SimpleAnswerDto{Result = currentSession.Token.ToString()};
                 }
             }
 

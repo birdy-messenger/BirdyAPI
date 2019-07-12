@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/friends")]
+    [Route("friends")]
     public class FriendController : Controller
     {
         private readonly FriendService _friendService;
@@ -23,11 +23,11 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpPost]
-        [Route("addFriend")]
-        [ProducesResponseType(statusCode: 200, type: typeof(FriendRequestAnswerDto))]
+        [Route("{token}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult AddFriend([FromBody] FriendRequestDto friendRequest, [FromQuery] Guid token)
+        public IActionResult AddFriend([FromBody] FriendRequestDto friendRequest, Guid token)
         {
             try
             {

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/user")]
+    [Route("user")]
     public class UserController : Controller
     {
         private readonly UserService _userService;
@@ -22,11 +22,11 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
         [HttpGet]
-        [Route("get")]
+        [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetUserInfo([FromQuery] Guid token)
+        public IActionResult GetUserInfo(Guid token)
         {
             try
             {
@@ -51,28 +51,6 @@ namespace BirdyAPI.Controllers
             try
             {
                 return Ok(_userService.GetAllUsers());
-            }
-            catch (AuthenticationException)
-            {
-                return Unauthorized();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.SerializeAsResponse());
-            }
-        }
-
-        [HttpPost]
-        [Route("setAvatar")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
-        [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult SetAvatar([FromQuery] Guid token, [FromBody] byte[] photoBytes)
-        {
-            try
-            {
-                int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_userService.SetProfileAvatar(currentUserId, photoBytes));
             }
             catch (AuthenticationException)
             {
