@@ -29,13 +29,13 @@ namespace BirdyAPI.Controllers
         /// <response code = "200">Return user token</response>
         /// <response code = "401">User need to confirm email</response>
         /// <response code = "404">Invalid login or password</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         [HttpGet]
         [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         public IActionResult UserAuthentication([FromBody] AuthenticationDto user)
         {
             try
@@ -52,7 +52,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -60,12 +60,12 @@ namespace BirdyAPI.Controllers
         /// User registration
         /// </summary>
         /// <response code = "200">Confirm message sent</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "409">Duplicate account</response>
         [HttpPost]
         [Route("reg")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 409, type: typeof(void))]
         public IActionResult UserRegistration([FromBody]RegistrationDto user)
         {
@@ -80,7 +80,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -93,6 +93,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
+                
                 return Ok(_appEntryService.GetUserConfirmed(id));
             }
             catch (Exception ex)
@@ -105,7 +106,7 @@ namespace BirdyAPI.Controllers
         /// Change user password
         /// </summary>
         /// <response code = "200">Password changed</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "400">Wrong password</response>
         /// <response code = "401">Invalid token</response>
         [HttpPut]
@@ -113,7 +114,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         public IActionResult ChangePassword([FromHeader] Guid token, [FromBody] ChangePasswordDto passwordChanges)
         {
             try
@@ -132,7 +133,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -140,12 +141,12 @@ namespace BirdyAPI.Controllers
         /// Terminate all sessions
         /// </summary>
         /// <response code = "200">All sessions stopped</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ExitApp([FromHeader] Guid token)
         {
@@ -161,7 +162,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -169,12 +170,12 @@ namespace BirdyAPI.Controllers
         /// Terminate current session
         /// </summary>
         /// <response code = "200">Current session stopped</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult FullExitApp([FromHeader] Guid token)
         {
@@ -190,7 +191,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }

@@ -9,9 +9,9 @@ namespace BirdyAPI.Controllers
 {
     public class ExtendedController : Controller
     {
-        protected ObjectResult Teapot(ExceptionDto exception)
+        protected ObjectResult InternalServerError(ExceptionDto exception)
         {
-            return StatusCode(418, exception);
+            return StatusCode(500, exception);
         }
     }
 }

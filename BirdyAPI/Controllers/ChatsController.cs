@@ -26,11 +26,11 @@ namespace BirdyAPI.Controllers
         /// Get all user chats
         /// </summary>
         /// <response code = "200">Return chats info</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetChats([FromHeader] Guid token)
         {
@@ -45,7 +45,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -53,7 +53,7 @@ namespace BirdyAPI.Controllers
         /// Get chat info
         /// </summary>
         /// <response code = "200">Return chat info</response>
-        /// <response code = "418">I'm a teapot! Unexpected Exception (only for debug)</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "403">User isn't in this chat</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
@@ -61,7 +61,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        [ProducesResponseType(statusCode: 418, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         public IActionResult GetChat([FromHeader] Guid token, Guid chatId)
         {
             try
@@ -79,7 +79,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Teapot(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
