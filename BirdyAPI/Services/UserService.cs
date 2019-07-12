@@ -20,38 +20,17 @@ namespace BirdyAPI.Services
             _context = context;
             _configuration = configuration;
         }
-
-        public UserAccountDto SearchMySelfInfo(int userId)
+        public UserAccountDto GetUserInfo(int userId)
         {
             User user = _context.Users.Find(userId);
-            if (user == null)
-                throw new ArgumentException("User Not Found");
-            else
+
+            return new UserAccountDto
             {
-                return new UserAccountDto
-                {
-                    AvatarReference = user.AvatarReference,
-                    FirstName = user.FirstName,
-                    UniqueTag = user.UniqueTag,
-                    RegistrationDate = user.RegistrationDate
-                };
-            }
-        }
-        public UserAccountDto SearchUserInfo(string uniqueTag)
-        {
-            User user = _context.Users.FirstOrDefault(k => k.UniqueTag == uniqueTag);
-            if (user == null)
-                throw new ArgumentException("User Not Found");
-            else
-            {
-                return new UserAccountDto
-                {
-                    AvatarReference = user.AvatarReference,
-                    FirstName = user.FirstName,
-                    UniqueTag = user.UniqueTag,
-                    RegistrationDate = user.RegistrationDate
-                };
-            }
+                AvatarReference = user.AvatarReference,
+                FirstName = user.FirstName,
+                UniqueTag = user.UniqueTag,
+                RegistrationDate = user.RegistrationDate
+            };
         }
 
         public List<User> GetAllUsers()

@@ -29,18 +29,18 @@ namespace BirdyAPI.Controllers
         /// Current user data
         /// </summary>
         /// <response code = "200">Return current user data in JSON</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetMySelfInfo([FromHeader] Guid token)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_userService.SearchMySelfInfo(currentUserId));
+                return Ok(_userService.GetUserInfo(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -48,7 +48,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -56,27 +56,34 @@ namespace BirdyAPI.Controllers
         /// User data
         /// </summary>
         /// <response code = "200">Return user data in JSON</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
+        /// <response code = "404">User by tag not found</response>
         [HttpGet]
         [Route("{uniqueTag}")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 404, type: typeof(void))]
         public IActionResult GetUserInfo([FromHeader] Guid token, string uniqueTag)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_userService.SearchUserInfo(uniqueTag));
+                int userId = _toolService.GetUserIdByUniqueTag(uniqueTag);
+                return Ok(_userService.GetUserInfo(userId));
             }
             catch (AuthenticationException)
             {
                 return Unauthorized();
             }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
