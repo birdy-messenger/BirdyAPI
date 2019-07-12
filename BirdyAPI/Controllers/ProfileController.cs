@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [Route("profile")]
     public class ProfileController : Controller
     {

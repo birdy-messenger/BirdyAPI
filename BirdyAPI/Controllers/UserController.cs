@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("user")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [Route("users")]
     public class UserController : Controller
     {
         private readonly UserService _userService;

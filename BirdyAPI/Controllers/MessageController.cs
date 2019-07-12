@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/messages")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [Route("messages")]
     public class MessageController : Controller
     {
         private readonly MessageService _messageService;

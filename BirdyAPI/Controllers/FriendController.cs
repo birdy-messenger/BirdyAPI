@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [Route("friends")]
     public class FriendController : Controller
     {

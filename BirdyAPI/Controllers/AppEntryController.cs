@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 namespace BirdyAPI.Controllers
 {
     [Produces("application/json")]
+    [Consumes("application/json")]
     [Route("app")]
     public class AppEntryController : Controller
     {
