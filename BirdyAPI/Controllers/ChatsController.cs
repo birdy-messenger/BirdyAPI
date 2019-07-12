@@ -48,7 +48,7 @@ namespace BirdyAPI.Controllers
         }
 
         /// <summary>
-        /// Get all user chats
+        /// Get chat info
         /// </summary>
         /// <response code = "200">Return chat info</response>
         /// <response code = "400">Exception message</response>
@@ -58,7 +58,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetChat([FromQuery] Guid token, [FromQuery] Guid chatId)
+        public IActionResult GetChat([FromQuery] Guid token, Guid chatId)
         {
             try
             {
