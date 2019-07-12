@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
 {
-    [Route("api/chats")]
+    [Route("chats")]
     public class ChatsController : Controller
     {
         private readonly ChatsService _chatsService;
@@ -20,8 +20,13 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
+        /// <summary>
+        /// Get all user chats
+        /// </summary>
+        /// <response code = "200">Return chats info</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("getAllChats")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
@@ -42,8 +47,14 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all user chats
+        /// </summary>
+        /// <response code = "200">Return chat info</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("getChat")]
+        [Route("{chatId}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
