@@ -55,7 +55,6 @@ namespace BirdyAPI.Services
 
         }
 
-        //TODO :1 Make exception logic and messages
         public void DeleteFriend(int userId, int friendId)
         {
             bool isItInversedRequest = false;

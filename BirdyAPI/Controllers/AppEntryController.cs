@@ -23,6 +23,7 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
+        //TODO :1 Decrease status codes count
         /// <summary>
         /// User authentication
         /// </summary>

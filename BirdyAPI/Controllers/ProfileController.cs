@@ -27,12 +27,12 @@ namespace BirdyAPI.Controllers
         /// Set user avatar
         /// </summary>
         /// <response code = "200">Return reference to avatar</response>
-        /// <response code = "400">Exception message</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpPut]
         [Route("avatar")]
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult SetAvatar([FromHeader] Guid token, [FromBody] byte[] photoBytes)
         {
@@ -47,7 +47,7 @@ namespace BirdyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.SerializeAsResponse());
+                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }
