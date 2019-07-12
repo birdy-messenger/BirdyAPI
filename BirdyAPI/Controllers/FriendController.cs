@@ -13,7 +13,7 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("friends")]
-    public class FriendController : Controller
+    public class FriendController : ExtendedController
     {
         private readonly FriendService _friendService;
         private readonly ToolService _toolService;

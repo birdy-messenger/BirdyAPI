@@ -11,7 +11,7 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("messages")]
-    public class MessageController : Controller
+    public class MessageController : ExtendedController
     {
         private readonly MessageService _messageService;
         private readonly ToolService _toolService;

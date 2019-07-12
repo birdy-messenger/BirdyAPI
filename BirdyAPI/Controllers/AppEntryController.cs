@@ -12,7 +12,7 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("app")]
-    public class AppEntryController : Controller
+    public class AppEntryController : ExtendedController
     {
         private readonly AppEntryService _appEntryService;
         private readonly ToolService _toolService;

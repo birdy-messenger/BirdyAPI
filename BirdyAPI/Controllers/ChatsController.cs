@@ -12,7 +12,7 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("chats")]
-    public class ChatsController : Controller
+    public class ChatsController : ExtendedController
     {
         private readonly ChatsService _chatsService;
         private readonly ToolService _toolService;

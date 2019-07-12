@@ -11,7 +11,7 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("profile")]
-    public class ProfileController : Controller
+    public class ProfileController : ExtendedController
     {
         private readonly ToolService _toolService;
         private readonly ProfileService _profileService;
