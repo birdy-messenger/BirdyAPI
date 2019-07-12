@@ -23,11 +23,10 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpPost]
-        [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult SendFriendRequest([FromBody] string userUniqueTag, Guid token)
+        public IActionResult SendFriendRequest([FromBody] string userUniqueTag, [FromHeader] Guid token)
         {
             try
             {
@@ -46,11 +45,10 @@ namespace BirdyAPI.Controllers
         }
 
         [HttpPatch]
-        [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult AcceptFriendRequest([FromBody] string userUniqueTag, Guid token)
+        public IActionResult AcceptFriendRequest([FromBody] string userUniqueTag, [FromHeader] Guid token)
         {
             try
             {
@@ -73,7 +71,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetFriends([FromQuery] Guid token)
+        public IActionResult GetFriends([FromHeader] Guid token)
         {
             try
             {
@@ -95,7 +93,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult DeleteFriend([FromQuery] int friendId, Guid token)
+        public IActionResult DeleteFriend([FromQuery] int friendId, [FromHeader] Guid token)
         {
             try
             {

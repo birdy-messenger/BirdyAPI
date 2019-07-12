@@ -99,11 +99,11 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpPut]
-        [Route("password/{token}")]
+        [Route("password")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ChangePassword(Guid token, [FromBody] ChangePasswordDto passwordChanges)
+        public IActionResult ChangePassword([FromHeader] Guid token, [FromBody] ChangePasswordDto passwordChanges)
         {
             try
             {
@@ -128,11 +128,11 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
-        [Route("exit/all/{token}")]
+        [Route("exit/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ExitApp(Guid token)
+        public IActionResult ExitApp([FromHeader] Guid token)
         {
             try
             {
@@ -157,11 +157,11 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
-        [Route("exit/{token}")]
+        [Route("exit")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult FullExitApp(Guid token)
+        public IActionResult FullExitApp([FromHeader] Guid token)
         {
             try
             {

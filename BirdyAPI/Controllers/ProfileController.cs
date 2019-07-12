@@ -30,7 +30,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult SetAvatar([FromQuery] Guid token, [FromBody] byte[] photoBytes)
+        public IActionResult SetAvatar([FromHeader] Guid token, [FromBody] byte[] photoBytes)
         {
             try
             {

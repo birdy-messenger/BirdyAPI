@@ -30,11 +30,10 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetMySelfInfo(Guid token)
+        public IActionResult GetMySelfInfo([FromHeader] Guid token)
         {
             try
             {
@@ -58,11 +57,11 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("{token}&{uniqueTag}")]
+        [Route("{uniqueTag}")]
         [ProducesResponseType(statusCode: 200, type: typeof(UserAccountDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetUserInfo(Guid token, string uniqueTag)
+        public IActionResult GetUserInfo([FromHeader] Guid token, string uniqueTag)
         {
             try
             {

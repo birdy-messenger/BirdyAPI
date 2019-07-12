@@ -27,11 +27,10 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("{token}")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetChats(Guid token)
+        public IActionResult GetChats([FromHeader] Guid token)
         {
             try
             {
@@ -55,11 +54,11 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("{chatId}&{token}")]
+        [Route("{chatId}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetChat(Guid token, Guid chatId)
+        public IActionResult GetChat([FromHeader] Guid token, Guid chatId)
         {
             try
             {
