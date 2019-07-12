@@ -22,6 +22,13 @@ namespace BirdyAPI.Controllers
             _toolService = new ToolService(context);
         }
 
+
+        /// <summary>
+        /// Send friend request
+        /// </summary>
+        /// <response code = "200">Request sent</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpPost]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
@@ -44,6 +51,12 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Accept friend request
+        /// </summary>
+        /// <response code = "200">Request accepted</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpPatch]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
@@ -66,6 +79,12 @@ namespace BirdyAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get friends
+        /// </summary>
+        /// <response code = "200">Return list of friends</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpGet]
         [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
@@ -87,6 +106,13 @@ namespace BirdyAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Delete user for friend
+        /// </summary>
+        /// <response code = "200">Friend deleted</response>
+        /// <response code = "400">Exception message</response>
+        /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("{friendUniqueTag}")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
