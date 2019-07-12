@@ -29,8 +29,9 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "401">User need to confirm email</response>
         [HttpGet]
-        [ProducesResponseType(statusCode:200, type:typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode:400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type:typeof(void))]
         public IActionResult UserAuthentication([FromBody] AuthenticationDto user)
         {
             try
@@ -54,8 +55,9 @@ namespace BirdyAPI.Controllers
         /// <response code = "400">Exception message</response>
         /// <response code = "409">Duplicate account</response>
         [HttpPost]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 409, type: typeof(void))]
         public IActionResult UserRegistration([FromBody]RegistrationDto user)
         {
             try
@@ -96,7 +98,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         [HttpPut]
         [Route("password")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ChangePassword([FromQuery] Guid token, [FromBody] ChangePasswordDto passwordChanges)
@@ -125,7 +127,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit/all")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult ExitApp([FromQuery] Guid token)
@@ -154,7 +156,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
         [Route("exit")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 400, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult FullExitApp([FromQuery] Guid token)
