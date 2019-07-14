@@ -9,5 +9,10 @@ namespace BirdyAPI.Controllers
         {
             return StatusCode(500, exception);
         }
+
+        protected StatusCodeResult PartialContent()
+        {
+            return StatusCode(206);
+        }
     }
 }

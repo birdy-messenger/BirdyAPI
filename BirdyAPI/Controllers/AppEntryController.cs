@@ -27,12 +27,14 @@ namespace BirdyAPI.Controllers
         /// User authentication
         /// </summary>
         /// <response code = "200">Return user token</response>
+        /// <response code = "206">User need to choose uniqueTag</response>
         /// <response code = "401">User need to confirm email</response>
         /// <response code = "404">Invalid login or password</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         [HttpGet]
         [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 206, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
@@ -49,6 +51,10 @@ namespace BirdyAPI.Controllers
             catch (ArgumentException)
             {
                 return NotFound();
+            }
+            catch (UnfinishedAccountException)
+            {
+                return PartialContent();
             }
             catch (Exception ex)
             {

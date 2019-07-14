@@ -2,7 +2,7 @@
 
 namespace BirdyAPI.Tools
 {
-    public class DuplicateAccountException : Exception
+    public class UnfinishedAccountException : Exception
     {
     }
 }
