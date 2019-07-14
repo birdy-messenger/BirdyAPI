@@ -20,8 +20,8 @@ namespace BirdyAPI.Services
             UserSession currentSession = _context.UserSessions.Find(token);
             if (currentSession == null)
                 throw new AuthenticationException();
-            else
-                return currentSession.UserId;
+
+            return currentSession.UserId;
         }
 
         public int GetUserIdByUniqueTag(string uniqueTag)

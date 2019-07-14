@@ -24,25 +24,23 @@ namespace BirdyAPI.Services
 
         public SimpleAnswerDto Authentication(AuthenticationDto user)
         {
-            User currentUser = _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
+            User currentUser =
+                _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
 
-            if (currentUser != null)
-            {
-                if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
-                    throw new AuthenticationException();
-                else if(currentUser.CurrentStatus == UserStatus.NeverUsed)
-                {
-                    throw new UnfinishedAccountException();
-                }
-                else
-                {
-                    UserSession currentSession = _context.UserSessions.Add(new UserSession{Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
-                    _context.SaveChanges();
-                    return new SimpleAnswerDto{Result = currentSession.Token.ToString()};
-                }
-            }
+            if (currentUser == null)
+                throw new ArgumentException();
 
-            throw new ArgumentException();
+            if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
+                throw new AuthenticationException();
+
+            if (currentUser.CurrentStatus == UserStatus.NeverUsed)
+                throw new UnfinishedAccountException();
+
+            UserSession currentSession = _context.UserSessions
+                .Add(new UserSession {Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
+            _context.SaveChanges();
+
+            return new SimpleAnswerDto {Result = currentSession.Token.ToString()};
         }
 
 

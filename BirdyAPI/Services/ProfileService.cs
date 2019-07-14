@@ -23,13 +23,11 @@ namespace BirdyAPI.Services
         {
             if(_context.Users.Count(k => k.UniqueTag == newUniqueTag) != 0)
                 throw new DuplicateNameException();
-            else
-            {
-                User currentUser  = _context.Users.Find(userId);
+
+            User currentUser  = _context.Users.Find(userId);
                 currentUser.UniqueTag = newUniqueTag;
                 _context.Users.Update(currentUser);
                 _context.SaveChanges();
-            }
         }
         public SimpleAnswerDto SetAvatar(int userId, byte[] imageBytes)
         {
