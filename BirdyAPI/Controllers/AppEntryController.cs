@@ -99,7 +99,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _appEntryService.GetUserConfirmed(email, token);
+                _appEntryService.GetUserNeverUsed(email, token);
                 return Ok("CurrentStatus = 1");
             }
             catch (ArgumentException)

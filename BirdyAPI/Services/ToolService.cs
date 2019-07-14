@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
+using BirdyAPI.Types;
 
 namespace BirdyAPI.Services
 {
@@ -30,6 +31,14 @@ namespace BirdyAPI.Services
                 throw new ArgumentException();
 
             return currentUser.Id;
+        }
+
+        public void GetUserConfirmed(int userId)
+        {
+            User currentUser = _context.Users.Find(userId);
+            currentUser.CurrentStatus = UserStatus.Confirmed;
+            _context.Users.Update(currentUser);
+            _context.SaveChanges();
         }
     }
 }

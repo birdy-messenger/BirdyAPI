@@ -71,6 +71,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _toolService.ValidateToken(token);
                 _profileService.SetUniqueTag(currentUserId, uniqueTag);
+                _toolService.GetUserConfirmed(currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)

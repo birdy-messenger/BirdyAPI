@@ -47,7 +47,7 @@ namespace BirdyAPI.Services
 
 
 
-        public void GetUserConfirmed(string email, Guid token)
+        public void GetUserNeverUsed(string email, Guid token)
         {
             ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);
             if(currentConfirmToken == null || currentConfirmToken.Token != token)
