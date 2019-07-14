@@ -1,4 +1,4 @@
-﻿namespace BirdyAPI.Models
+﻿namespace BirdyAPI.Types
 {
     public enum UserStatus
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using BirdyAPI.Dto;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
@@ -37,7 +34,7 @@ namespace BirdyAPI.Services
             CloudStorageAccount account =
                 new CloudStorageAccount(
                     new StorageCredentials("birdystorage",
-                        _configuration.GetConnectionString("BlobStorage")), true);
+                        ConfigurationManager.AppSettings["BlobStorage"]), true);
 
             var blobClient = account.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference($"user{id}");

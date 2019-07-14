@@ -37,7 +37,6 @@ namespace BirdyAPI
 
             services.AddDbContext<BirdyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

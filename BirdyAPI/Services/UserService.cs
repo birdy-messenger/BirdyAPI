@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BirdyAPI.DataBaseModels;
+﻿using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Auth;
-using Microsoft.Azure.Storage.Blob;
-using Microsoft.Extensions.Configuration;
-
 namespace BirdyAPI.Services
 {
     public class UserService
@@ -29,11 +21,6 @@ namespace BirdyAPI.Services
                 UniqueTag = user.UniqueTag,
                 RegistrationDate = user.RegistrationDate
             };
-        }
-
-        public List<User> GetAllUsers()
-        {
-            return _context.Users.ToList();
         }
     }
 }

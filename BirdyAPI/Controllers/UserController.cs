@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Authentication;
-using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
@@ -20,7 +18,7 @@ namespace BirdyAPI.Controllers
 
         public UserController(BirdyContext context, IConfiguration configuration)
         {
-            _userService = new UserService(context, configuration);
+            _userService = new UserService(context);
             _toolService = new ToolService(context);
         }
 
@@ -84,25 +82,6 @@ namespace BirdyAPI.Controllers
             catch (Exception ex)
             {
                 return InternalServerError(ex.SerializeAsResponse());
-            }
-        }
-
-        [HttpGet]
-        [Route("show")]
-        [Produces(typeof(List<User>))]
-        public IActionResult GetUsers() //Чисто для тестов/проверки/чека бд, так что никакх проверок на токены и т.д.
-        {
-            try
-            {
-                return Ok(_userService.GetAllUsers());
-            }
-            catch (AuthenticationException)
-            {
-                return Unauthorized();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.SerializeAsResponse());
             }
         }
     }

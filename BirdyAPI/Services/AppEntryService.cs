@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
-using BirdyAPI.Models;
 using BirdyAPI.Tools;
+using BirdyAPI.Types;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -115,7 +116,7 @@ namespace BirdyAPI.Services
 
         private async void SendConfirmEmail(string email, string confirmReference)
         {
-            SendGridClient client = new SendGridClient(apiKey: _configuration.GetConnectionString("SendGrid"));
+            SendGridClient client = new SendGridClient(apiKey: ConfigurationManager.AppSettings["SendGrid"]);
             SendGridMessage message = MessageBuilder(email, confirmReference);
 
             await client.SendEmailAsync(message);

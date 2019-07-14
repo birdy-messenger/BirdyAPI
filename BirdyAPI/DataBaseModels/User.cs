@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using BirdyAPI.Dto;
-using BirdyAPI.Models;
+using BirdyAPI.Types;
 
 namespace BirdyAPI.DataBaseModels
 {

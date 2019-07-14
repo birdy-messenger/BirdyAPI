@@ -1,9 +1,4 @@
-﻿using System;
-using System.Security.Authentication;
-using BirdyAPI.DataBaseModels;
-using BirdyAPI.Dto;
-using BirdyAPI.Services;
-using BirdyAPI.Tools;
+﻿using BirdyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Authentication;
-using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
@@ -67,7 +66,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_chatsService.GetChat(currentUserId, chatId));
+                return Ok(_chatsService.GetChatInfo(currentUserId, chatId));
             }
             catch (AuthenticationException)
             {

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Security.Authentication;
-using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
-using BirdyAPI.Models;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
@@ -110,7 +108,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "404">User by tag not found</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriendDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
@@ -144,7 +142,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "404">User by tag not found</response>
         [HttpGet]
         [Route("{userUniqueTag}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriend>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<UserFriendDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]

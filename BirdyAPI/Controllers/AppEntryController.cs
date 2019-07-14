@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Authentication;
-using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
@@ -145,7 +144,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
-        [Route("exit/all")]
+        [Route("logout/all")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
@@ -174,7 +173,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpDelete]
-        [Route("exit")]
+        [Route("logout")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]

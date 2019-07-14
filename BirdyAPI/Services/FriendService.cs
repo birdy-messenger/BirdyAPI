@@ -3,7 +3,6 @@ using System.Data;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
-using BirdyAPI.Models;
 
 namespace BirdyAPI.Services
 {
@@ -45,13 +44,13 @@ namespace BirdyAPI.Services
             _context.Friends.Update(inverseRequest);
         }
 
-        public IQueryable<UserFriend> GetFriends(int userId)
+        public IQueryable<UserFriendDto> GetFriends(int userId)
         {
             return _context.Users.Where(k =>
                 _context.Friends.Where(e => e.FirstUserID == userId && e.RequestAccepted)
                     .Any(x => x.SecondUserID == k.Id)).Union(_context.Users.Where(k =>
                 _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
-                    .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriend{Id = k.Id, FirstName = k.FirstName, Avatar = k.AvatarReference});
+                    .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriendDto{Id = k.Id, FirstName = k.FirstName, Avatar = k.AvatarReference});
 
         }
 

@@ -16,26 +16,19 @@ namespace BirdyAPI.Services
 
         public List<ChatInfoDto> GetChats(int userId)
         {
-            List<ChatInfoDto> chats = new List<ChatInfoDto>();
-
-            foreach (var chat in _context.ChatUsers.Where(k => k.UserInChatID == userId))
-            {
-                chats.Add(GetChat(chat.ChatID));
-            }
-
-            return chats;
+            return _context.ChatUsers.Where(k => k.UserInChatID == userId).Select(k => GetChatInfo(k.ChatID)).ToList();
         }
 
-        public ChatInfoDto GetChat(int userId, Guid chatId)
+        public ChatInfoDto GetChatInfo(int userId, Guid chatId)
         {
             ChatUsers userChat = _context.ChatUsers.Find( userId, chatId);
             if(userChat == null)
                 throw new ArgumentException();
 
-            return GetChat(chatId);
+            return GetChatInfo(chatId);
         }
 
-        private ChatInfoDto GetChat(Guid chatId)
+        private ChatInfoDto GetChatInfo(Guid chatId)
         {
             ChatInfo currentChat = _context.ChatInfo.Find(chatId);
 
