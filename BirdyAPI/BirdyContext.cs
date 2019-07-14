@@ -11,6 +11,7 @@ namespace BirdyAPI
         public DbSet<ChatUsers> ChatUsers { get; set; }
         public DbSet<ChatInfo> ChatInfo { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<ConfirmTokens> ConfirmTokens { get; set; }
         public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }

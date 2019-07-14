@@ -4,7 +4,6 @@ using BirdyAPI.Types;
 
 namespace BirdyAPI.DataBaseModels
 {
-    //TODO :4 fix set in dbModels, models and Dto
     public class User
     {
         [Key]
