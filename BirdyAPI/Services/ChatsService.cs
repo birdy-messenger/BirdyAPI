@@ -21,7 +21,7 @@ namespace BirdyAPI.Services
 
         public ChatInfoDto GetChatInfo(int userId, Guid chatId)
         {
-            ChatUsers userChat = _context.ChatUsers.Find( userId, chatId);
+            ChatUser userChat = _context.ChatUsers.Find( userId, chatId);
             if(userChat == null)
                 throw new ArgumentException();
 

@@ -8,10 +8,10 @@ namespace BirdyAPI
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
-        public DbSet<ChatUsers> ChatUsers { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<ChatInfo> ChatInfo { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<ConfirmTokens> ConfirmTokens { get; set; }
+        public DbSet<ConfirmToken> ConfirmTokens { get; set; }
         public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }
@@ -19,7 +19,7 @@ namespace BirdyAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Friend>().HasKey(k => new {k.FirstUserID, k.SecondUserID});
-            modelBuilder.Entity<ChatUsers>().HasKey(k => new {k.ChatID, k.UserInChatID});
+            modelBuilder.Entity<ChatUser>().HasKey(k => new {k.ChatID, k.UserInChatID});
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BirdyAPI.DataBaseModels
 {
-    public class ConfirmTokens
+    public class ConfirmToken
     {
         [Key]
         public string Email { get; set; }
-        public Guid ConfirmToken { get; set; }
+        public Guid Token { get; set; }
         public DateTime TokenDate { get; set; }
     }
 }

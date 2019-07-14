@@ -64,6 +64,17 @@ namespace BirdyAPI.Services
             if (_context.Users.SingleOrDefault(k => k.Email == registrationData.Email) != null)
                 throw new DuplicateAccountException();
 
+            AddNewUser(registrationData);
+            Guid currentToken = CreateConfirmToken(registrationData.Email);
+
+            string userReference = "birdytestapi.azurewebsites.net/app/confirm" +
+                                   new QueryBuilder { { "email", registrationData.Email }, {"token", currentToken.ToString()} }.ToQueryString();
+
+            SendConfirmEmail(registrationData.Email, userReference);
+        }
+
+        private void AddNewUser(RegistrationDto registrationData)
+        {
             User newUser = new User
             {
                 Email = registrationData.Email,
@@ -77,13 +88,21 @@ namespace BirdyAPI.Services
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
-
-            string userReference = "birdytestapi.azurewebsites.net/app/confirm" +
-                                   new QueryBuilder { { "id", newUser.Id.ToString() } }.ToQueryString();
-
-            SendConfirmEmail(newUser.Email, userReference);
         }
 
+        private Guid CreateConfirmToken(string email)
+        {
+            ConfirmToken newConfirmToken = new ConfirmToken
+            {
+                Email = email,
+                Token = Guid.NewGuid(),
+                TokenDate = DateTime.Now
+            };
+            _context.ConfirmTokens.Add(newConfirmToken);
+            _context.SaveChanges();
+
+            return newConfirmToken.Token;
+        }
         public void ChangePassword(int id, ChangePasswordDto passwordChanges)
         {
             User currentUser = _context.Users.Find(id);
