@@ -85,16 +85,24 @@ namespace BirdyAPI.Controllers
         }
 
 
-        //TODO :2 Rewrite without userId in url
+        //Нужно что-то нормальное возвращать, чтобы юзер вообще понимал, что происходит
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         [Route("confirm")]
-        public IActionResult EmailConfirming([FromQuery] int id)
+        public IActionResult EmailConfirming([FromQuery] string email, Guid token)
         {
             try
             {
-                
-                return Ok(_appEntryService.GetUserConfirmed(id));
+                _appEntryService.GetUserConfirmed(email, token);
+                return Ok("CurrentStatus = 1");
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest("Invalid link");
+            }
+            catch (TimeoutException)
+            {
+                return Forbid("Timeout");
             }
             catch (Exception ex)
             {

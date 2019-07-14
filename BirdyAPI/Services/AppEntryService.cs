@@ -45,18 +45,26 @@ namespace BirdyAPI.Services
 
 
 
-        public string GetUserConfirmed(int id)
+        public void GetUserConfirmed(string email, Guid token)
         {
-            User user = _context.Users.Find(id);
-            if (user == null)
-                throw new ArgumentException("Invalid link");
+            ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);
+            if(currentConfirmToken == null || currentConfirmToken.Token != token)
+                throw new ArgumentException();
 
-            user.CurrentStatus = UserStatus.Confirmed;
 
-            _context.Users.Update(user);
+            if (currentConfirmToken.TokenDate.AddDays(1) < DateTime.Now)
+            {
+                _context.ConfirmTokens.Remove(currentConfirmToken);
+                _context.SaveChanges();
+                throw new TimeoutException();
+            }
+
+
+            User confirmedUser = _context.Users.Single(k => k.Email == email);
+            confirmedUser.CurrentStatus = UserStatus.Confirmed;
+            _context.Users.Update(confirmedUser);
+            _context.ConfirmTokens.Remove(currentConfirmToken);
             _context.SaveChanges();
-            return JsonConvert.SerializeObject(new { Status = user.CurrentStatus });
-            //Здесь вообще должно быть что-то другое, пока оставлю так
         }
 
         public void CreateNewAccount(RegistrationDto registrationData)
