@@ -53,7 +53,7 @@ namespace BirdyAPI.Controllers
         }
 
         /// <summary>
-        /// Set user avatar
+        /// Set user unique tag for first auth
         /// </summary>
         /// <response code = "200">Return reference to avatar</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
@@ -66,6 +66,41 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
         public IActionResult CreateUniqueTag([FromHeader] Guid token, [FromBody] string uniqueTag)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _profileService.SetUniqueTag(currentUserId, uniqueTag);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (DuplicateNameException)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// Set user unique tag
+        /// </summary>
+        /// <response code = "200">Return reference to avatar</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
+        /// <response code = "401">Invalid token</response>
+        /// <response code = "403">Tag is not unique</response>
+        [HttpPut]
+        [Route("uniqueTag")]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
+        public IActionResult ChangeUniqueTag([FromHeader] Guid token, [FromBody] string uniqueTag)
         {
             try
             {
