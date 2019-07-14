@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
@@ -16,10 +17,10 @@ namespace BirdyAPI.Controllers
         private readonly ToolService _toolService;
         private readonly ProfileService _profileService;
 
-        public ProfileController(BirdyContext context, IConfiguration configuration)
+        public ProfileController(BirdyContext context)
         {
             _toolService = new ToolService(context);
-            _profileService = new ProfileService(context, configuration);
+            _profileService = new ProfileService(context);
         }
 
 
@@ -39,11 +40,46 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_profileService.SetProfileAvatar(currentUserId, photoBytes));
+                return Ok(_profileService.SetAvatar(currentUserId, photoBytes));
             }
             catch (AuthenticationException)
             {
                 return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// Set user avatar
+        /// </summary>
+        /// <response code = "200">Return reference to avatar</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
+        /// <response code = "401">Invalid token</response>
+        /// <response code = "403">Tag is not unique</response>
+        [HttpPost]
+        [Route("uniqueTag")]
+        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
+        public IActionResult CreateUniqueTag([FromHeader] Guid token, [FromBody] string uniqueTag)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _profileService.SetUniqueTag(currentUserId, uniqueTag);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (DuplicateNameException)
+            {
+                return Forbid();
             }
             catch (Exception ex)
             {

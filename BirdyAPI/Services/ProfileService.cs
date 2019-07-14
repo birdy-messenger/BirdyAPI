@@ -1,4 +1,7 @@
 ﻿using System.Configuration;
+using System.Data;
+using System.Linq;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
@@ -10,15 +13,25 @@ namespace BirdyAPI.Services
     public class ProfileService
     {
         private readonly BirdyContext _context;
-        private readonly IConfiguration _configuration;
 
-        public ProfileService(BirdyContext context, IConfiguration configuration)
+        public ProfileService(BirdyContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
-        public SimpleAnswerDto SetProfileAvatar(int userId, byte[] imageBytes)
+        public void SetUniqueTag(int userId, string newUniqueTag)
+        {
+            if(_context.Users.Count(k => k.UniqueTag == newUniqueTag) != 0)
+                throw new DuplicateNameException();
+            else
+            {
+                User currentUser  = _context.Users.Find(userId);
+                currentUser.UniqueTag = newUniqueTag;
+                _context.Users.Update(currentUser);
+                _context.SaveChanges();
+            }
+        }
+        public SimpleAnswerDto SetAvatar(int userId, byte[] imageBytes)
         {
             CloudBlockBlob blob = InitAzureBlob(userId);
 

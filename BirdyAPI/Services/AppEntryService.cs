@@ -17,11 +17,9 @@ namespace BirdyAPI.Services
     public class AppEntryService
     {
         private readonly BirdyContext _context;
-        private readonly IConfiguration _configuration;
-        public AppEntryService(BirdyContext context, IConfiguration configuration)
+        public AppEntryService(BirdyContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         public SimpleAnswerDto Authentication(AuthenticationDto user)
