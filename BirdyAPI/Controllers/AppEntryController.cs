@@ -31,7 +31,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">User need to confirm email</response>
         /// <response code = "404">Invalid login or password</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
-        [HttpGet]
+        [HttpPost]
         [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 206, type: typeof(SimpleAnswerDto))]
