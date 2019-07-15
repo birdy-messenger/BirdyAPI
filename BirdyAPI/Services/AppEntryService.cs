@@ -128,7 +128,7 @@ namespace BirdyAPI.Services
 
         public void TerminateSession(Guid token, int userId)
         {
-            UserSession currentSession = new UserSession{Token = token, UserId = userId};
+             UserSession currentSession = _context.UserSessions.Single(k => k.Token == token && k.UserId == userId);
             _context.UserSessions.Remove(currentSession);
             _context.SaveChanges();
         }

@@ -162,7 +162,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult ExitApp([FromHeader] Guid token)
+        public IActionResult FullExitApp([FromHeader] Guid token)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult FullExitApp([FromHeader] Guid token)
+        public IActionResult ExitApp([FromHeader] Guid token)
         {
             try
             {
