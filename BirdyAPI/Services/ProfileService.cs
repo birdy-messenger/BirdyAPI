@@ -13,10 +13,11 @@ namespace BirdyAPI.Services
     public class ProfileService
     {
         private readonly BirdyContext _context;
-
-        public ProfileService(BirdyContext context)
+        private readonly IConfiguration _configuration;
+        public ProfileService(BirdyContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public void SetUniqueTag(int userId, string newUniqueTag)
@@ -45,7 +46,7 @@ namespace BirdyAPI.Services
             CloudStorageAccount account =
                 new CloudStorageAccount(
                     new StorageCredentials("birdystorage",
-                        ConfigurationManager.AppSettings["BlobStorage"]), true);
+                        _configuration.GetConnectionString("BlobStorage")), true);
 
             var blobClient = account.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference($"user{id}");
