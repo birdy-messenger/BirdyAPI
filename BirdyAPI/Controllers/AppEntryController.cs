@@ -52,9 +52,9 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (UnfinishedAccountException)
+            catch (UnfinishedAccountException ex)
             {
-                return PartialContent();
+                return PartialContent(new SimpleAnswerDto{Result = ex.Message});
             }
             catch (Exception ex)
             {

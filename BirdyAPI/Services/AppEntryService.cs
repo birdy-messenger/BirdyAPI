@@ -36,12 +36,12 @@ namespace BirdyAPI.Services
             if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
                 throw new AuthenticationException();
 
-            if (currentUser.CurrentStatus == UserStatus.NeverUsed)
-                throw new UnfinishedAccountException();
-
             UserSession currentSession = _context.UserSessions
                 .Add(new UserSession {Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
             _context.SaveChanges();
+
+            if (currentUser.CurrentStatus == UserStatus.NeverUsed)
+                throw new UnfinishedAccountException(currentSession.Token.ToString());
 
             return new SimpleAnswerDto {Result = currentSession.Token.ToString()};
         }

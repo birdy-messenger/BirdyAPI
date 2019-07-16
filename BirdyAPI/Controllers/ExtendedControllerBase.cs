@@ -10,9 +10,9 @@ namespace BirdyAPI.Controllers
             return StatusCode(500, exception);
         }
 
-        protected StatusCodeResult PartialContent()
+        protected ObjectResult PartialContent(SimpleAnswerDto answer)
         {
-            return StatusCode(206);
+            return StatusCode(206, answer);
         }
     }
 }
