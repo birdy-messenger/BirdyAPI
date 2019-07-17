@@ -11,13 +11,13 @@ namespace BirdyAPI.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("chats")]
-    public class ChatsController : ExtendedController
+    public class ChatController : ExtendedController
     {
-        private readonly ChatsService _chatsService;
+        private readonly ChatService _chatService;
         private readonly ToolService _toolService;
-        public ChatsController(BirdyContext context)
+        public ChatController(BirdyContext context)
         {
-            _chatsService = new ChatsService(context);
+            _chatService = new ChatService(context);
             _toolService = new ToolService(context);
         }
 
@@ -36,7 +36,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_chatsService.GetChats(currentUserId));
+                return Ok(_chatService.GetChats(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -66,7 +66,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_chatsService.GetChatInfo(currentUserId, chatId));
+                return Ok(_chatService.GetChatInfo(currentUserId, chatId));
             }
             catch (AuthenticationException)
             {

@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Tools;
 using BirdyAPI.Types;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 

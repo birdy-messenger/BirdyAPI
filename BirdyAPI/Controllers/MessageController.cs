@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Security.Authentication;
-using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;

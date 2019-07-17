@@ -4,7 +4,6 @@ using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {

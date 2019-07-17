@@ -6,10 +6,10 @@ using BirdyAPI.Dto;
 
 namespace BirdyAPI.Services
 {
-    public class ChatsService
+    public class ChatService
     {
         private readonly BirdyContext _context;
-        public ChatsService(BirdyContext context)
+        public ChatService(BirdyContext context)
         {
             _context = context;
         }

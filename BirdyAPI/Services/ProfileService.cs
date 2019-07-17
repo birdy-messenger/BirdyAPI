@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
