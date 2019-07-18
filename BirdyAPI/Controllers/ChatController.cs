@@ -102,6 +102,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _toolService.ValidateToken(token);
                 List<int> friendsId = friendsUniqueTags.Select(k => _toolService.GetUserIdByUniqueTag(k)).ToList();
+                friendsId.RemoveAll(k => !_toolService.IsItUserFriend(currentUserId ,k));
                 _chatService.CreateChat(friendsId, currentUserId);
                 return Ok();
             }

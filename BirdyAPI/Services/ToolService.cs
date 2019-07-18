@@ -40,5 +40,22 @@ namespace BirdyAPI.Services
             _context.Users.Update(currentUser);
             _context.SaveChanges();
         }
+        public bool IsItUserFriend(int currentUserId, int userId)
+        {
+            Friend currentFriend = _context.Friends.Find(userId, currentUserId);
+            if (currentFriend == null)
+            {
+                Friend currentInverseFriend = _context.Friends.Find(currentUserId, userId);
+                if (currentInverseFriend.RequestAccepted)
+                    return true;
+
+                return false;
+            }
+
+            if (currentFriend.RequestAccepted)
+                return true;
+
+            return false;
+        }
     }
 }

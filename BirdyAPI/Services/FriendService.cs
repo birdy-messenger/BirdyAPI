@@ -51,7 +51,6 @@ namespace BirdyAPI.Services
                     .Any(x => x.SecondUserID == k.Id)).Union(_context.Users.Where(k =>
                 _context.Friends.Where(e => e.SecondUserID == userId && e.RequestAccepted)
                     .Any(x => x.FirstUserID == k.Id))).Select(k => new UserFriendDto{Id = k.Id, FirstName = k.FirstName, Avatar = k.AvatarReference});
-
         }
 
         public void DeleteFriend(int userId, int friendId)
@@ -63,9 +62,6 @@ namespace BirdyAPI.Services
                 acceptedRequest = _context.Friends.Find(friendId, userId);
                 isItInversedRequest = true;
             }
-
-            if(acceptedRequest == null || acceptedRequest.RequestAccepted == false)
-                throw new DataException();
 
             if (isItInversedRequest)
             {
