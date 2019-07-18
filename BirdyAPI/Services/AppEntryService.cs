@@ -43,8 +43,6 @@ namespace BirdyAPI.Services
             return new SimpleAnswerDto {Result = currentSession.Token.ToString()};
         }
 
-
-
         public void GetUserNeverUsed(string email, Guid token)
         {
             ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);

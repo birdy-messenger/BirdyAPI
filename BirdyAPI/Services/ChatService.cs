@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
+using BirdyAPI.Types;
 
 namespace BirdyAPI.Services
 {
@@ -41,6 +42,48 @@ namespace BirdyAPI.Services
                 LastMessage = chatLastMessage?.Text,
                 LastMessageTime = chatLastMessage?.SendDate ?? DateTime.MinValue
             };
+        }
+
+        public void CreateChat(List<int> usersId, int chatCreatorId)
+        {
+            ChatUser newChatAdmin = new ChatUser
+            {
+                ChatID = Guid.NewGuid(),
+                UserInChatID = chatCreatorId,
+                Status = ChatStatus.Admin,
+                ChatNumber = _context.ChatUsers.Count(k => k.UserInChatID == chatCreatorId) + 1
+            };
+            _context.ChatUsers.Add(newChatAdmin);
+            usersId.ForEach(k =>
+            {
+                if(IsItUserFriend(chatCreatorId, k))
+                    _context.ChatUsers.Add(new ChatUser
+                    {
+                        ChatID = newChatAdmin.ChatID,
+                        UserInChatID = k,
+                        Status = ChatStatus.User,
+                        ChatNumber = _context.ChatUsers.Count(e => e.UserInChatID == chatCreatorId) + 1
+                    });
+            });
+            _context.SaveChanges();
+        }
+
+        private bool IsItUserFriend(int currentUserId, int userId)
+        {
+            Friend currentFriend = _context.Friends.Find(userId, currentUserId);
+            if (currentFriend == null)
+            {
+                Friend currentInverseFriend = _context.Friends.Find(currentUserId, userId);
+                if (currentInverseFriend.RequestAccepted)
+                    return true;
+
+                return false;
+            }
+
+            if (currentFriend.RequestAccepted)
+                return true;
+
+            return false;
         }
     }
 }
