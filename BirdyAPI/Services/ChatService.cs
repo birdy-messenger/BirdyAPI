@@ -4,6 +4,7 @@ using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Types;
+using BirdyAPI.Tools.Exceptions;
 
 namespace BirdyAPI.Services
 {
@@ -61,10 +62,29 @@ namespace BirdyAPI.Services
                     ChatID = newChatAdmin.ChatID,
                     UserInChatID = k,
                     Status = ChatStatus.User,
-                    ChatNumber = _context.ChatUsers.Count(e => e.UserInChatID == chatCreatorId) + 1
+                    ChatNumber = GetNextChatNumber(k)
                 });
             });
             _context.SaveChanges();
+        }
+
+        public void AddUserToChat(int currentUserId, int userId, int chatNumber)
+        {
+            Guid currentChatID =
+                _context.ChatUsers.Single(k => k.ChatNumber == chatNumber && k.UserInChatID == currentUserId).ChatID;
+
+            _context.ChatUsers.Add(new ChatUser
+            {
+                ChatID = currentChatID,
+                UserInChatID = userId,
+                ChatNumber = GetNextChatNumber(userId),
+                Status = ChatStatus.User
+            });
+        }
+
+        private int GetNextChatNumber(int userId)
+        {
+            return _context.ChatUsers.Count(e => e.UserInChatID == userId) + 1;
         }
     }
 }
