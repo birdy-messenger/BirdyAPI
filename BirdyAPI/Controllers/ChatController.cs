@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
+using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Tools.Extensions;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
@@ -125,17 +126,19 @@ namespace BirdyAPI.Controllers
         }
 
         /// <summary>
-        /// Create chat with user friends
+        /// Add friend to chat
         /// </summary>
-        /// <response code = "200">Chat created</response>
+        /// <response code = "200">Friend added</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
+        /// <response code = "403">User has no rights for this action</response>
         /// <response code = "404">User by tag not found</response>;
         [HttpPatch]
         [Route("{chatNumber}")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
 
         public IActionResult AddFriendToChat([FromHeader] Guid token, [FromBody] string friendUniqueTag, int chatNumber)
@@ -145,7 +148,7 @@ namespace BirdyAPI.Controllers
                 int currentUserId = _toolService.ValidateToken(token);
                 int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
-                if(!_toolService.IsItUserFriend(currentUserId, friendId))
+                if (!_toolService.IsItUserFriend(currentUserId, friendId))
                     throw new DataException();
                 _chatService.AddUserToChat(currentUserId, friendId, chatNumber);
                 return Ok();
@@ -153,6 +156,10 @@ namespace BirdyAPI.Controllers
             catch (AuthenticationException)
             {
                 return Unauthorized();
+            }
+            catch (InsufficientRightsException)
+            {
+                return Forbid();
             }
             catch (ArgumentException)
             {
