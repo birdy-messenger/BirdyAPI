@@ -2,7 +2,8 @@
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
-using BirdyAPI.Tools;
+using BirdyAPI.Tools.Exceptions;
+using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 

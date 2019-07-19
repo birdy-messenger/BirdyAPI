@@ -1,6 +1,6 @@
 ﻿using System;
 using BirdyAPI.Services;
-using BirdyAPI.Tools;
+using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers

@@ -1,7 +1,7 @@
 ﻿using System;
 using BirdyAPI.Dto;
 
-namespace BirdyAPI.Tools
+namespace BirdyAPI.Tools.Extensions
 {
     public static class ExceptionExtensions
     {
