@@ -65,17 +65,19 @@ namespace BirdyAPI.Services
                     ChatNumber = GetNextChatNumber(k)
                 });
             });
+
+            _context.ChatInfo.Add(new ChatInfo {ChatID = newChatAdmin.ChatID, ChatName = "New chat"});
             _context.SaveChanges();
         }
 
         public void AddUserToChat(int currentUserId, int userId, int chatNumber)
         {
-            Guid currentChatID =
+            Guid currentChatId =
                 _context.ChatUsers.Single(k => k.ChatNumber == chatNumber && k.UserInChatID == currentUserId).ChatID;
 
             _context.ChatUsers.Add(new ChatUser
             {
-                ChatID = currentChatID,
+                ChatID = currentChatId,
                 UserInChatID = userId,
                 ChatNumber = GetNextChatNumber(userId),
                 Status = ChatStatus.User
@@ -85,6 +87,15 @@ namespace BirdyAPI.Services
         private int GetNextChatNumber(int userId)
         {
             return _context.ChatUsers.Count(e => e.UserInChatID == userId) + 1;
+        }
+
+        public void RenameChat(int currentUserId, int chatNumber, string newChatName)
+        {
+            Guid currentChatId  = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber).ChatID;
+            ChatInfo currentChatInfo = _context.ChatInfo.Find(currentChatId);
+            currentChatInfo.ChatName = newChatName;
+            _context.ChatInfo.Update(currentChatInfo);
+            _context.SaveChanges();
         }
     }
 }

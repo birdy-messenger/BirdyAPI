@@ -149,7 +149,7 @@ namespace BirdyAPI.Controllers
                 int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 if (!_toolService.IsItUserFriend(currentUserId, friendId))
-                    throw new DataException();
+                    throw new InsufficientRightsException();
                 _chatService.AddUserToChat(currentUserId, friendId, chatNumber);
                 return Ok();
             }
@@ -164,6 +164,43 @@ namespace BirdyAPI.Controllers
             catch (ArgumentException)
             {
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// Rename chat
+        /// </summary>
+        /// <response code = "200">Chat renamed</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
+        /// <response code = "401">Invalid token</response>
+        /// <response code = "403">User has no rights for this action</response>
+        [HttpPut]
+        [Route("{chatNumber}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
+
+        public IActionResult RenameChat([FromHeader] Guid token, int chatNumber, [FromBody] string newChatName)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User, ChatStatus.Admin);
+                _chatService.RenameChat(currentUserId, chatNumber, newChatName);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (InsufficientRightsException)
+            {
+                return Forbid();
             }
             catch (Exception ex)
             {
