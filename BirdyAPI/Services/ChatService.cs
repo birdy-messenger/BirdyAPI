@@ -18,14 +18,12 @@ namespace BirdyAPI.Services
 
         public List<ChatInfoDto> GetChats(int userId)
         {
-            return _context.ChatUsers.Where(k => k.UserInChatID == userId).Select(k => GetChatInfo(k.ChatID)).ToList();
+            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User).Select(k => GetChatInfo(k.ChatID)).ToList();
         }
 
-        public ChatInfoDto GetChatInfo(int userId, Guid chatId)
+        public ChatInfoDto GetChatInfo(int userId, int chatNumber)
         {
-            ChatUser userChat = _context.ChatUsers.Find( userId, chatId);
-            if(userChat == null)
-                throw new ArgumentException();
+            Guid chatId = GetChatIdByChatNumberAndUserId(userId, chatNumber);
 
             return GetChatInfo(chatId);
         }
@@ -89,13 +87,18 @@ namespace BirdyAPI.Services
             return _context.ChatUsers.Count(e => e.UserInChatID == userId) + 1;
         }
 
-        public void RenameChat(int currentUserId, int chatNumber, string newChatName)
+        public void RenameChat(int userId, int chatNumber, string newChatName)
         {
-            Guid currentChatId  = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber).ChatID;
+            Guid currentChatId  = GetChatIdByChatNumberAndUserId(userId, chatNumber);
             ChatInfo currentChatInfo = _context.ChatInfo.Find(currentChatId);
             currentChatInfo.ChatName = newChatName;
             _context.ChatInfo.Update(currentChatInfo);
             _context.SaveChanges();
+        }
+
+        private Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
+        {
+            return _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatNumber == chatNumber).ChatID;
         }
     }
 }

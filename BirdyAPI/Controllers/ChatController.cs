@@ -62,17 +62,18 @@ namespace BirdyAPI.Controllers
         /// <response code = "403">User isn't in this chat</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [Route("{chatId}")]
+        [Route("{chatNumber}")]
         [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
-        public IActionResult GetChat([FromHeader] Guid token, Guid chatId)
+        public IActionResult GetChat([FromHeader] Guid token, int chatNumber)
         {
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                return Ok(_chatService.GetChatInfo(currentUserId, chatId));
+                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                return Ok(_chatService.GetChatInfo(currentUserId, chatNumber));
             }
             catch (AuthenticationException)
             {
