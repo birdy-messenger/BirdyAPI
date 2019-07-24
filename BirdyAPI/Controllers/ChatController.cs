@@ -9,6 +9,7 @@ using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Tools.Extensions;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace BirdyAPI.Controllers
 {
@@ -202,6 +203,92 @@ namespace BirdyAPI.Controllers
             catch (InsufficientRightsException)
             {
                 return Forbid();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// Kick user from chat
+        /// </summary>
+        /// <response code = "200">User kicked</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
+        /// <response code = "401">Invalid token</response>
+        /// <response code = "403">User has no rights for this action</response>
+        /// <response code = "404">User for kick not found</response>
+        [HttpDelete]
+        [Route("{chatNumber}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
+        [ProducesResponseType(statusCode: 404, type: typeof(void))]
+
+        public IActionResult KickUserFromChat([FromHeader] Guid token, int chatNumber, [FromBody] string userUniqueTag)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.Admin);
+                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                _accessService.CheckChatUserAccess(userId, chatNumber, ChatStatus.User);
+                _chatService.KickUser(currentUserId, chatNumber, userId);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (InsufficientRightsException)
+            {
+                return Forbid();
+            }
+            catch (DataNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex.SerializeAsResponse());
+            }
+        }
+
+        /// <summary>
+        /// Leave from chat
+        /// </summary>
+        /// <response code = "200">User kicked</response>
+        /// <response code = "500">Unexpected Exception (only for debug)</response>
+        /// <response code = "401">Invalid token</response>
+        /// <response code = "403">User has no rights for this action</response>
+        [HttpDelete]
+        [Route("{chatNumber}")]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 401, type: typeof(void))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
+
+        public IActionResult LeaveFromChat([FromHeader] Guid token, int chatNumber)
+        {
+            try
+            {
+                int currentUserId = _toolService.ValidateToken(token);
+                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                _chatService.LeaveFromChat(currentUserId, chatNumber);
+                return Ok();
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
+            catch (InsufficientRightsException)
+            {
+                return Forbid();
+            }
+            catch (DataNotFoundException)
+            {
+                return NotFound();
             }
             catch (Exception ex)
             {

@@ -96,6 +96,25 @@ namespace BirdyAPI.Services
             _context.SaveChanges();
         }
 
+        public void KickUser(int chatAdminId, int chatNumber, int userId)
+        {
+            Guid chatId = GetChatIdByChatNumberAndUserId(chatAdminId, chatNumber);
+            ChatUser currentUser = _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId);
+            if(currentUser == null)
+                throw new DataNotFoundException();
+
+            currentUser.Status = ChatStatus.Kicked;
+            _context.ChatUsers.Update(currentUser);
+        }
+
+        public void LeaveFromChat(int currentUserId, int chatNumber)
+        {
+            Guid chatId = GetChatIdByChatNumberAndUserId(currentUserId, chatNumber);
+            ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber);
+            currentUser.Status = ChatStatus.Left;
+            _context.ChatUsers.Update(currentUser);
+        }
+
         private Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
         {
             return _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatNumber == chatNumber).ChatID;
