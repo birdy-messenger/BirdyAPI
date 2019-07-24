@@ -2,9 +2,9 @@
 {
     public enum ChatStatus
     {
-        User = 1,
-        Admin = 2,
-        Kicked = 3,
-        Left = 4
+        Kicked = 1,
+        Left = 2,
+        User = 3,
+        Admin = 4
     }
 }

@@ -190,7 +190,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _toolService.ValidateToken(token);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User, ChatStatus.Admin);
+                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 _chatService.RenameChat(currentUserId, chatNumber, newChatName);
                 return Ok();
             }

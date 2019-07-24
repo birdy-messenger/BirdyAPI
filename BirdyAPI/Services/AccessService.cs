@@ -17,21 +17,8 @@ namespace BirdyAPI.Services
         public void CheckChatUserAccess(int userId, int chatNumber, ChatStatus statusToCheck)
         {
             ChatUser currentUserChat = _context.ChatUsers.SingleOrDefault(k => k.ChatNumber == chatNumber && k.UserInChatID == userId);
-            if (currentUserChat == null || currentUserChat.Status != statusToCheck)
+            if (currentUserChat == null || currentUserChat.Status < statusToCheck)
                 throw new InsufficientRightsException();
-        }
-
-        public void CheckChatUserAccess(int userId, int chatNumber, ChatStatus statusToCheck,
-            ChatStatus anotherStatusToCheck)
-        {
-            try
-            {
-                CheckChatUserAccess(userId, chatNumber, statusToCheck);
-            }
-            catch (InsufficientRightsException)
-            {
-                CheckChatUserAccess(userId, chatNumber, anotherStatusToCheck);
-            }
         }
     }
 }
