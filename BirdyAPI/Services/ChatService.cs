@@ -32,13 +32,15 @@ namespace BirdyAPI.Services
         {
             ChatInfo currentChat = _context.ChatInfo.Find(chatId);
 
-            Message chatLastMessage = _context.Messages.Where(k => k.ChatID == currentChat.ChatID)
+            Message chatLastMessage = _context.Messages.Where(k => k.ConversationID == currentChat.ChatID)
                 .OrderByDescending(k => k.SendDate).FirstOrDefault();
+
             return new ChatInfoDto
             {
                 ChatID = currentChat.ChatID,
                 ChatName = currentChat.ChatName,
                 LastMessage = chatLastMessage?.Text,
+                LastMessageAuthor = chatLastMessage == null ? null : GetUserUniqueTag(chatLastMessage.AuthorID),
                 LastMessageTime = chatLastMessage?.SendDate ?? DateTime.MinValue
             };
         }
@@ -85,6 +87,11 @@ namespace BirdyAPI.Services
         private int GetNextChatNumber(int userId)
         {
             return _context.ChatUsers.Count(e => e.UserInChatID == userId) + 1;
+        }
+
+        private string GetUserUniqueTag(int userId)
+        {
+            return _context.Users.Find(userId).UniqueTag;
         }
 
         public void RenameChat(int userId, int chatNumber, string newChatName)

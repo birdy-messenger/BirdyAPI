@@ -27,7 +27,7 @@ namespace BirdyAPI.Services
             }
 
             //Message newMessage = new Message
-              //{AuthorID = currentUserId, ChatID = default, SendDate = DateTime.Now, Text = message};
+              //{AuthorID = currentUserId, ConversationID = default, SendDate = DateTime.Now, Text = message};
         }
     }
 }
