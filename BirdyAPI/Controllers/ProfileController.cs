@@ -55,7 +55,7 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Set user unique tag for first auth
         /// </summary>
-        /// <response code = "200">Return reference to avatar</response>
+        /// <response code = "200">Tag set</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         /// <response code = "403">Tag is not unique</response>
@@ -91,7 +91,7 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Set user unique tag
         /// </summary>
-        /// <response code = "200">Return reference to avatar</response>
+        /// <response code = "200">Tag changed</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         /// <response code = "403">Tag is not unique</response>

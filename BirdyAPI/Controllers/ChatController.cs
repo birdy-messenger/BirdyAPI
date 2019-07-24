@@ -233,7 +233,6 @@ namespace BirdyAPI.Controllers
                 int currentUserId = _toolService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.Admin);
                 int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
-                _accessService.CheckChatUserAccess(userId, chatNumber, ChatStatus.User);
                 _chatService.KickUser(currentUserId, chatNumber, userId);
                 return Ok();
             }
@@ -263,7 +262,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         /// <response code = "403">User has no rights for this action</response>
         [HttpDelete]
-        [Route("{chatNumber}")]
+        [Route("leave/{chatNumber}")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]

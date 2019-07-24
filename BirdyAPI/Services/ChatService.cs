@@ -103,16 +103,20 @@ namespace BirdyAPI.Services
             if(currentUser == null)
                 throw new DataNotFoundException();
 
+            if(currentUser.Status != ChatStatus.User)
+                throw new InsufficientRightsException();
             currentUser.Status = ChatStatus.Kicked;
             _context.ChatUsers.Update(currentUser);
+            _context.SaveChanges();
         }
 
-        public void LeaveFromChat(int currentUserId, int chatNumber)
+        public void LeaveFromChat(int currentUserId, int chatNumber) // Ливнул админ = гг
         {
             Guid chatId = GetChatIdByChatNumberAndUserId(currentUserId, chatNumber);
             ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber);
             currentUser.Status = ChatStatus.Left;
             _context.ChatUsers.Update(currentUser);
+            _context.SaveChanges();
         }
 
         private Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
