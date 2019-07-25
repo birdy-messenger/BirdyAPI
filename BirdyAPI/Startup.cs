@@ -35,6 +35,7 @@ namespace BirdyAPI
                 configuration.IncludeXmlComments(xmlPath);
             });
 
+            Configurations.Token = Configuration.GetConnectionString("SendGrid");
             services.AddDbContext<BirdyContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

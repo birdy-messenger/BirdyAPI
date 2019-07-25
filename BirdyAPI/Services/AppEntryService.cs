@@ -6,7 +6,6 @@ using BirdyAPI.Dto;
 using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -15,11 +14,10 @@ namespace BirdyAPI.Services
     public class AppEntryService
     {
         private readonly BirdyContext _context;
-        private readonly IConfiguration _configuration;
-        public AppEntryService(BirdyContext context, IConfiguration configuration)
+
+        public AppEntryService(BirdyContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         public SimpleAnswerDto Authentication(AuthenticationDto user)
@@ -141,7 +139,7 @@ namespace BirdyAPI.Services
 
         private async void SendConfirmEmail(string email, string confirmReference)
         {
-            SendGridClient client = new SendGridClient(apiKey: _configuration.GetConnectionString("SendGrid"));
+            SendGridClient client = new SendGridClient(Configurations.Token);
             SendGridMessage message = MessageBuilder(email, confirmReference);
 
             await client.SendEmailAsync(message);

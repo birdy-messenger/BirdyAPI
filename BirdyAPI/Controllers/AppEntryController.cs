@@ -5,7 +5,6 @@ using BirdyAPI.Services;
 using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
@@ -17,9 +16,9 @@ namespace BirdyAPI.Controllers
         private readonly AppEntryService _appEntryService;
         private readonly ToolService _toolService;
 
-        public AppEntryController(BirdyContext context, IConfiguration configuration)
+        public AppEntryController(BirdyContext context)
         {
-            _appEntryService = new AppEntryService(context, configuration);
+            _appEntryService = new AppEntryService(context);
             _toolService = new ToolService(context);
         }
 

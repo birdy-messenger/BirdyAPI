@@ -2,6 +2,9 @@
 {
     public static class Configurations
     {
+        public static string Token;
+
+
         public static string OurEmailAddress = "birdy-noreply@birdy.com";
 
         public static string EmailConfirmMessage =
