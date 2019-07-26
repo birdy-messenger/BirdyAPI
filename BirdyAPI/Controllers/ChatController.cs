@@ -21,11 +21,13 @@ namespace BirdyAPI.Controllers
         private readonly ChatService _chatService;
         private readonly FriendService _friendService;
         private readonly AccessService _accessService;
+        private readonly UserService _userService;
         public ChatController(BirdyContext context)
         {
             _chatService = new ChatService(context);
             _friendService = new FriendService(context);
             _accessService = new AccessService(context);
+            _userService = new UserService(context);
         }
 
         /// <summary>
@@ -108,7 +110,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                List<int> friendsId = friendsUniqueTags.Select(k => _toolService.GetUserIdByUniqueTag(k)).ToList();
+                List<int> friendsId = friendsUniqueTags.Select(k => _userService.GetUserIdByUniqueTag(k)).ToList();
                 friendsId.RemoveAll(k => !_friendService.IsItUserFriend(currentUserId ,k));
                 _chatService.CreateChat(friendsId, currentUserId);
                 return Ok();
@@ -148,7 +150,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
+                int friendId = _userService.GetUserIdByUniqueTag(friendUniqueTag);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 if (!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new InsufficientRightsException();
@@ -232,7 +234,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.Admin);
-                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _chatService.KickUser(currentUserId, chatNumber, userId);
                 return Ok();
             }

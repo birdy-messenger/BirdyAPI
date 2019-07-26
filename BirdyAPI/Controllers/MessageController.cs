@@ -12,11 +12,13 @@ namespace BirdyAPI.Controllers
     {
         private readonly MessageService _messageService;
         private readonly AccessService _accessService;
+        private readonly UserService _userService;
 
         public MessageController(BirdyContext context)
         {
             _messageService = new MessageService(context);
             _accessService = new AccessService(context);
+            _userService = new UserService(context);
         }
 
         [HttpPost]
@@ -26,7 +28,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int userId = _toolService.GetUserIdByUniqueTag(uniqueTag);
+                int userId = _userService.GetUserIdByUniqueTag(uniqueTag);
                 _messageService.SendMessageToUser(currentUserId, userId, message);
                 
                 return Ok();

@@ -15,14 +15,5 @@ namespace BirdyAPI.Services
         {
             _context = context;
         }
-
-        public int GetUserIdByUniqueTag(string uniqueTag)
-        {
-            User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
-            if(currentUser == null)
-                throw new ArgumentException();
-
-            return currentUser.Id;
-        }
     }
 }

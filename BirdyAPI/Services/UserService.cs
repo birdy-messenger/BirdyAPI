@@ -1,4 +1,6 @@
-﻿using BirdyAPI.DataBaseModels;
+﻿using System;
+using System.Linq;
+using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 namespace BirdyAPI.Services
 {
@@ -21,6 +23,15 @@ namespace BirdyAPI.Services
                 UniqueTag = user.UniqueTag,
                 RegistrationDate = user.RegistrationDate
             };
+        }
+
+        public int GetUserIdByUniqueTag(string uniqueTag)
+        {
+            User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
+            if (currentUser == null)
+                throw new ArgumentException();
+
+            return currentUser.Id;
         }
     }
 }

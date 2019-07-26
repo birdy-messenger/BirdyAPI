@@ -16,11 +16,13 @@ namespace BirdyAPI.Controllers
     {
         private readonly FriendService _friendService;
         private readonly AccessService _accessService;
+        private readonly UserService _userService;
 
         public FriendController(BirdyContext context)
         {
             _friendService = new FriendService(context);
             _accessService = new AccessService(context);
+            _userService = new UserService(context);
         }
 
 
@@ -41,7 +43,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _friendService.SendFriendRequest(userId, currentUserId);
                 return Ok();
             }
@@ -78,7 +80,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _friendService.AcceptFriendRequest(userId, currentUserId);
                 return Ok();
             }
@@ -151,7 +153,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
+                int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 return Ok(_friendService.GetFriends(userId));
             }
             catch (AuthenticationException)
@@ -189,7 +191,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
+                int friendId = _userService.GetUserIdByUniqueTag(friendUniqueTag);
                 if(!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new DataException();
 
