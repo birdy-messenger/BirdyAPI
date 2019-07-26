@@ -16,11 +16,13 @@ namespace BirdyAPI.Controllers
     {
         private readonly AccessService _accessService;
         private readonly ProfileService _profileService;
+        private readonly AppEntryService _appEntryService;
 
         public ProfileController(BirdyContext context)
         {
             _accessService = new AccessService(context);
             _profileService = new ProfileService(context);
+            _appEntryService = new AppEntryService(context);
         }
 
 
@@ -71,7 +73,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _accessService.ValidateToken(token);
                 _profileService.SetUniqueTag(currentUserId, uniqueTag);
-                _toolService.GetUserConfirmed(currentUserId);
+                _appEntryService.GetUserConfirmed(currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)

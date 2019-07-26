@@ -190,7 +190,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _accessService.ValidateToken(token);
                 int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
-                if(!_toolService.IsItUserFriend(currentUserId, friendId))
+                if(!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new DataException();
 
                 _friendService.DeleteFriend(currentUserId, friendId);

@@ -19,12 +19,12 @@ namespace BirdyAPI.Controllers
     public class ChatController : ExtendedController
     {
         private readonly ChatService _chatService;
-        private readonly ToolService _toolService;
+        private readonly FriendService _friendService;
         private readonly AccessService _accessService;
         public ChatController(BirdyContext context)
         {
             _chatService = new ChatService(context);
-            _toolService = new ToolService(context);
+            _friendService = new FriendService(context);
             _accessService = new AccessService(context);
         }
 
@@ -109,7 +109,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _accessService.ValidateToken(token);
                 List<int> friendsId = friendsUniqueTags.Select(k => _toolService.GetUserIdByUniqueTag(k)).ToList();
-                friendsId.RemoveAll(k => !_toolService.IsItUserFriend(currentUserId ,k));
+                friendsId.RemoveAll(k => !_friendService.IsItUserFriend(currentUserId ,k));
                 _chatService.CreateChat(friendsId, currentUserId);
                 return Ok();
             }
@@ -150,7 +150,7 @@ namespace BirdyAPI.Controllers
                 int currentUserId = _accessService.ValidateToken(token);
                 int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
-                if (!_toolService.IsItUserFriend(currentUserId, friendId))
+                if (!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new InsufficientRightsException();
                 _chatService.AddUserToChat(currentUserId, friendId, chatNumber);
                 return Ok();

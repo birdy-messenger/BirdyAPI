@@ -24,30 +24,5 @@ namespace BirdyAPI.Services
 
             return currentUser.Id;
         }
-
-        public void GetUserConfirmed(int userId)
-        {
-            User currentUser = _context.Users.Find(userId);
-            currentUser.CurrentStatus = UserStatus.Confirmed;
-            _context.Users.Update(currentUser);
-            _context.SaveChanges();
-        }
-        public bool IsItUserFriend(int currentUserId, int userId)
-        {
-            Friend currentFriend = _context.Friends.Find(userId, currentUserId);
-            if (currentFriend == null)
-            {
-                Friend currentInverseFriend = _context.Friends.Find(currentUserId, userId);
-                if (currentInverseFriend.RequestAccepted)
-                    return true;
-
-                return false;
-            }
-
-            if (currentFriend.RequestAccepted)
-                return true;
-
-            return false;
-        }
     }
 }

@@ -157,5 +157,13 @@ namespace BirdyAPI.Services
             return MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,
                 plainTextContent, HTMLmessage);
         }
+
+        public void GetUserConfirmed(int userId)
+        {
+            User currentUser = _context.Users.Find(userId);
+            currentUser.CurrentStatus = UserStatus.Confirmed;
+            _context.Users.Update(currentUser);
+            _context.SaveChanges();
+        }
     }
 }
