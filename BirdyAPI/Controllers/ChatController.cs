@@ -42,7 +42,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 return Ok(_chatService.GetChats(currentUserId));
             }
             catch (AuthenticationException)
@@ -72,7 +72,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 return Ok(_chatService.GetChatInfo(currentUserId, chatNumber));
             }
@@ -107,7 +107,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 List<int> friendsId = friendsUniqueTags.Select(k => _toolService.GetUserIdByUniqueTag(k)).ToList();
                 friendsId.RemoveAll(k => !_toolService.IsItUserFriend(currentUserId ,k));
                 _chatService.CreateChat(friendsId, currentUserId);
@@ -147,7 +147,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 int friendId = _toolService.GetUserIdByUniqueTag(friendUniqueTag);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 if (!_toolService.IsItUserFriend(currentUserId, friendId))
@@ -191,7 +191,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 _chatService.RenameChat(currentUserId, chatNumber, newChatName);
                 return Ok();
@@ -230,7 +230,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.Admin);
                 int userId = _toolService.GetUserIdByUniqueTag(userUniqueTag);
                 _chatService.KickUser(currentUserId, chatNumber, userId);
@@ -272,7 +272,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
                 _chatService.LeaveFromChat(currentUserId, chatNumber);
                 return Ok();

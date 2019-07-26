@@ -14,12 +14,12 @@ namespace BirdyAPI.Controllers
     [Route("profile")]
     public class ProfileController : ExtendedController
     {
-        private readonly ToolService _toolService;
+        private readonly AccessService _accessService;
         private readonly ProfileService _profileService;
 
         public ProfileController(BirdyContext context)
         {
-            _toolService = new ToolService(context);
+            _accessService = new AccessService(context);
             _profileService = new ProfileService(context);
         }
 
@@ -39,7 +39,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 return Ok(_profileService.SetAvatar(currentUserId, photoBytes));
             }
             catch (AuthenticationException)
@@ -69,7 +69,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _profileService.SetUniqueTag(currentUserId, uniqueTag);
                 _toolService.GetUserConfirmed(currentUserId);
                 return Ok();
@@ -105,7 +105,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 _profileService.SetUniqueTag(currentUserId, uniqueTag);
                 return Ok();
             }

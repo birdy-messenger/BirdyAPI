@@ -14,12 +14,12 @@ namespace BirdyAPI.Controllers
     public class DialogController : ExtendedController
     {
         private readonly DialogService _dialogService;
-        private readonly ToolService _toolService;
+        private readonly AccessService _accessService;
 
         public DialogController(BirdyContext context)
         {
             _dialogService = new DialogService(context);
-            _toolService = new ToolService(context);
+            _accessService = new AccessService(context);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _toolService.ValidateToken(token);
+                int currentUserId = _accessService.ValidateToken(token);
                 return Ok(_dialogService.GetDialogs(currentUserId));
             }
             catch (AuthenticationException)

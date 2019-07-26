@@ -16,15 +16,6 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public int ValidateToken(Guid token)
-        {
-            UserSession currentSession = _context.UserSessions.Find(token);
-            if (currentSession == null)
-                throw new AuthenticationException();
-
-            return currentSession.UserId;
-        }
-
         public int GetUserIdByUniqueTag(string uniqueTag)
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
