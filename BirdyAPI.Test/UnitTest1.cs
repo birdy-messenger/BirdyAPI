@@ -1,5 +1,6 @@
 using System;
 using BirdyAPI.Controllers;
+using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using Xunit;
 
@@ -13,9 +14,9 @@ namespace BirdyAPI.Test
 
         }
 
-        private readonly AppEntryService test;
+        private static readonly AppEntryController test;
 
-        public UnitTest1()
+        static UnitTest1()
         {
             test = TestInit._AppEntryService;
         }
@@ -23,7 +24,8 @@ namespace BirdyAPI.Test
         [Fact]
         public void TestMethod1()
         {
-
+            test.UserRegistration(new RegistrationDto
+                {Email = "vladkazanskiy@mail.ru", FirstName = "Vlad", PasswordHash = "fhwouigvsvj"});
         }
     }
 }
