@@ -17,10 +17,10 @@ namespace BirdyAPI.Controllers
         private readonly ToolService _toolService;
         private readonly ProfileService _profileService;
 
-        public ProfileController(BirdyContext context, IConfiguration configuration)
+        public ProfileController(BirdyContext context)
         {
             _toolService = new ToolService(context);
-            _profileService = new ProfileService(context, configuration);
+            _profileService = new ProfileService(context);
         }
 
 

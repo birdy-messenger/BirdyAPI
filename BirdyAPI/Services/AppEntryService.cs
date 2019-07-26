@@ -139,7 +139,7 @@ namespace BirdyAPI.Services
 
         private async void SendConfirmEmail(string email, string confirmReference)
         {
-            SendGridClient client = new SendGridClient(Configurations.Token);
+            SendGridClient client = new SendGridClient(Configurations.SendGridApiKey);
             SendGridMessage message = MessageBuilder(email, confirmReference);
 
             await client.SendEmailAsync(message);
