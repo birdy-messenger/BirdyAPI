@@ -52,7 +52,8 @@ namespace BirdyAPI.Services
                     .ToList(),
                 Users = chatUsers
                     .Select(k => 
-                        Tuple.Create(GetUserUniqueTag(k.UserInChatID), k.Status)).ToList()
+                        (new ChatMemberDto{UserUniqueTag = GetUserUniqueTag(k.UserInChatID), UserStatus = k.Status}))
+                    .ToList()
             };
         }
 

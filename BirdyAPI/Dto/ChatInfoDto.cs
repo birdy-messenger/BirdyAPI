@@ -8,7 +8,7 @@ namespace BirdyAPI.Dto
 {
     public class ChatInfoDto
     {
-        public List<Tuple<string, ChatStatus>> Users { get; set; }
+        public List<ChatMemberDto> Users { get; set; }
         public List<MessageDto> Messages { get; set; }
     }
 }
