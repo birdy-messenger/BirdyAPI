@@ -14,20 +14,51 @@ namespace BirdyAPI.Services
 
         public void SendMessageToUser(int currentUserId, int userId, string message)
         {
-            ChatUser currentChat = _context.ChatUsers.Where(k => k.UserInChatID == currentUserId)
-                .Intersect(_context.ChatUsers.Where(k => k.UserInChatID == userId)).SingleOrDefault();
+            DialogUser currentDialog = _context.DialogUsers.SingleOrDefault(k =>
+                                           (k.FirstUserID == currentUserId && k.SecondUserID == userId) ||
+                                           (k.FirstUserID == userId && k.SecondUserID == currentUserId)) ??
+                                       InitNewDialog(currentUserId, userId);
 
-            if (currentChat == null)
+            Message currentMessage = new Message
             {
-                ChatUser firstUser = new ChatUser {ChatID = Guid.NewGuid(), UserInChatID = currentUserId};
-                ChatUser secondUser = new ChatUser { ChatID = firstUser.ChatID, UserInChatID = userId };
-                _context.ChatUsers.Add(firstUser);
-                _context.ChatUsers.Add(secondUser);
-                _context.SaveChanges();
-            }
+                AuthorID = currentUserId,
+                ConversationID = currentDialog.DialogID,
+                MessageID = Guid.NewGuid(),
+                SendDate = DateTime.Now,
+                Text = message
+            };
 
-            //Message newMessage = new Message
-              //{AuthorID = currentUserId, ConversationID = default, SendDate = DateTime.Now, Text = message};
+            _context.Messages.Add(currentMessage);
+            _context.SaveChanges();
+        }
+
+        public void SendMessageToChat(int currentUserId, Guid chatId, string message)
+        {
+            Message currentMessage = new Message
+             {
+                 AuthorID = currentUserId,
+                 ConversationID = chatId,
+                 MessageID = Guid.NewGuid(),
+                 SendDate = DateTime.Now,
+                 Text = message
+             };
+
+             _context.Messages.Add(currentMessage);
+             _context.SaveChanges();
+        }
+
+        private DialogUser InitNewDialog(int firstUserId, int secondUserId)
+        {
+            DialogUser newDialog = new DialogUser
+            {
+                DialogID = Guid.NewGuid(),
+                FirstUserID = firstUserId,
+                SecondUserID = secondUserId
+            };
+            _context.DialogUsers.Add(newDialog);
+            _context.SaveChanges();
+
+            return newDialog;
         }
     }
 }

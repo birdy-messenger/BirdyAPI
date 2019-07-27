@@ -22,7 +22,7 @@ namespace BirdyAPI.Services
                 .Select(k => GetDialogInfo(k.DialogID, userId)).ToList();
         }
 
-        public DialogInfoDto GetDialogInfo(Guid dialogId, int currentUserId)
+        private DialogInfoDto GetDialogInfo(Guid dialogId, int currentUserId)
         {
             DialogUser currentDialog = _context.DialogUsers.Find(dialogId);
 
@@ -31,22 +31,17 @@ namespace BirdyAPI.Services
 
             return new DialogInfoDto
             {
-                InterlocutorUniqueTag = GetInterlocutorUniqueTag(currentDialog, currentUserId),
+                InterlocutorUniqueTag = 
+                    currentUserId == currentDialog.FirstUserID ? 
+                        GetUserUniqueTag(currentDialog.SecondUserID) : GetUserUniqueTag(currentUserId),
                 LastMessage = lastMessage?.Text,
                 LastMessageTime = lastMessage?.SendDate ?? DateTime.MinValue
             };
         }
+
         private string GetUserUniqueTag(int userId)
         {
             return _context.Users.Find(userId).UniqueTag;
-        }
-
-        private string GetInterlocutorUniqueTag(DialogUser currentDialog ,int currentUserId)
-        {
-            if (currentDialog.FirstUserID == currentUserId)
-                return GetUserUniqueTag(currentDialog.SecondUserID);
-
-            return GetUserUniqueTag(currentDialog.FirstUserID);
         }
     }
 }

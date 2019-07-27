@@ -126,7 +126,7 @@ namespace BirdyAPI.Services
             _context.SaveChanges();
         }
 
-        private Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
+        public Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
         {
             return _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatNumber == chatNumber).ChatID;
         }
