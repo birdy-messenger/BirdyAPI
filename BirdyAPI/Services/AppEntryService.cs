@@ -152,6 +152,7 @@ namespace BirdyAPI.Services
             EmailAddress userAddress = new EmailAddress(email);
 
             string messageTopic = "Confirm your email";
+            // ReSharper disable once InconsistentNaming
             string HTMLmessage = Configurations.EmailConfirmMessage + $"<a href =\"https://{confirmReference}\">Confirm Link</a>";
             string plainTextContent = HTMLmessage; // Когда сообщение обрастет стилями и т.д. надо будет сделать нормально
             return MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,

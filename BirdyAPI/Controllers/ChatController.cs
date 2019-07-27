@@ -37,7 +37,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         [HttpGet]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetChats([FromHeader] Guid token)
@@ -45,7 +45,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = _accessService.ValidateToken(token);
-                return Ok(_chatService.GetChats(currentUserId));
+                return Ok(_chatService.GetChatsPreview(currentUserId));
             }
             catch (AuthenticationException)
             {
@@ -66,7 +66,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         [HttpGet]
         [Route("{chatNumber}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(ChatInfoDto))]
+        [ProducesResponseType(statusCode: 200, type: typeof(ChatPreviewDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
@@ -76,7 +76,7 @@ namespace BirdyAPI.Controllers
             {
                 int currentUserId = _accessService.ValidateToken(token);
                 _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
-                return Ok(_chatService.GetChatInfo(currentUserId, chatNumber));
+                return Ok(/*_chatService.GetChatInfo(currentUserId, chatNumber)*/);
             }
             catch (AuthenticationException)
             {
@@ -100,7 +100,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         /// <response code = "404">User by tag not found</response>;
         [HttpPost]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
@@ -139,7 +139,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "404">User by tag not found</response>;
         [HttpPatch]
         [Route("{chatNumber}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
@@ -184,7 +184,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "403">User has no rights for this action</response>
         [HttpPut]
         [Route("{chatNumber}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
@@ -222,7 +222,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "404">User for kick not found</response>
         [HttpDelete]
         [Route("{chatNumber}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
@@ -265,7 +265,7 @@ namespace BirdyAPI.Controllers
         /// <response code = "403">User has no rights for this action</response>
         [HttpDelete]
         [Route("leave/{chatNumber}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatInfoDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<ChatPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 403, type: typeof(void))]

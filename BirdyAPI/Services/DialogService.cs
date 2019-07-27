@@ -15,21 +15,21 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public List<DialogInfoDto> GetDialogs(int userId)
+        public List<DialogPreviewDto> GetDialogsPreview(int userId)
         {
             return _context.DialogUsers.Where(k => k.FirstUserID == userId)
                 .Union(_context.DialogUsers.Where(k => k.SecondUserID == userId))
-                .Select(k => GetDialogInfo(k.DialogID, userId)).ToList();
+                .Select(k => GetDialogPreview(k.DialogID, userId)).ToList();
         }
 
-        private DialogInfoDto GetDialogInfo(Guid dialogId, int currentUserId)
+        private DialogPreviewDto GetDialogPreview(Guid dialogId, int currentUserId)
         {
             DialogUser currentDialog = _context.DialogUsers.Find(dialogId);
 
             Message lastMessage = _context.Messages.Where(k => k.ConversationID == dialogId)
                 .OrderByDescending(k => k.SendDate).FirstOrDefault();
 
-            return new DialogInfoDto
+            return new DialogPreviewDto
             {
                 InterlocutorUniqueTag = 
                     currentUserId == currentDialog.FirstUserID ? 

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BirdyAPI.Dto
 {
-    public class DialogInfoDto
+    public class ChatPreviewDto
     {
-        public string InterlocutorUniqueTag { get; set; }
+        public int ChatNumber { get; set; }
+        public string ChatName { get; set; }
         public string LastMessage { get; set; }
         public string LastMessageAuthor { get; set; }
         public DateTime LastMessageTime { get; set; }
