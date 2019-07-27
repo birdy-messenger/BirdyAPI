@@ -16,28 +16,47 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public List<ChatInfoDto> GetChats(int userId)
+        public List<ChatPreviewDto> GetChatsPreview(int userId)
         {
-            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User).Select(k => GetChatInfo(k.ChatID)).ToList();
+            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User).Select(k => GetChatPreview(k.ChatID, userId)).ToList();
         }
 
-        public ChatInfoDto GetChatInfo(int userId, int chatNumber)
+        public ChatInfoDto GetChat(int userId, int chatNumber)
         {
             Guid chatId = GetChatIdByChatNumberAndUserId(userId, chatNumber);
+            List<Message> lastMessages = _context.Messages.Where(k => k.ConversationID == chatId).OrderByDescending(k => k.SendDate)
+                .Take(50).ToList();
 
-            return GetChatInfo(chatId);
+            List<ChatUser> chatUsers = _context.ChatUsers.Where(k => k.ChatID == chatId && k.Status >= ChatStatus.User).ToList();
+
+            return new ChatInfoDto
+            {
+                Messages = lastMessages
+                    .Select(k => 
+                        new MessageDto
+                        {
+                            AuthorUniqueTag = GetUserUniqueTag(k.AuthorID),
+                            Message = k.Text,
+                            MessageTime = k.SendDate
+                        })
+                    .ToList(),
+                Users = chatUsers
+                    .Select(k => 
+                        Tuple.Create(GetUserUniqueTag(k.UserInChatID), k.Status)).ToList()
+            };
+
         }
 
-        private ChatInfoDto GetChatInfo(Guid chatId)
+        private ChatPreviewDto GetChatPreview(Guid chatId, int currentUserId)
         {
             ChatInfo currentChat = _context.ChatInfo.Find(chatId);
 
             Message chatLastMessage = _context.Messages.Where(k => k.ConversationID == currentChat.ChatID)
                 .OrderByDescending(k => k.SendDate).FirstOrDefault();
 
-            return new ChatInfoDto
+            return new ChatPreviewDto
             {
-                ChatID = currentChat.ChatID,
+                ChatNumber = GetChatNumber(chatId, currentUserId),
                 ChatName = currentChat.ChatName,
                 LastMessage = chatLastMessage?.Text,
                 LastMessageAuthor = chatLastMessage == null ? null : GetUserUniqueTag(chatLastMessage.AuthorID),
@@ -62,7 +81,7 @@ namespace BirdyAPI.Services
                     ChatID = newChatAdmin.ChatID,
                     UserInChatID = k,
                     Status = ChatStatus.User,
-                    ChatNumber = GetNextChatNumber(k)
+                    ChatNumber = GetNewChatNumber(k)
                 });
             });
 
@@ -79,14 +98,19 @@ namespace BirdyAPI.Services
             {
                 ChatID = currentChatId,
                 UserInChatID = userId,
-                ChatNumber = GetNextChatNumber(userId),
+                ChatNumber = GetNewChatNumber(userId),
                 Status = ChatStatus.User
             });
         }
 
-        private int GetNextChatNumber(int userId)
+        private int GetNewChatNumber(int userId)
         {
             return _context.ChatUsers.Count(e => e.UserInChatID == userId) + 1;
+        }
+
+        private int GetChatNumber(Guid chatId, int currentUserId)
+        {
+            return _context.ChatUsers.Single(k => k.ChatID == chatId && k.UserInChatID == currentUserId).ChatNumber;
         }
 
         private string GetUserUniqueTag(int userId)
@@ -119,7 +143,6 @@ namespace BirdyAPI.Services
 
         public void LeaveFromChat(int currentUserId, int chatNumber) // Ливнул админ = гг
         {
-            Guid chatId = GetChatIdByChatNumberAndUserId(currentUserId, chatNumber);
             ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber);
             currentUser.Status = ChatStatus.Left;
             _context.ChatUsers.Update(currentUser);

@@ -52,13 +52,13 @@ namespace BirdyAPI.Controllers
         /// <summary>
         /// Get dialog info
         /// </summary>
-        /// <response code = "200">Return dialogs info</response>
+        /// <response code = "200">Return dialog messages</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
         /// <response code = "404">User not found</response>
         [HttpGet]
         [Route("{interlocutorUniqueTag}")]
-        [ProducesResponseType(statusCode: 200, type: typeof(List<DialogPreviewDto>))]
+        [ProducesResponseType(statusCode: 200, type: typeof(List<MessageDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         public IActionResult GetDialog([FromHeader] Guid token, string interlocutorUniqueTag)
