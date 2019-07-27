@@ -18,7 +18,7 @@ namespace BirdyAPI.Services
 
         public void SetUniqueTag(int userId, string newUniqueTag)
         {
-            if(_context.Users.Count(k => k.UniqueTag == newUniqueTag) != 0)
+            if(_context.Users.Single(k => k.UniqueTag == newUniqueTag) != null)
                 throw new DuplicateNameException("This unique tag is already occupied");
 
             User currentUser  = _context.Users.Find(userId);
@@ -29,11 +29,12 @@ namespace BirdyAPI.Services
         public SimpleAnswerDto SetAvatar(int userId, byte[] imageBytes)
         {
             CloudBlockBlob blob = InitAzureBlob(userId);
-
             blob.UploadFromByteArray(imageBytes, 0, imageBytes.Length);
             CloudBlob avatarCloudBlob = blob.Container.GetBlobReference("avatar.png");
+
             _context.Users.Find(userId).AvatarReference = avatarCloudBlob.Uri.ToString();
             _context.SaveChanges();
+
             return new SimpleAnswerDto {Result = avatarCloudBlob.Uri.ToString()};
         }
 

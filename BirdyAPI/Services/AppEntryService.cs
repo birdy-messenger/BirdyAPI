@@ -44,6 +44,7 @@ namespace BirdyAPI.Services
         public void GetUserNeverUsed(string email, Guid token)
         {
             ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);
+
             if(currentConfirmToken == null || currentConfirmToken.Token != token)
                 throw new ArgumentException("Wrong email");
 

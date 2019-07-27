@@ -14,9 +14,10 @@ namespace BirdyAPI.Services
 
         public void SendMessageToUser(int currentUserId, int userId, string message)
         {
-            DialogUser currentDialog = _context.DialogUsers.SingleOrDefault(k =>
-                                           (k.FirstUserID == currentUserId && k.SecondUserID == userId) ||
-                                           (k.FirstUserID == userId && k.SecondUserID == currentUserId)) ??
+            DialogUser currentDialog = _context.DialogUsers
+                                           .SingleOrDefault(k =>
+                                               (k.FirstUserID == currentUserId && k.SecondUserID == userId) ||
+                                               (k.FirstUserID == userId && k.SecondUserID == currentUserId)) ??
                                        InitNewDialog(currentUserId, userId);
 
             Message currentMessage = new Message

@@ -19,17 +19,25 @@ namespace BirdyAPI.Services
 
         public List<ChatPreviewDto> GetChatsPreview(int userId)
         {
-            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User)
-                .Select(k => GetChatPreview(k.ChatID, userId)).ToList();
+            return _context.ChatUsers
+                .Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User)
+                .Select(k => GetChatPreview(k.ChatID, userId))
+                .ToList();
         }
 
         public ChatInfoDto GetChat(int userId, int chatNumber, int? offset, int? count)
         {
             Guid chatId = GetChatIdByChatNumberAndUserId(userId, chatNumber);
-            List<Message> lastMessages = _context.Messages.Where(k => k.ConversationID == chatId).OrderByDescending(k => k.SendDate)
-                .Skip(offset ?? 0).Take(count ?? 50).ToList();
+            List<Message> lastMessages = _context.Messages
+                .Where(k => k.ConversationID == chatId)
+                .OrderByDescending(k => k.SendDate)
+                .Skip(offset ?? 0)
+                .Take(count ?? 50)
+                .ToList();
 
-            List<ChatUser> chatUsers = _context.ChatUsers.Where(k => k.ChatID == chatId && k.Status >= ChatStatus.User).ToList();
+            List<ChatUser> chatUsers = _context.ChatUsers
+                .Where(k => k.ChatID == chatId && k.Status >= ChatStatus.User)
+                .ToList();
 
             return new ChatInfoDto
             {
@@ -52,8 +60,10 @@ namespace BirdyAPI.Services
         {
             ChatInfo currentChat = _context.ChatInfo.Find(chatId);
 
-            Message chatLastMessage = _context.Messages.Where(k => k.ConversationID == currentChat.ChatID)
-                .OrderByDescending(k => k.SendDate).FirstOrDefault();
+            Message chatLastMessage = _context.Messages
+                .Where(k => k.ConversationID == currentChat.ChatID)
+                .OrderByDescending(k => k.SendDate)
+                .FirstOrDefault();
 
             return new ChatPreviewDto
             {
