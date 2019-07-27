@@ -66,13 +66,13 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
-        public IActionResult GetChat([FromHeader] Guid token, int chatNumber)
+        public IActionResult GetChat([FromHeader] Guid token, int chatNumber, [FromBody] int? offset, [FromBody] int? count)
         {
             try
             {
                 int currentUserId = ValidateToken(token);
                 CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
-                return Ok(_chatService.GetChat(currentUserId, chatNumber));
+                return Ok(_chatService.GetChat(currentUserId, chatNumber, offset, count));
             }
             catch (AuthenticationException)
             {

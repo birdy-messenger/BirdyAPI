@@ -45,13 +45,13 @@ namespace BirdyAPI.Services
             return _context.Users.Find(userId).UniqueTag;
         }
 
-        public List<MessageDto> GetDialog(int currentUserId, int interlocutorId)
+        public List<MessageDto> GetDialog(int currentUserId, int interlocutorId, int? offset, int? count)
         {
             DialogUser currentDialog = _context.DialogUsers.SingleOrDefault(k =>
                 k.FirstUserID == currentUserId && k.SecondUserID == interlocutorId);
 
             List<Message> lastMessages = _context.Messages.Where(k => k.ConversationID == currentDialog.DialogID)
-                .OrderByDescending(k => k.SendDate).Take(50).ToList();
+                .OrderByDescending(k => k.SendDate).Skip(offset ?? 0).Take(count ?? 50).ToList();
 
             return lastMessages.Select(k => new MessageDto
                 {AuthorUniqueTag = GetUserUniqueTag(k.AuthorID), Message = k.Text, MessageTime = k.SendDate}).ToList();

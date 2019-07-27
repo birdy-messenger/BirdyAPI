@@ -61,13 +61,13 @@ namespace BirdyAPI.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(List<MessageDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetDialog([FromHeader] Guid token, string interlocutorUniqueTag)
+        public IActionResult GetDialog([FromHeader] Guid token, string interlocutorUniqueTag, [FromBody] int? offset, [FromBody] int? count)
         {
             try
             {
                 int currentUserId = ValidateToken(token);
                 int interlocutorId = _userService.GetUserIdByUniqueTag(interlocutorUniqueTag);
-                return Ok(_dialogService.GetDialog(currentUserId, interlocutorId));
+                return Ok(_dialogService.GetDialog(currentUserId, interlocutorId, offset, count));
             }
             catch (AuthenticationException)
             {
