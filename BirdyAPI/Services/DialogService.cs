@@ -35,6 +35,7 @@ namespace BirdyAPI.Services
                     currentUserId == currentDialog.FirstUserID ? 
                         GetUserUniqueTag(currentDialog.SecondUserID) : GetUserUniqueTag(currentUserId),
                 LastMessage = lastMessage?.Text,
+                LastMessageAuthor = GetUserUniqueTag(currentUserId),
                 LastMessageTime = lastMessage?.SendDate ?? DateTime.MinValue
             };
         }
@@ -42,6 +43,18 @@ namespace BirdyAPI.Services
         private string GetUserUniqueTag(int userId)
         {
             return _context.Users.Find(userId).UniqueTag;
+        }
+
+        public List<MessageDto> GetDialog(int currentUserId, int interlocutorId)
+        {
+            DialogUser currentDialog = _context.DialogUsers.SingleOrDefault(k =>
+                k.FirstUserID == currentUserId && k.SecondUserID == interlocutorId);
+
+            List<Message> lastMessages = _context.Messages.Where(k => k.ConversationID == currentDialog.DialogID)
+                .OrderByDescending(k => k.SendDate).Take(50).ToList();
+
+            return lastMessages.Select(k => new MessageDto
+                {AuthorUniqueTag = GetUserUniqueTag(k.AuthorID), Message = k.Text, MessageTime = k.SendDate}).ToList();
         }
     }
 }

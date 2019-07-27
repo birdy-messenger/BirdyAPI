@@ -10,7 +10,7 @@ namespace BirdyAPI.Controllers
 {
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("api/dialogs")]
+    [Route("dialogs")]
     public class DialogController : ExtendedController
     {
         private readonly DialogService _dialogService;
@@ -57,16 +57,17 @@ namespace BirdyAPI.Controllers
         /// <response code = "401">Invalid token</response>
         /// <response code = "404">User not found</response>
         [HttpGet]
+        [Route("{interlocutorUniqueTag}")]
         [ProducesResponseType(statusCode: 200, type: typeof(List<DialogPreviewDto>))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        public IActionResult GetDialog([FromHeader] Guid token, [FromBody] string userUniqueTag)
+        public IActionResult GetDialog([FromHeader] Guid token, string interlocutorUniqueTag)
         {
             try
             {
                 int currentUserId = ValidateToken(token);
-                _userService.GetUserIdByUniqueTag(userUniqueTag);
-                return Ok(_dialogService.GetDialogsPreview(currentUserId));
+                int interlocutorId = _userService.GetUserIdByUniqueTag(interlocutorUniqueTag);
+                return Ok(_dialogService.GetDialog(currentUserId, interlocutorId));
             }
             catch (AuthenticationException)
             {
