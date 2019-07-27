@@ -39,7 +39,7 @@ namespace BirdyAPI
             Configurations.BlobStorageApiKey = Configuration.GetConnectionString("BlobStorage");
 
             services.AddDbContext<BirdyContext>(options =>
-                options.UseSqlServer("Server=tcp:birdytest.database.windows.net,1433;Initial Catalog=BirdyDB;Persist Security Info=False;User ID=lol67;Password=Lolilop67;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" /*Configuration.GetConnectionString("AzureDbServer")*/));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
