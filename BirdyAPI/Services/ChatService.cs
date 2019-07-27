@@ -5,6 +5,7 @@ using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Types;
 using BirdyAPI.Tools.Exceptions;
+using BirdyAPI.Tools.Extensions;
 
 namespace BirdyAPI.Services
 {
@@ -18,7 +19,8 @@ namespace BirdyAPI.Services
 
         public List<ChatPreviewDto> GetChatsPreview(int userId)
         {
-            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User).Select(k => GetChatPreview(k.ChatID, userId)).ToList();
+            return _context.ChatUsers.Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User)
+                .Select(k => GetChatPreview(k.ChatID, userId)).ToList();
         }
 
         public ChatInfoDto GetChat(int userId, int chatNumber)
@@ -44,7 +46,6 @@ namespace BirdyAPI.Services
                     .Select(k => 
                         Tuple.Create(GetUserUniqueTag(k.UserInChatID), k.Status)).ToList()
             };
-
         }
 
         private ChatPreviewDto GetChatPreview(Guid chatId, int currentUserId)
@@ -141,9 +142,16 @@ namespace BirdyAPI.Services
             _context.SaveChanges();
         }
 
-        public void LeaveFromChat(int currentUserId, int chatNumber) // Ливнул админ = гг
+        public void LeaveFromChat(int currentUserId, int chatNumber)
         {
             ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber);
+            if(currentUser.Status == ChatStatus.Admin)
+            {
+                ChatUser newAdmin = GetNewChatAdmin(currentUser.ChatID);
+                newAdmin.Status = ChatStatus.Admin;
+                _context.Update(newAdmin);
+                _context.SaveChanges();
+            }
             currentUser.Status = ChatStatus.Left;
             _context.ChatUsers.Update(currentUser);
             _context.SaveChanges();
@@ -152,6 +160,11 @@ namespace BirdyAPI.Services
         public Guid GetChatIdByChatNumberAndUserId(int userId, int chatNumber)
         {
             return _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatNumber == chatNumber).ChatID;
+        }
+
+        private ChatUser GetNewChatAdmin(Guid chatId)
+        {
+            return _context.ChatUsers.Where(k => k.ChatID == chatId).ToList().RandomItem();
         }
     }
 }
