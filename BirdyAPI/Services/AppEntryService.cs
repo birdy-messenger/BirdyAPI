@@ -26,10 +26,10 @@ namespace BirdyAPI.Services
                 _context.Users.SingleOrDefault(k => k.Email == user.Email && k.PasswordHash == user.PasswordHash);
 
             if (currentUser == null)
-                throw new ArgumentException();
+                throw new ArgumentException("Wrong password or email");
 
             if (currentUser.CurrentStatus == UserStatus.Unconfirmed)
-                throw new AuthenticationException();
+                throw new AuthenticationException("User need to confirm email");
 
             UserSession currentSession = _context.UserSessions
                 .Add(new UserSession {Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
@@ -45,14 +45,14 @@ namespace BirdyAPI.Services
         {
             ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);
             if(currentConfirmToken == null || currentConfirmToken.Token != token)
-                throw new ArgumentException();
+                throw new ArgumentException("Wrong email");
 
 
             if (currentConfirmToken.TokenDate.AddDays(1) < DateTime.Now)
             {
                 _context.ConfirmTokens.Remove(currentConfirmToken);
                 _context.SaveChanges();
-                throw new TimeoutException();
+                throw new TimeoutException("Token expired");
             }
 
 
@@ -66,7 +66,7 @@ namespace BirdyAPI.Services
         public void CreateNewAccount(RegistrationDto registrationData)
         {
             if (_context.Users.SingleOrDefault(k => k.Email == registrationData.Email) != null)
-                throw new DuplicateAccountException();
+                throw new DuplicateAccountException("Birdy messenger contains account with that email");
 
             AddNewUser(registrationData);
             Guid currentToken = CreateConfirmToken(registrationData.Email);
@@ -118,7 +118,7 @@ namespace BirdyAPI.Services
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Wrong Password");
             }
         }
 

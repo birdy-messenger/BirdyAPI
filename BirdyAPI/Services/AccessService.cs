@@ -20,14 +20,14 @@ namespace BirdyAPI.Services
         {
             ChatUser currentUserChat = _context.ChatUsers.SingleOrDefault(k => k.ChatNumber == chatNumber && k.UserInChatID == userId);
             if (currentUserChat == null || currentUserChat.Status < statusToCheck)
-                throw new InsufficientRightsException();
+                throw new InsufficientRightsException("User haven't got permission for this action");
         }
 
         public int ValidateToken(Guid token)
         {
             UserSession currentSession = _context.UserSessions.Find(token);
             if (currentSession == null)
-                throw new AuthenticationException();
+                throw new AuthenticationException("Invalid session");
 
             return currentSession.UserId;
         }

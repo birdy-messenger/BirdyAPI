@@ -133,10 +133,10 @@ namespace BirdyAPI.Services
             Guid chatId = GetChatIdByChatNumberAndUserId(chatAdminId, chatNumber);
             ChatUser currentUser = _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId);
             if(currentUser == null)
-                throw new DataNotFoundException();
+                throw new DataNotFoundException("User not found");
 
             if(currentUser.Status != ChatStatus.User)
-                throw new InsufficientRightsException();
+                throw new InsufficientRightsException("User haven't got permission for this action");
             currentUser.Status = ChatStatus.Kicked;
             _context.ChatUsers.Update(currentUser);
             _context.SaveChanges();

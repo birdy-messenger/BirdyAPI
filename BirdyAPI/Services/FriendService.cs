@@ -18,8 +18,10 @@ namespace BirdyAPI.Services
         public void SendFriendRequest(int userId, int currentUserId)
         {
             Friend inverseRequest = _context.Friends.Find(userId, currentUserId);
-            if(inverseRequest != null) //Не уверен что это нужно, но пусть пока будет
+            if (inverseRequest != null) //Не уверен что это нужно, но пусть пока будет
+            {
                 AcceptFriendRequest(inverseRequest);
+            }
             else
             {
                 _context.Friends.Add(new Friend
@@ -33,7 +35,7 @@ namespace BirdyAPI.Services
             Friend inverseRequest = _context.Friends.Find(userId, currentUserId);
 
             if (inverseRequest == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException("Friend request not found");
 
             AcceptFriendRequest(inverseRequest);
         }

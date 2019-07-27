@@ -29,7 +29,7 @@ namespace BirdyAPI.Services
         {
             User currentUser = _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag);
             if (currentUser == null)
-                throw new ArgumentException();
+                throw new ArgumentException("User not found");
 
             return currentUser.Id;
         }

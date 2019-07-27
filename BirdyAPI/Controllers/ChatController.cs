@@ -149,7 +149,7 @@ namespace BirdyAPI.Controllers
                 int friendId = _userService.GetUserIdByUniqueTag(friendUniqueTag);
                 CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 if (!_friendService.IsItUserFriend(currentUserId, friendId))
-                    throw new InsufficientRightsException();
+                    throw new InsufficientRightsException("User haven't got permission for this action");
                 _chatService.AddUserToChat(currentUserId, friendId, chatNumber);
                 return Ok();
             }

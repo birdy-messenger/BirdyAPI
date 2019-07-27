@@ -19,7 +19,7 @@ namespace BirdyAPI.Services
         public void SetUniqueTag(int userId, string newUniqueTag)
         {
             if(_context.Users.Count(k => k.UniqueTag == newUniqueTag) != 0)
-                throw new DuplicateNameException();
+                throw new DuplicateNameException("This unique tag is already occupied");
 
             User currentUser  = _context.Users.Find(userId);
                 currentUser.UniqueTag = newUniqueTag;
