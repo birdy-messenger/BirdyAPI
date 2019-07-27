@@ -111,7 +111,7 @@ namespace BirdyAPI.Services
         {
             User currentUser = _context.Users.Find(id);
 
-            if (currentUser.PasswordHash == passwordChanges.OldPassorwdHash)
+            if (currentUser.PasswordHash == passwordChanges.OldPasswordHash)
             {
                 currentUser.PasswordHash = passwordChanges.NewPasswordHash;
                 _context.Users.Update(currentUser);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Security.Authentication;
 using BirdyAPI.Dto;
@@ -9,7 +8,6 @@ using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Tools.Extensions;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace BirdyAPI.Controllers
 {

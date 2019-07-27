@@ -1,6 +1,5 @@
 ﻿using System;
 using BirdyAPI.Dto;
-using BirdyAPI.Migrations;
 using BirdyAPI.Services;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;

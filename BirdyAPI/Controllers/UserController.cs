@@ -64,7 +64,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = ValidateToken(token);
+                ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(uniqueTag);
                 return Ok(_userService.GetUserInfo(userId));
             }

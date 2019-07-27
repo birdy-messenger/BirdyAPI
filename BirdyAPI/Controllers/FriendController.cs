@@ -150,7 +150,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = ValidateToken(token);
+                ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 return Ok(_friendService.GetFriends(userId));
             }

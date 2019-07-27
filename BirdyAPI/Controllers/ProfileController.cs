@@ -5,7 +5,6 @@ using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace BirdyAPI.Controllers
 {
