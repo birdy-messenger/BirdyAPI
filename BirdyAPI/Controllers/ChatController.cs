@@ -20,13 +20,11 @@ namespace BirdyAPI.Controllers
     {
         private readonly ChatService _chatService;
         private readonly FriendService _friendService;
-        private readonly AccessService _accessService;
         private readonly UserService _userService;
-        public ChatController(BirdyContext context)
+        public ChatController(BirdyContext context) : base(context)
         {
             _chatService = new ChatService(context);
             _friendService = new FriendService(context);
-            _accessService = new AccessService(context);
             _userService = new UserService(context);
         }
 
@@ -44,7 +42,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 return Ok(_chatService.GetChatsPreview(currentUserId));
             }
             catch (AuthenticationException)
@@ -74,8 +72,8 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                int currentUserId = ValidateToken(token);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 return Ok(/*_chatService.GetChatInfo(currentUserId, chatNumber)*/);
             }
             catch (AuthenticationException)
@@ -109,7 +107,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 List<int> friendsId = friendsUniqueTags.Select(k => _userService.GetUserIdByUniqueTag(k)).ToList();
                 friendsId.RemoveAll(k => !_friendService.IsItUserFriend(currentUserId ,k));
                 _chatService.CreateChat(friendsId, currentUserId);
@@ -149,9 +147,9 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int friendId = _userService.GetUserIdByUniqueTag(friendUniqueTag);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 if (!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new InsufficientRightsException();
                 _chatService.AddUserToChat(currentUserId, friendId, chatNumber);
@@ -193,8 +191,8 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                int currentUserId = ValidateToken(token);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 _chatService.RenameChat(currentUserId, chatNumber, newChatName);
                 return Ok();
             }
@@ -232,8 +230,8 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.Admin);
+                int currentUserId = ValidateToken(token);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.Admin);
                 int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _chatService.KickUser(currentUserId, chatNumber, userId);
                 return Ok();
@@ -274,8 +272,8 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
-                _accessService.CheckChatUserAccess(currentUserId, chatNumber, ChatStatus.User);
+                int currentUserId = ValidateToken(token);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 _chatService.LeaveFromChat(currentUserId, chatNumber);
                 return Ok();
             }

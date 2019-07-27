@@ -14,12 +14,10 @@ namespace BirdyAPI.Controllers
     public class AppEntryController : ExtendedController
     {
         private readonly AppEntryService _appEntryService;
-        private readonly AccessService _accessService;
 
-        public AppEntryController(BirdyContext context)
+        public AppEntryController(BirdyContext context) : base(context)
         {
             _appEntryService = new AppEntryService(context);
-            _accessService = new AccessService(context);
         }
 
         //TODO :1 Decrease status codes count
@@ -133,7 +131,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 _appEntryService.ChangePassword(currentUserId, passwordChanges);
                 return Ok();
             }
@@ -166,7 +164,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 _appEntryService.TerminateSession(currentUserId);
                 return Ok();
             }
@@ -195,7 +193,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 _appEntryService.TerminateSession(token, currentUserId);
                 return Ok();
             }

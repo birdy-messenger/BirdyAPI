@@ -15,13 +15,11 @@ namespace BirdyAPI.Controllers
     public class FriendController : ExtendedController
     {
         private readonly FriendService _friendService;
-        private readonly AccessService _accessService;
         private readonly UserService _userService;
 
         public FriendController(BirdyContext context)
         {
             _friendService = new FriendService(context);
-            _accessService = new AccessService(context);
             _userService = new UserService(context);
         }
 
@@ -42,7 +40,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _friendService.SendFriendRequest(userId, currentUserId);
                 return Ok();
@@ -79,7 +77,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 _friendService.AcceptFriendRequest(userId, currentUserId);
                 return Ok();
@@ -118,7 +116,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 return Ok(_friendService.GetFriends(currentUserId));
             }
             catch (AuthenticationException)
@@ -152,7 +150,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(userUniqueTag);
                 return Ok(_friendService.GetFriends(userId));
             }
@@ -190,7 +188,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int friendId = _userService.GetUserIdByUniqueTag(friendUniqueTag);
                 if(!_friendService.IsItUserFriend(currentUserId, friendId))
                     throw new DataException();

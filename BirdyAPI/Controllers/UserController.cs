@@ -13,12 +13,10 @@ namespace BirdyAPI.Controllers
     public class UserController : ExtendedController
     {
         private readonly UserService _userService;
-        private readonly AccessService _accessService;
 
         public UserController(BirdyContext context)
         {
             _userService = new UserService(context);
-            _accessService = new AccessService(context);
         }
 
 
@@ -36,7 +34,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 return Ok(_userService.GetUserInfo(currentUserId));
             }
             catch (AuthenticationException)
@@ -66,7 +64,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                int currentUserId = _accessService.ValidateToken(token);
+                int currentUserId = ValidateToken(token);
                 int userId = _userService.GetUserIdByUniqueTag(uniqueTag);
                 return Ok(_userService.GetUserInfo(userId));
             }
