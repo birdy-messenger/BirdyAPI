@@ -23,14 +23,7 @@ namespace BirdyAPI.Controllers
         [Produces(typeof(List<User>))]
         public IActionResult GetUsers()
         {
-            try
-            {
-                return Ok(_debugService.GetAllUsers());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.SerializeAsResponse());
-            }
+            return Ok(_debugService.GetAllUsers());
         }
     }
 }

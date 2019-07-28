@@ -2,7 +2,9 @@
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
+using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Tools.Extensions;
+using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
@@ -54,10 +56,6 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -66,25 +64,28 @@ namespace BirdyAPI.Controllers
         /// <response code = "200">Message sent</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "401">Invalid token</response>
-        /// <response code = "404">User not found</response>
         [HttpPost]
         [Route("{chatNumber}")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        [ProducesResponseType(statusCode: 404, type: typeof(void))]
         public IActionResult SendMessageToChat([FromHeader] Guid token, int chatNumber, [FromBody] string message)
         {
             try
             {
                 int currentUserId = ValidateToken(token);
+                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 Guid currentChatId = _chatService.GetChatIdByChatNumberAndUserId(currentUserId, chatNumber);
                 _messageService.SendMessageToChat(currentUserId, currentChatId, message);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (AuthenticationException)
             {
-                return InternalServerError(ex.SerializeAsResponse());
+                return Unauthorized();
+            }
+            catch (InsufficientRightsException)
+            {
+                return Forbid();
             }
         }
     }

@@ -47,10 +47,6 @@ namespace BirdyAPI.Controllers
             {
                 return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -81,10 +77,6 @@ namespace BirdyAPI.Controllers
             catch (InsufficientRightsException)
             {
                 return Forbid();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -118,10 +110,6 @@ namespace BirdyAPI.Controllers
             catch(ArgumentException)
             {
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -165,10 +153,6 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -201,10 +185,6 @@ namespace BirdyAPI.Controllers
             catch (InsufficientRightsException)
             {
                 return Forbid();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -246,10 +226,6 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -286,10 +262,6 @@ namespace BirdyAPI.Controllers
             catch (DataNotFoundException)
             {
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }

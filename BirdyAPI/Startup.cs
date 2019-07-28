@@ -1,8 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
+using BirdyAPI.Dto;
+using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,9 +42,10 @@ namespace BirdyAPI
 
             Configurations.SendGridApiKey = Configuration.GetConnectionString("SendGrid");
             Configurations.BlobStorageApiKey = Configuration.GetConnectionString("BlobStorage");
+            Configurations.AzureDatabaseConnectionString = Configuration.GetConnectionString("AzureDbServer");
 
             services.AddDbContext<BirdyContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureDbServer")));
+                options.UseSqlServer(Configurations.AzureDatabaseConnectionString));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -49,6 +55,7 @@ namespace BirdyAPI
             app.UseSwagger();
             app.UseSwaggerUI(configuration =>
                 configuration.SwaggerEndpoint("/swagger/Birdy/swagger.json", "Birdy API"));
+            app.ConfigureExceptionHandler();
             app.UseMvc();
         }
     }

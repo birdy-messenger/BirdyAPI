@@ -53,10 +53,6 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -93,10 +89,6 @@ namespace BirdyAPI.Controllers
             catch (NullReferenceException)
             {
                 return Conflict();
-            }   
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -126,10 +118,6 @@ namespace BirdyAPI.Controllers
             catch (ArgumentException)
             {
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -161,10 +149,6 @@ namespace BirdyAPI.Controllers
             catch (ArgumentException)
             {
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
 
@@ -207,10 +191,6 @@ namespace BirdyAPI.Controllers
             catch(ArgumentException)
             {
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }

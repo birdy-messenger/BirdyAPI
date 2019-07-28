@@ -45,10 +45,6 @@ namespace BirdyAPI.Controllers
             {
                 return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -81,10 +77,6 @@ namespace BirdyAPI.Controllers
             {
                 return Forbid();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -115,10 +107,6 @@ namespace BirdyAPI.Controllers
             catch (DuplicateNameException)
             {
                 return Forbid();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }

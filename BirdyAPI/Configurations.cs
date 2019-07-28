@@ -5,6 +5,7 @@
         public static string SendGridApiKey;
 
         public static string BlobStorageApiKey;
+        public static string AzureDatabaseConnectionString;
 
         public static string OurEmailAddress = "birdy-noreply@birdy.com";
 

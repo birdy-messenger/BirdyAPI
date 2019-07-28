@@ -54,10 +54,6 @@ namespace BirdyAPI.Controllers
             {
                 return PartialContent(new SimpleAnswerDto{Result = ex.Message});
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -82,10 +78,6 @@ namespace BirdyAPI.Controllers
             {
                 return Conflict();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
 
@@ -107,10 +99,6 @@ namespace BirdyAPI.Controllers
             catch (TimeoutException)
             {
                 return Forbid("Timeout");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.SerializeAsResponse());
             }
         }
 
@@ -143,10 +131,6 @@ namespace BirdyAPI.Controllers
             {
                 return BadRequest();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -172,10 +156,6 @@ namespace BirdyAPI.Controllers
             {
                 return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
-            }
         }
 
         /// <summary>
@@ -200,10 +180,6 @@ namespace BirdyAPI.Controllers
             catch (AuthenticationException)
             {
                 return Unauthorized();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex.SerializeAsResponse());
             }
         }
     }

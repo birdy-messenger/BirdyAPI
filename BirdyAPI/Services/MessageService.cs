@@ -20,7 +20,6 @@ namespace BirdyAPI.Services
                                                (k.FirstUserID == userId && k.SecondUserID == currentUserId)) ??
                                        InitNewDialog(currentUserId, userId);
 
-            
             Message currentMessage = Message.Create(currentUserId, currentDialog.DialogID, message);
             _context.Messages.Add(currentMessage);
             _context.SaveChanges();
