@@ -20,42 +20,22 @@ namespace BirdyAPI.Services
                                                (k.FirstUserID == userId && k.SecondUserID == currentUserId)) ??
                                        InitNewDialog(currentUserId, userId);
 
-            Message currentMessage = new Message
-            {
-                AuthorID = currentUserId,
-                ConversationID = currentDialog.DialogID,
-                MessageID = Guid.NewGuid(),
-                SendDate = DateTime.Now,
-                Text = message
-            };
-
+            
+            Message currentMessage = Message.Create(currentUserId, currentDialog.DialogID, message);
             _context.Messages.Add(currentMessage);
             _context.SaveChanges();
         }
 
         public void SendMessageToChat(int currentUserId, Guid chatId, string message)
         {
-            Message currentMessage = new Message
-             {
-                 AuthorID = currentUserId,
-                 ConversationID = chatId,
-                 MessageID = Guid.NewGuid(),
-                 SendDate = DateTime.Now,
-                 Text = message
-             };
-
-             _context.Messages.Add(currentMessage);
+            Message currentMessage = Message.Create(currentUserId, chatId, message);
+            _context.Messages.Add(currentMessage);
              _context.SaveChanges();
         }
 
         private DialogUser InitNewDialog(int firstUserId, int secondUserId)
         {
-            DialogUser newDialog = new DialogUser
-            {
-                DialogID = Guid.NewGuid(),
-                FirstUserID = firstUserId,
-                SecondUserID = secondUserId
-            };
+            DialogUser newDialog = DialogUser.Create(firstUserId, secondUserId);
             _context.DialogUsers.Add(newDialog);
             _context.SaveChanges();
 

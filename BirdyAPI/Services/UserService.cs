@@ -16,13 +16,7 @@ namespace BirdyAPI.Services
         {
             User user = _context.Users.Find(userId);
 
-            return new UserAccountDto
-            {
-                AvatarReference = user.AvatarReference,
-                FirstName = user.FirstName,
-                UniqueTag = user.UniqueTag,
-                RegistrationDate = user.RegistrationDate
-            };
+            return UserAccountDto.Create(user);
         }
 
         public int GetUserIdByUniqueTag(string uniqueTag)

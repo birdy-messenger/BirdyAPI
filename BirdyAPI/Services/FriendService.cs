@@ -24,8 +24,7 @@ namespace BirdyAPI.Services
             }
             else
             {
-                _context.Friends.Add(new Friend
-                    {FirstUserID = currentUserId, SecondUserID = userId, RequestAccepted = false});
+                _context.Friends.Add(Friend.Create(userId, currentUserId));
                 _context.SaveChanges();
             }
         }
@@ -58,7 +57,7 @@ namespace BirdyAPI.Services
                 _context.Friends
                     .Where(e => e.SecondUserID == userId && e.RequestAccepted)
                     .Any(x => x.FirstUserID == k.Id)))
-                .Select(k => new UserFriendDto{Id = k.Id, FirstName = k.FirstName, Avatar = k.AvatarReference})
+                .Select(k => new UserFriendDto(k.Id, k.FirstName, k.AvatarReference))
                 .ToList();
         }
 

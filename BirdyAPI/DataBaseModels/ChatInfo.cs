@@ -8,5 +8,12 @@ namespace BirdyAPI.DataBaseModels
         [Key]
         public Guid ChatID { get; set; }
         public string ChatName { get; set; }
+        public ChatInfo() { }
+
+        public ChatInfo(Guid chatId, string chatName)
+        {
+            ChatID = chatId;
+            ChatName = chatName;
+        }
     }
 }

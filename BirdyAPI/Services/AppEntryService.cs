@@ -32,7 +32,7 @@ namespace BirdyAPI.Services
                 throw new AuthenticationException("User need to confirm email");
 
             UserSession currentSession = _context.UserSessions
-                .Add(new UserSession {Token = Guid.NewGuid(), UserId = currentUser.Id}).Entity;
+                .Add(UserSession.Create(currentUser.Id)).Entity; 
             _context.SaveChanges();
 
             if (currentUser.CurrentStatus == UserStatus.NeverUsed)
@@ -80,16 +80,7 @@ namespace BirdyAPI.Services
 
         private void AddNewUser(RegistrationDto registrationData)
         {
-            User newUser = new User
-            {
-                Email = registrationData.Email,
-                PasswordHash = registrationData.PasswordHash,
-                FirstName = registrationData.FirstName,
-                UniqueTag = null,
-                RegistrationDate = DateTime.Now,
-                CurrentStatus = UserStatus.Unconfirmed,
-                AvatarReference = null
-            };
+            User newUser = User.Create(registrationData);
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
@@ -97,12 +88,7 @@ namespace BirdyAPI.Services
 
         private Guid CreateConfirmToken(string email)
         {
-            ConfirmToken newConfirmToken = new ConfirmToken
-            {
-                Email = email,
-                Token = Guid.NewGuid(),
-                TokenDate = DateTime.Now
-            };
+            ConfirmToken newConfirmToken = ConfirmToken.Create(email);
             _context.ConfirmTokens.Add(newConfirmToken);
             _context.SaveChanges();
 

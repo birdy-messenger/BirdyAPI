@@ -10,5 +10,13 @@ namespace BirdyAPI.Dto
         public string AuthorUniqueTag { get; set; }
         public string Message { get; set; }
         public DateTime MessageTime { get; set; }
+        public MessageDto() { }
+
+        public MessageDto(string authorUniqueTag, string message, DateTime messageTime)
+        {
+            AuthorUniqueTag = authorUniqueTag;
+            Message = message;
+            MessageTime = messageTime;
+        }
     }
 }

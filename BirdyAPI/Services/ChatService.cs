@@ -43,16 +43,11 @@ namespace BirdyAPI.Services
             {
                 Messages = lastMessages
                     .Select(k => 
-                        new MessageDto
-                        {
-                            AuthorUniqueTag = GetUserUniqueTag(k.AuthorID),
-                            Message = k.Text,
-                            MessageTime = k.SendDate
-                        })
+                        new MessageDto(GetUserUniqueTag(k.AuthorID), k.Text, k.SendDate))
                     .ToList(),
                 Users = chatUsers
                     .Select(k => 
-                        (new ChatMemberDto{UserUniqueTag = GetUserUniqueTag(k.UserInChatID), UserStatus = k.Status}))
+                        new ChatMemberDto(GetUserUniqueTag(k.UserInChatID), k.Status))
                     .ToList()
             };
         }
@@ -66,38 +61,22 @@ namespace BirdyAPI.Services
                 .OrderByDescending(k => k.SendDate)
                 .FirstOrDefault();
 
-            return new ChatPreviewDto
-            {
-                ChatNumber = GetChatNumber(chatId, currentUserId),
-                ChatName = currentChat.ChatName,
-                LastMessage = chatLastMessage?.Text,
-                LastMessageAuthor = chatLastMessage == null ? null : GetUserUniqueTag(chatLastMessage.AuthorID),
-                LastMessageTime = chatLastMessage?.SendDate ?? DateTime.MinValue
-            };
+            string lastMessageAuthor = GetUserUniqueTag(chatLastMessage?.AuthorID);
+
+            return ChatPreviewDto.Create(GetChatNumber(chatId, currentUserId), currentChat.ChatName, lastMessageAuthor, chatLastMessage);
         }
 
         public void CreateChat(List<int> usersId, int chatCreatorId)
         {
-            ChatUser newChatAdmin = new ChatUser
-            {
-                ChatID = Guid.NewGuid(),
-                UserInChatID = chatCreatorId,
-                Status = ChatStatus.Admin,
-                ChatNumber = _context.ChatUsers.Count(k => k.UserInChatID == chatCreatorId) + 1
-            };
+            ChatUser newChatAdmin = ChatUser.Create(chatCreatorId, GetNewChatNumber(chatCreatorId));
             _context.ChatUsers.Add(newChatAdmin);
-            usersId.ForEach(k =>
-            {
-                _context.ChatUsers.Add(new ChatUser
-                {
-                    ChatID = newChatAdmin.ChatID,
-                    UserInChatID = k,
-                    Status = ChatStatus.User,
-                    ChatNumber = GetNewChatNumber(k)
-                });
-            });
 
-            _context.ChatInfo.Add(new ChatInfo {ChatID = newChatAdmin.ChatID, ChatName = "New chat"});
+            usersId.ForEach(k =>
+                {
+                    _context.ChatUsers.Add(ChatUser.Create(newChatAdmin.ChatID, k, GetNewChatNumber(k)));
+                });
+
+            _context.ChatInfo.Add(new ChatInfo(newChatAdmin.ChatID, "New chat"));
             _context.SaveChanges();
         }
 
@@ -106,13 +85,7 @@ namespace BirdyAPI.Services
             Guid currentChatId =
                 _context.ChatUsers.Single(k => k.ChatNumber == chatNumber && k.UserInChatID == currentUserId).ChatID;
 
-            _context.ChatUsers.Add(new ChatUser
-            {
-                ChatID = currentChatId,
-                UserInChatID = userId,
-                ChatNumber = GetNewChatNumber(userId),
-                Status = ChatStatus.User
-            });
+            _context.ChatUsers.Add(ChatUser.Create(currentChatId, userId, GetNewChatNumber(userId)));
         }
 
         private int GetNewChatNumber(int userId)
@@ -125,9 +98,9 @@ namespace BirdyAPI.Services
             return _context.ChatUsers.Single(k => k.ChatID == chatId && k.UserInChatID == currentUserId).ChatNumber;
         }
 
-        private string GetUserUniqueTag(int userId)
+        private string GetUserUniqueTag(int? userId)
         {
-            return _context.Users.Find(userId).UniqueTag;
+            return _context.Users.Find(userId)?.UniqueTag;
         }
 
         public void RenameChat(int userId, int chatNumber, string newChatName)
