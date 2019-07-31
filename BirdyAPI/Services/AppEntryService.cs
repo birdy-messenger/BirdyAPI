@@ -72,7 +72,7 @@ namespace BirdyAPI.Services
             AddNewUser(registrationData);
             Guid currentToken = CreateConfirmToken(registrationData.Email);
 
-            string userReference = "birdytestapi.azurewebsites.net/app/confirm" +
+            string userReference = "birdyapi.azurewebsites.net/app/confirm" +
                                    new QueryBuilder { { "email", registrationData.Email }, {"token", currentToken.ToString()} }.ToQueryString();
 
             SendConfirmEmail(registrationData.Email, userReference);

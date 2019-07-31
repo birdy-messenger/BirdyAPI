@@ -1,13 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using BirdyAPI.Dto;
 using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
