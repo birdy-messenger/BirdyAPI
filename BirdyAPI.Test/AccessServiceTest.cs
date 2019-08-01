@@ -17,7 +17,7 @@ namespace BirdyAPI.Test
             Random = new Random();
         }
 
-        public AccessService GetAccessService()
+        private AccessService GetAccessService()
         {
             return new AccessService(TestContext.GetContext());
         }
@@ -57,7 +57,6 @@ namespace BirdyAPI.Test
         public void CheckValidUserRights_Ok()
         {
             BirdyContext context = TestContext.GetContext();
-            AccessService accessService = new AccessService(context);
 
             Guid randomChatId = Guid.NewGuid();
             int randomChatNumber = Random.Next();
@@ -70,8 +69,11 @@ namespace BirdyAPI.Test
                 UserInChatID = randomUserId,
                 Status = ChatStatus.Admin
             };
+
             context.ChatUsers.Add(currentChatUser);
             context.SaveChanges();
+
+            AccessService accessService = new AccessService(context);
             accessService.CheckChatUserAccess(currentChatUser.UserInChatID, currentChatUser.ChatNumber,
                 ChatStatus.Admin);
         }

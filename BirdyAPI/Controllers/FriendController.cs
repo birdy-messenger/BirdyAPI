@@ -4,7 +4,6 @@ using System.Data;
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
-using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
