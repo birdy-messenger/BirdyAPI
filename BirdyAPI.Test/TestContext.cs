@@ -4,13 +4,14 @@ namespace BirdyAPI.Test
 {
     public class TestInit
     {
-        public static readonly DbContextOptions<BirdyContext> Options;
-        static TestInit()
+        public static BirdyContext GetContext()
         {
-            Options = new DbContextOptionsBuilder<BirdyContext>()
+            var options = new DbContextOptionsBuilder<BirdyContext>()
                 .UseSqlite(
                     "Data Source=BirdyTestDB.db")
                 .Options;
+
+            return new BirdyContext(options);
         }
     }
 }
