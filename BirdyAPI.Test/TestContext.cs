@@ -2,7 +2,7 @@
 
 namespace BirdyAPI.Test
 {
-    public class TestInit
+    public class TestContext
     {
         public static BirdyContext GetContext()
         {
