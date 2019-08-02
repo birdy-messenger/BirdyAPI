@@ -43,6 +43,7 @@ namespace BirdyAPI.Services
         {
             inverseRequest.RequestAccepted = true;
             _context.Friends.Update(inverseRequest);
+            _context.SaveChanges();
         }
 
         public  List<UserFriendDto> GetFriends(int userId)
@@ -63,26 +64,26 @@ namespace BirdyAPI.Services
 
         public void DeleteFriend(int userId, int friendId)
         {
-            bool isItInversedRequest = false;
+            bool isItOutgoingRequest = false;
             Friend acceptedRequest = _context.Friends.Find(userId, friendId);
             if (acceptedRequest == null)
             {
                 acceptedRequest = _context.Friends.Find(friendId, userId);
-                isItInversedRequest = true;
+                isItOutgoingRequest = true;
             }
 
-            if (isItInversedRequest)
+            if (isItOutgoingRequest)
             {
-                int swapHelper = acceptedRequest.FirstUserID;
-                acceptedRequest.FirstUserID = acceptedRequest.SecondUserID;
-                acceptedRequest.SecondUserID = swapHelper;
-                acceptedRequest.RequestAccepted = false;
-                _context.Friends.Update(acceptedRequest);
+                _context.Friends.Remove(acceptedRequest);
+                Friend inversedRequest = Friend.Create(acceptedRequest.SecondUserID, acceptedRequest.FirstUserID);
+                _context.Friends.Add(inversedRequest);
+                _context.SaveChanges();
             }
             else
             {
                 acceptedRequest.RequestAccepted = false;
                 _context.Friends.Update(acceptedRequest);
+                _context.SaveChanges();
             }
         }
         public bool IsItUserFriend(int currentUserId, int userId)
