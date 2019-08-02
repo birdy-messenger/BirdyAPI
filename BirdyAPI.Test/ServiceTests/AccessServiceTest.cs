@@ -10,16 +10,15 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class AccessServiceTest
     {
-        private static readonly Random Random;
-
-        static AccessServiceTest()
-        {
-            Random = new Random();
-        }
+        private static int RandomUserId => TestFactory.GetRandomInt();
+        private static int RandomChatNumber => TestFactory.GetRandomInt();
+        private static BirdyContext Context => TestFactory.GetContext();
+        private static Guid RandomToken => TestFactory.GetRandomGuid();
+        private static Guid RandomChatId => TestFactory.GetRandomGuid();
 
         private AccessService GetAccessService()
         {
-            return new AccessService(TestFactory.GetContext());
+            return new AccessService(Context);
         }
 
         [Fact]
@@ -32,44 +31,38 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void SendValidToken_UserId()
         {
-            Guid randomToken = Guid.NewGuid();
-            int randomUserId = Random.Next();
+            UserSession testSession = new UserSession {Token = RandomToken, UserId = RandomUserId};
 
-            BirdyContext context = TestFactory.GetContext();
+            BirdyContext context = Context;
+            context.UserSessions.Add(testSession);
+            context.SaveChanges();
+
             AccessService accessService = new AccessService(context);
 
-            context.UserSessions.Add(new UserSession {Token = randomToken, UserId = randomUserId});
-            context.SaveChanges();
-            Assert.Equal(randomUserId, accessService.ValidateToken(randomToken));
+            Assert.Equal(testSession.UserId, accessService.ValidateToken(testSession.Token));
         }
 
         [Fact]
         public void CheckInvalidUserRights_InsufficientRightsException()
         {
             AccessService accessService = GetAccessService();
-            int randomUserId = Random.Next();
-            int randomChatNumber = Random.Next();
 
-            Assert.Throws<InsufficientRightsException>(() => accessService.CheckChatUserAccess(randomUserId, randomChatNumber, ChatStatus.User));
+            Assert.Throws<InsufficientRightsException>(() => accessService.CheckChatUserAccess(RandomUserId, RandomChatNumber, ChatStatus.User));
         }
 
         [Fact]
         public void CheckValidUserRights_Ok()
         {
-            BirdyContext context = TestFactory.GetContext();
-
-            Guid randomChatId = Guid.NewGuid();
-            int randomChatNumber = Random.Next();
-            int randomUserId = Random.Next();
 
             ChatUser currentChatUser = new ChatUser
             {
-                ChatID = randomChatId,
-                ChatNumber = randomChatNumber,
-                UserInChatID = randomUserId,
+                ChatID = RandomChatId,
+                ChatNumber = RandomChatNumber,
+                UserInChatID = RandomUserId,
                 Status = ChatStatus.Admin
             };
 
+            BirdyContext context = Context;
             context.ChatUsers.Add(currentChatUser);
             context.SaveChanges();
 
