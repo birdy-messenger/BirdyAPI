@@ -10,6 +10,8 @@ namespace BirdyAPI.Test.ServiceTests
         private static string RandomString => TestFactory.GetRandomString();
         private static int RandomUserId => TestFactory.GetRandomInt();
         private static Guid RandomConversationId => TestFactory.GetRandomGuid();
+        private static BirdyContext Context => TestFactory.GetContext();
+
         [Fact]
         public void SendMessageToChat_Ok()
         {
@@ -17,7 +19,7 @@ namespace BirdyAPI.Test.ServiceTests
             int user = RandomUserId;
             string message = RandomString;
 
-            BirdyContext context = TestFactory.GetContext();
+            BirdyContext context = Context;
             MessageService messageService = new MessageService(context);
 
             messageService.SendMessageToChat(user, conversationId, message);
@@ -33,7 +35,7 @@ namespace BirdyAPI.Test.ServiceTests
             int secondUserId = RandomUserId;
             string message = RandomString;
 
-            BirdyContext context = TestFactory.GetContext();
+            BirdyContext context = Context;
             MessageService messageService = new MessageService(context);
 
             messageService.SendMessageToUser(userId, secondUserId, message);

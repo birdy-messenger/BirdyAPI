@@ -91,10 +91,10 @@ namespace BirdyAPI.Services
             if (currentFriend == null)
             {
                 Friend currentInverseFriend = _context.Friends.Find(currentUserId, userId);
-                if (currentInverseFriend.RequestAccepted)
-                    return true;
+                if (currentInverseFriend == null || !currentInverseFriend.RequestAccepted)
+                    return false;
 
-                return false;
+                return true;
             }
 
             if (currentFriend.RequestAccepted)

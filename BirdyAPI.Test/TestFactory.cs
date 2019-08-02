@@ -32,6 +32,10 @@ namespace BirdyAPI.Test
         {
             return Random.Next();
         }
+        public static int GetRandomInt(int min, int max)
+        {
+            return Random.Next(min, max);
+        }
 
         public static Guid GetRandomGuid()
         {
