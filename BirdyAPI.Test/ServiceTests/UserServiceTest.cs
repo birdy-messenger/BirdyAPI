@@ -9,79 +9,70 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class UserServiceTest
     {
-        private static readonly Random Random;
-        static UserServiceTest()
-        {
-            Random = new Random();
-        }
+        private static string RandomString => TestFactory.GetRandomString();
+        private static int RandomUserId => TestFactory.GetRandomInt();
+        private static BirdyContext Context => TestFactory.GetContext();
         private UserService GetUserService()
         {
-            return new UserService(TestFactory.GetContext());
+            return new UserService(Context);
         }
         [Fact]
         public void SendInvalidUserTag_ArgumentException()
         {
             UserService userService = GetUserService();
+
             Assert.Throws<ArgumentException>(() => userService.GetUserIdByUniqueTag(null));
         }
         [Fact]
         public void SendValidUserTag_UserId()
         {
-            BirdyContext context = TestFactory.GetContext();
+            User user = GetRandomUser();
 
-            int randomUserId = Random.Next();
-            string randomTag = TestFactory.GetRandomString();
-
-            User user = new User
-            {
-                AvatarReference = "test",
-                CurrentStatus = UserStatus.Confirmed,
-                Email = TestFactory.GetRandomString(),
-                FirstName = "test",
-                Id = randomUserId,
-                PasswordHash = "testPassword",
-                RegistrationDate = DateTime.Now,
-                UniqueTag = randomTag
-            };
-
+            BirdyContext context = Context;
             context.Users.Add(user);
             context.SaveChanges();
 
             UserService userService = new UserService(context);
-            Assert.Equal(randomUserId, userService.GetUserIdByUniqueTag(randomTag));
+
+            Assert.Equal(user.Id, userService.GetUserIdByUniqueTag(user.UniqueTag));
         }
 
         [Fact]
         public void SendUserId_UserInfo()
         {
-            BirdyContext context = TestFactory.GetContext();
-            
-            int randomUserId = Random.Next();
-            string randomTag = TestFactory.GetRandomString();
-            DateTime regData = DateTime.Now;
+            BirdyContext context = Context;
 
-            User user = new User
-            {
-                AvatarReference = "test",
-                CurrentStatus = UserStatus.Confirmed,
-                Email = TestFactory.GetRandomString(),
-                FirstName = "test",
-                Id = randomUserId,
-                PasswordHash = "testPassword",
-                RegistrationDate = regData,
-                UniqueTag = randomTag
-            };
+            User user = GetRandomUser();
 
             context.Users.Add(user);
             context.SaveChanges();
 
             UserService userService = new UserService(context);
-            var searchedAccount = userService.GetUserInfo(randomUserId);
-            var expected = (regData, randomTag);
+
+            var searchedAccount = userService.GetUserInfo(user.Id);
+            var expected = (user.RegistrationDate, user.UniqueTag);
             var actual = (searchedAccount.RegistrationDate, searchedAccount.UniqueTag);
+
             Assert.Equal(expected, actual);
         }
 
-       
+        private User GetRandomUser()
+        {
+            User user = new User
+            {
+                AvatarReference = RandomString,
+                CurrentStatus = UserStatus.Confirmed,
+                Email = RandomString,
+                FirstName = RandomString,
+                Id = RandomUserId,
+                PasswordHash = RandomString,
+                RegistrationDate = DateTime.Now,
+                UniqueTag = RandomString
+            };
+            return user;
+        }
+
+
+
     }
 }
