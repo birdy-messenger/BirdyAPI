@@ -6,7 +6,7 @@ using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Types;
 using Xunit;
 
-namespace BirdyAPI.Test
+namespace BirdyAPI.Test.ServiceTests
 {
     public class AccessServiceTest
     {
@@ -19,7 +19,7 @@ namespace BirdyAPI.Test
 
         private AccessService GetAccessService()
         {
-            return new AccessService(TestContext.GetContext());
+            return new AccessService(TestFactory.GetContext());
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace BirdyAPI.Test
             Guid randomToken = Guid.NewGuid();
             int randomUserId = Random.Next();
 
-            BirdyContext context = TestContext.GetContext();
+            BirdyContext context = TestFactory.GetContext();
             AccessService accessService = new AccessService(context);
 
             context.UserSessions.Add(new UserSession {Token = randomToken, UserId = randomUserId});
@@ -56,7 +56,7 @@ namespace BirdyAPI.Test
         [Fact]
         public void CheckValidUserRights_Ok()
         {
-            BirdyContext context = TestContext.GetContext();
+            BirdyContext context = TestFactory.GetContext();
 
             Guid randomChatId = Guid.NewGuid();
             int randomChatNumber = Random.Next();

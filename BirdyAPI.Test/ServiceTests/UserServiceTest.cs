@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using BirdyAPI.DataBaseModels;
-using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Types;
 using Xunit;
 
-namespace BirdyAPI.Test
+namespace BirdyAPI.Test.ServiceTests
 {
     public class UserServiceTest
     {
@@ -19,7 +16,7 @@ namespace BirdyAPI.Test
         }
         private UserService GetUserService()
         {
-            return new UserService(TestContext.GetContext());
+            return new UserService(TestFactory.GetContext());
         }
         [Fact]
         public void SendInvalidUserTag_ArgumentException()
@@ -30,16 +27,16 @@ namespace BirdyAPI.Test
         [Fact]
         public void SendValidUserTag_UserId()
         {
-            BirdyContext context = TestContext.GetContext();
+            BirdyContext context = TestFactory.GetContext();
 
             int randomUserId = Random.Next();
-            string randomTag = GetRandomString(8);
+            string randomTag = TestFactory.GetRandomString();
 
             User user = new User
             {
                 AvatarReference = "test",
                 CurrentStatus = UserStatus.Confirmed,
-                Email = GetRandomString(7),
+                Email = TestFactory.GetRandomString(),
                 FirstName = "test",
                 Id = randomUserId,
                 PasswordHash = "testPassword",
@@ -57,17 +54,17 @@ namespace BirdyAPI.Test
         [Fact]
         public void SendUserId_UserInfo()
         {
-            BirdyContext context = TestContext.GetContext();
-
+            BirdyContext context = TestFactory.GetContext();
+            
             int randomUserId = Random.Next();
-            string randomTag = GetRandomString(8);
+            string randomTag = TestFactory.GetRandomString();
             DateTime regData = DateTime.Now;
 
             User user = new User
             {
                 AvatarReference = "test",
                 CurrentStatus = UserStatus.Confirmed,
-                Email = GetRandomString(7),
+                Email = TestFactory.GetRandomString(),
                 FirstName = "test",
                 Id = randomUserId,
                 PasswordHash = "testPassword",
@@ -85,11 +82,6 @@ namespace BirdyAPI.Test
             Assert.Equal(expected, actual);
         }
 
-        private string GetRandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[Random.Next(s.Length)]).ToArray());
-        }
+       
     }
 }

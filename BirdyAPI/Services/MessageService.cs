@@ -29,7 +29,7 @@ namespace BirdyAPI.Services
         {
             Message currentMessage = Message.Create(currentUserId, chatId, message);
             _context.Messages.Add(currentMessage);
-             _context.SaveChanges();
+            _context.SaveChanges();
         }
 
         private DialogUser InitNewDialog(int firstUserId, int secondUserId)
