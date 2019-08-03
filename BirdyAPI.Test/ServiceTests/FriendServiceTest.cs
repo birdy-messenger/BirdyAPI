@@ -4,45 +4,40 @@ using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
 using BirdyAPI.Test.Factories;
 using BirdyAPI.Types;
-using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace BirdyAPI.Test.ServiceTests
 {
     public class FriendServiceTest
     {
-        private static BirdyContext Context => ContextFactory.GetContext();
-        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
-        private static int RandomCount => RandomValuesFactory.GetRandomInt(1, 15);
-        private static string RandomString => RandomValuesFactory.GetRandomString();
-        private static DateTime CurrentDateTime => RandomValuesFactory.GetDateTime();
         [Fact]
         public void SendNotFriendId_False()
         {
-            FriendService friendService = new FriendService(Context);
-            Assert.False(friendService.IsItUserFriend(RandomUserId, RandomUserId));
+            FriendService friendService = new FriendService(ContextFactory.GetContext());
+            Assert.False(friendService.IsItUserFriend(RandomValuesFactory.GetRandomInt(),
+                RandomValuesFactory.GetRandomInt()));
         }
         [Fact]
         public void SendUserId_ListOfFriends()
         {
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
-            int testUserId = RandomUserId;
-            int randomCount = RandomCount;
+            int testUserId = RandomValuesFactory.GetRandomInt();
+            int randomCount = RandomValuesFactory.GetRandomInt();
 
             for (int i = 0; i < randomCount; i++)
             {
-                int friendId = RandomUserId;
+                int friendId = RandomValuesFactory.GetRandomInt();
                 context.Friends.Add(new Friend {FirstUserID = testUserId, RequestAccepted = true, SecondUserID = friendId});
                 context.Users.Add(new User
                 {
-                    AvatarReference = RandomString,
+                    AvatarReference = RandomValuesFactory.GetRandomString(),
                     CurrentStatus = UserStatus.Confirmed,
-                    Email = RandomString,
-                    FirstName = RandomString,
-                    PasswordHash = RandomString,
-                    RegistrationDate = CurrentDateTime,
-                    UniqueTag = RandomString,
+                    Email = RandomValuesFactory.GetRandomString(),
+                    FirstName = RandomValuesFactory.GetRandomString(),
+                    PasswordHash = RandomValuesFactory.GetRandomString(),
+                    RegistrationDate = RandomValuesFactory.GetDateTime(),
+                    UniqueTag = RandomValuesFactory.GetRandomString(),
                     Id = friendId
                 });
             }
@@ -55,10 +50,10 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void SendFriendRequest_InsertRequestToDb()
         {
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
-            int firstUserId = RandomUserId;
-            int secondUserId = RandomUserId;
+            int firstUserId = RandomValuesFactory.GetRandomInt();
+            int secondUserId = RandomValuesFactory.GetRandomInt();
             friendService.SendFriendRequest(firstUserId, secondUserId);
 
             Assert.NotNull(context.Friends.SingleOrDefault(k =>
@@ -68,10 +63,10 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void AcceptRequest_UpdateRequestDb()
         {
-            int firstUserId = RandomUserId;
-            int secondUserId = RandomUserId;
+            int firstUserId = RandomValuesFactory.GetRandomInt();
+            int secondUserId = RandomValuesFactory.GetRandomInt();
 
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
 
             context.Friends.Add(new Friend
@@ -89,17 +84,19 @@ namespace BirdyAPI.Test.ServiceTests
         {
             BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
-            Assert.Throws<NullReferenceException>(() => friendService.AcceptFriendRequest(RandomUserId, RandomUserId));
+            Assert.Throws<NullReferenceException>(() =>
+                friendService.AcceptFriendRequest(RandomValuesFactory.GetRandomInt(),
+                    RandomValuesFactory.GetRandomInt()));
         }
 
         [Fact]
         public void DeleteFriend_UpdateRequestDb()
         {
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
 
-            int firstUserId = RandomUserId;
-            int secondUserId = RandomUserId;
+            int firstUserId = RandomValuesFactory.GetRandomInt();
+            int secondUserId = RandomValuesFactory.GetRandomInt();
 
             context.Friends.Add(new Friend
                 {FirstUserID = firstUserId, SecondUserID = secondUserId, RequestAccepted = true});
@@ -113,11 +110,11 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void DeleteFriend_FlipRequestDb()
         {
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
 
-            int firstUserId = RandomUserId;
-            int secondUserId = RandomUserId;
+            int firstUserId = RandomValuesFactory.GetRandomInt();
+            int secondUserId = RandomValuesFactory.GetRandomInt();
 
             context.Friends.Add(new Friend
                 { FirstUserID = firstUserId, SecondUserID = secondUserId, RequestAccepted = true });

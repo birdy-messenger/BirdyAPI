@@ -11,30 +11,20 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class AccessServiceTest
     {
-        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
-        private static int RandomChatNumber => RandomValuesFactory.GetRandomInt();
-        private static BirdyContext Context => ContextFactory.GetContext();
-        private static Guid RandomToken => RandomValuesFactory.GetRandomGuid();
-        private static Guid RandomChatId => RandomValuesFactory.GetRandomGuid();
-
-        private AccessService GetAccessService()
-        {
-            return new AccessService(Context);
-        }
-
         [Fact]
         public void SendInvalidToken_ArgumentException()
         {
-            AccessService accessService = GetAccessService();
+            AccessService accessService = new AccessService(ContextFactory.GetContext());
 
             Assert.Throws<AuthenticationException>(() => accessService.ValidateToken(Guid.NewGuid()));
         }
         [Fact]
         public void SendValidToken_UserId()
         {
-            UserSession testSession = new UserSession {Token = RandomToken, UserId = RandomUserId};
+            UserSession testSession = new UserSession
+                {Token = RandomValuesFactory.GetRandomGuid(), UserId = RandomValuesFactory.GetRandomInt()};
 
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             context.UserSessions.Add(testSession);
             context.SaveChanges();
 
@@ -46,9 +36,11 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void CheckInvalidUserRights_InsufficientRightsException()
         {
-            AccessService accessService = GetAccessService();
+            AccessService accessService = new AccessService(ContextFactory.GetContext());
 
-            Assert.Throws<InsufficientRightsException>(() => accessService.CheckChatUserAccess(RandomUserId, RandomChatNumber, ChatStatus.User));
+            Assert.Throws<InsufficientRightsException>(() =>
+                accessService.CheckChatUserAccess(RandomValuesFactory.GetRandomInt(),
+                    RandomValuesFactory.GetRandomInt(), ChatStatus.User));
         }
 
         [Fact]
@@ -57,13 +49,13 @@ namespace BirdyAPI.Test.ServiceTests
 
             ChatUser currentChatUser = new ChatUser
             {
-                ChatID = RandomChatId,
-                ChatNumber = RandomChatNumber,
-                UserInChatID = RandomUserId,
+                ChatID = RandomValuesFactory.GetRandomGuid(),
+                ChatNumber = RandomValuesFactory.GetRandomInt(),
+                UserInChatID = RandomValuesFactory.GetRandomInt(),
                 Status = ChatStatus.Admin
             };
 
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             context.ChatUsers.Add(currentChatUser);
             context.SaveChanges();
 

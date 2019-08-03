@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
 using BirdyAPI.Test.Factories;
@@ -10,17 +9,10 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class UserServiceTest
     {
-        private static string RandomString => RandomValuesFactory.GetRandomString();
-        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
-        private static BirdyContext Context => ContextFactory.GetContext();
-        private UserService GetUserService()
-        {
-            return new UserService(Context);
-        }
         [Fact]
         public void SendInvalidUserTag_ArgumentException()
         {
-            UserService userService = GetUserService();
+            UserService userService = new UserService(ContextFactory.GetContext());
 
             Assert.Throws<ArgumentException>(() => userService.GetUserIdByUniqueTag(null));
         }
@@ -29,7 +21,7 @@ namespace BirdyAPI.Test.ServiceTests
         {
             User user = GetRandomUser();
 
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
             context.Users.Add(user);
             context.SaveChanges();
 
@@ -41,7 +33,7 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void SendUserId_UserInfo()
         {
-            BirdyContext context = Context;
+            BirdyContext context = ContextFactory.GetContext();
 
             User user = GetRandomUser();
 
@@ -61,14 +53,14 @@ namespace BirdyAPI.Test.ServiceTests
         {
             User user = new User
             {
-                AvatarReference = RandomString,
+                AvatarReference = RandomValuesFactory.GetRandomString(),
                 CurrentStatus = UserStatus.Confirmed,
-                Email = RandomString,
-                FirstName = RandomString,
-                Id = RandomUserId,
-                PasswordHash = RandomString,
+                Email = RandomValuesFactory.GetRandomString(),
+                FirstName = RandomValuesFactory.GetRandomString(),
+                Id = RandomValuesFactory.GetRandomInt(),
+                PasswordHash = RandomValuesFactory.GetRandomString(),
                 RegistrationDate = DateTime.Now,
-                UniqueTag = RandomString
+                UniqueTag = RandomValuesFactory.GetRandomString()
             };
             return user;
         }

@@ -2,7 +2,7 @@
 
 namespace BirdyAPI.Test.Factories
 {
-    public class ContextFactory
+    public static class ContextFactory
     {
         public static BirdyContext GetContext()
         {

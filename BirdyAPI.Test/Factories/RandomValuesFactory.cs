@@ -7,7 +7,7 @@ namespace BirdyAPI.Test.Factories
 {
     public static class RandomValuesFactory
     {
-        public static readonly Random Random;
+        private static readonly Random Random;
 
         static RandomValuesFactory()
         {
