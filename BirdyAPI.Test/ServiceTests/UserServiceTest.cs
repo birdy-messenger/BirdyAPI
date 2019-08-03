@@ -19,7 +19,7 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void SendValidUserTag_UserId()
         {
-            User user = GetRandomUser();
+            User user = DatabaseModelsFactory.GetRandomUser();
 
             BirdyContext context = ContextFactory.GetContext();
             context.Users.Add(user);
@@ -35,7 +35,7 @@ namespace BirdyAPI.Test.ServiceTests
         {
             BirdyContext context = ContextFactory.GetContext();
 
-            User user = GetRandomUser();
+            User user = DatabaseModelsFactory.GetRandomUser();
 
             context.Users.Add(user);
             context.SaveChanges();
@@ -48,24 +48,5 @@ namespace BirdyAPI.Test.ServiceTests
 
             Assert.Equal(expected, actual);
         }
-
-        private User GetRandomUser()
-        {
-            User user = new User
-            {
-                AvatarReference = RandomValuesFactory.GetRandomString(),
-                CurrentStatus = UserStatus.Confirmed,
-                Email = RandomValuesFactory.GetRandomString(),
-                FirstName = RandomValuesFactory.GetRandomString(),
-                Id = RandomValuesFactory.GetRandomInt(),
-                PasswordHash = RandomValuesFactory.GetRandomString(),
-                RegistrationDate = DateTime.Now,
-                UniqueTag = RandomValuesFactory.GetRandomString()
-            };
-            return user;
-        }
-
-
-
     }
 }

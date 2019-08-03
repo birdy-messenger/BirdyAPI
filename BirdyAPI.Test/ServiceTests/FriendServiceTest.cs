@@ -23,7 +23,7 @@ namespace BirdyAPI.Test.ServiceTests
             BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
             int testUserId = RandomValuesFactory.GetRandomInt();
-            int randomCount = RandomValuesFactory.GetRandomInt();
+            int randomCount = RandomValuesFactory.GetRandomInt(2, 10);
 
             for (int i = 0; i < randomCount; i++)
             {
