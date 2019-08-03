@@ -2,6 +2,7 @@
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
+using BirdyAPI.Test.Factories;
 using BirdyAPI.Tools.Exceptions;
 using BirdyAPI.Types;
 using Xunit;
@@ -10,11 +11,11 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class AccessServiceTest
     {
-        private static int RandomUserId => TestFactory.GetRandomInt();
-        private static int RandomChatNumber => TestFactory.GetRandomInt();
-        private static BirdyContext Context => TestFactory.GetContext();
-        private static Guid RandomToken => TestFactory.GetRandomGuid();
-        private static Guid RandomChatId => TestFactory.GetRandomGuid();
+        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
+        private static int RandomChatNumber => RandomValuesFactory.GetRandomInt();
+        private static BirdyContext Context => ContextFactory.GetContext();
+        private static Guid RandomToken => RandomValuesFactory.GetRandomGuid();
+        private static Guid RandomChatId => RandomValuesFactory.GetRandomGuid();
 
         private AccessService GetAccessService()
         {

@@ -1,24 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Text;
 
-namespace BirdyAPI.Test
+namespace BirdyAPI.Test.Factories
 {
-    public class TestFactory
+    public static class RandomValuesFactory
     {
-        private static readonly Random Random;
-        static TestFactory()
+        public static readonly Random Random;
+
+        static RandomValuesFactory()
         {
             Random = new Random();
-        }
-        public static BirdyContext GetContext()
-        {
-            var options = new DbContextOptionsBuilder<BirdyContext>()
-                .UseSqlite(
-                    "Data Source=BirdyTestDB.db")
-                .Options;
-
-            return new BirdyContext(options);
         }
         public static string GetRandomString()
         {
@@ -32,6 +25,7 @@ namespace BirdyAPI.Test
         {
             return Random.Next();
         }
+
         public static int GetRandomInt(int min, int max)
         {
             return Random.Next(min, max);

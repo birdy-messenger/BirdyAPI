@@ -2,6 +2,7 @@
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
+using BirdyAPI.Test.Factories;
 using BirdyAPI.Types;
 using Xunit;
 
@@ -9,9 +10,9 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class UserServiceTest
     {
-        private static string RandomString => TestFactory.GetRandomString();
-        private static int RandomUserId => TestFactory.GetRandomInt();
-        private static BirdyContext Context => TestFactory.GetContext();
+        private static string RandomString => RandomValuesFactory.GetRandomString();
+        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
+        private static BirdyContext Context => ContextFactory.GetContext();
         private UserService GetUserService()
         {
             return new UserService(Context);

@@ -42,7 +42,7 @@ namespace BirdyAPI.Services
         {
             CloudStorageAccount account =
                 new CloudStorageAccount(
-                    new StorageCredentials("birdystorage",
+                    new StorageCredentials("birdy",
                         Configurations.BlobStorageApiKey), true);
 
             var blobClient = account.CreateCloudBlobClient();

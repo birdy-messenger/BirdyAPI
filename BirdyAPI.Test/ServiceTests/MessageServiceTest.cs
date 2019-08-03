@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using BirdyAPI.Services;
+using BirdyAPI.Test.Factories;
 using Xunit;
 
 namespace BirdyAPI.Test.ServiceTests
 {
     public class MessageServiceTest
     {
-        private static string RandomString => TestFactory.GetRandomString();
-        private static int RandomUserId => TestFactory.GetRandomInt();
-        private static Guid RandomConversationId => TestFactory.GetRandomGuid();
-        private static BirdyContext Context => TestFactory.GetContext();
+        private static string RandomString => RandomValuesFactory.GetRandomString();
+        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
+        private static Guid RandomConversationId => RandomValuesFactory.GetRandomGuid();
+        private static BirdyContext Context => ContextFactory.GetContext();
 
         [Fact]
         public void SendMessageToChat_Ok()

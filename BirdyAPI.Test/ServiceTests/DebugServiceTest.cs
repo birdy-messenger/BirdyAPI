@@ -1,4 +1,5 @@
 using BirdyAPI.Services;
+using BirdyAPI.Test.Factories;
 using Xunit;
 
 namespace BirdyAPI.Test.ServiceTests
@@ -15,7 +16,7 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void GetUsers_Ok()
         {
-            DebugService debugService = new DebugService(TestFactory.GetContext());
+            DebugService debugService = new DebugService(ContextFactory.GetContext());
             debugService.GetAllUsers();
         }
     }

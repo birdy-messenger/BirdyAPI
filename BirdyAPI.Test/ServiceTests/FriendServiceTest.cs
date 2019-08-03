@@ -2,6 +2,7 @@
 using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
+using BirdyAPI.Test.Factories;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
@@ -10,11 +11,11 @@ namespace BirdyAPI.Test.ServiceTests
 {
     public class FriendServiceTest
     {
-        private static BirdyContext Context => TestFactory.GetContext();
-        private static int RandomUserId => TestFactory.GetRandomInt();
-        private static int RandomCount => TestFactory.GetRandomInt(1, 15);
-        private static string RandomString => TestFactory.GetRandomString();
-        private static DateTime CurrentDateTime => TestFactory.GetDateTime();
+        private static BirdyContext Context => ContextFactory.GetContext();
+        private static int RandomUserId => RandomValuesFactory.GetRandomInt();
+        private static int RandomCount => RandomValuesFactory.GetRandomInt(1, 15);
+        private static string RandomString => RandomValuesFactory.GetRandomString();
+        private static DateTime CurrentDateTime => RandomValuesFactory.GetDateTime();
         [Fact]
         public void SendNotFriendId_False()
         {
@@ -86,7 +87,7 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void AcceptRequest_NullReferenceException()
         {
-            BirdyContext context = TestFactory.GetContext();
+            BirdyContext context = ContextFactory.GetContext();
             FriendService friendService = new FriendService(context);
             Assert.Throws<NullReferenceException>(() => friendService.AcceptFriendRequest(RandomUserId, RandomUserId));
         }
