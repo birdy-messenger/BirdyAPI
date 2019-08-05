@@ -41,6 +41,12 @@ namespace BirdyAPI.Test.Factories
                 Status = ChatStatus.Admin
             };
         }
+        public static ChatUser GetRandomChatUserUser()
+        {
+            ChatUser chatUser = GetRandomChatUserAdmin();
+            chatUser.Status = ChatStatus.User;
+            return chatUser;
+        }
 
         public static UserSession GetRandomUserSession()
         {
@@ -48,6 +54,15 @@ namespace BirdyAPI.Test.Factories
             {
                 Token = RandomValuesFactory.GetRandomGuid(),
                 UserId = RandomValuesFactory.GetRandomInt()
+            };
+        }
+
+        public static ChatInfo GetRandomChatInfo()
+        {
+            return new ChatInfo
+            {
+                ChatID = RandomValuesFactory.GetRandomGuid(),
+                ChatName = RandomValuesFactory.GetRandomString()
             };
         }
     }

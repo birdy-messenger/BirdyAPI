@@ -74,8 +74,8 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = ValidateToken(token);
-                CheckChatAccess(currentUserId, chatNumber, ChatStatus.User);
                 Guid currentChatId = _chatService.GetChatIdByChatNumberAndUserId(currentUserId, chatNumber);
+                CheckChatAccess(currentChatId, currentUserId, ChatStatus.User);
                 _messageService.SendMessageToChat(currentUserId, currentChatId, message);
                 return Ok();
             }

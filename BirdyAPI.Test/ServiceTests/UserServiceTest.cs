@@ -3,7 +3,6 @@ using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Test.Factories;
-using BirdyAPI.Types;
 using Xunit;
 
 namespace BirdyAPI.Test.ServiceTests

@@ -29,9 +29,9 @@ namespace BirdyAPI.Controllers
             return _accessService.ValidateToken(token);
         }
 
-        protected void CheckChatAccess(int userId, int chatNumber, ChatStatus status)
+        protected void CheckChatAccess(Guid chatId, int userId, ChatStatus status)
         {
-            _accessService.CheckChatUserAccess(userId, chatNumber, status);
+            _accessService.CheckChatUserAccess(chatId, userId, status);
         }
     }
 }

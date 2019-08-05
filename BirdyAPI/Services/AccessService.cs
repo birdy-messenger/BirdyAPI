@@ -23,6 +23,13 @@ namespace BirdyAPI.Services
             if (currentUserChat == null || currentUserChat.Status < statusToCheck)
                 throw new InsufficientRightsException("User haven't got permission for this action");
         }
+        public void CheckChatUserAccess(Guid chatId, int userId, ChatStatus statusToCheck)
+        {
+            ChatUser currentUserChat = _context.ChatUsers.SingleOrDefault(k => k.ChatID == chatId && k.UserInChatID == userId);
+
+            if (currentUserChat == null || currentUserChat.Status < statusToCheck)
+                throw new InsufficientRightsException("User haven't got permission for this action");
+        }
 
         public int ValidateToken(Guid token)
         {

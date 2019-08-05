@@ -22,7 +22,8 @@ namespace BirdyAPI.Services
                 .DialogUsers
                 .Where(k => k.FirstUserID == userId || k.SecondUserID == userId)
                 .ToList()
-                .Select(k => GetDialogPreview(k, userId)).ToList();
+                .Select(k => GetDialogPreview(k, userId))
+                .ToList();
         }
 
         private DialogPreviewDto GetDialogPreview(DialogUser dialog, int currentUserId)

@@ -3,7 +3,6 @@ using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Services;
 using BirdyAPI.Test.Factories;
-using BirdyAPI.Types;
 using Xunit;
 
 namespace BirdyAPI.Test.ServiceTests

@@ -21,6 +21,7 @@ namespace BirdyAPI.Services
         {
             return _context.ChatUsers
                 .Where(k => k.UserInChatID == userId && k.Status >= ChatStatus.User)
+                .ToList()
                 .Select(k => GetChatPreview(k.ChatID, userId))
                 .ToList();
         }
@@ -66,18 +67,19 @@ namespace BirdyAPI.Services
             return ChatPreviewDto.Create(GetChatNumber(chatId, currentUserId), currentChat.ChatName, lastMessageAuthor, chatLastMessage);
         }
 
-        public void CreateChat(List<int> usersId, int chatCreatorId)
+        public int CreateChat(List<int> usersId, int chatCreatorId)
         {
             ChatUser newChatAdmin = ChatUser.Create(chatCreatorId, GetNewChatNumber(chatCreatorId));
             _context.ChatUsers.Add(newChatAdmin);
 
-            usersId.ForEach(k =>
+            usersId?.ForEach(k =>
                 {
                     _context.ChatUsers.Add(ChatUser.Create(newChatAdmin.ChatID, k, GetNewChatNumber(k)));
                 });
 
             _context.ChatInfo.Add(new ChatInfo(newChatAdmin.ChatID, "New chat"));
             _context.SaveChanges();
+            return newChatAdmin.ChatNumber;
         }
 
         public void AddUserToChat(int currentUserId, int userId, int chatNumber)
@@ -86,6 +88,7 @@ namespace BirdyAPI.Services
                 _context.ChatUsers.Single(k => k.ChatNumber == chatNumber && k.UserInChatID == currentUserId).ChatID;
 
             _context.ChatUsers.Add(ChatUser.Create(currentChatId, userId, GetNewChatNumber(userId)));
+            _context.SaveChanges();
         }
 
         private int GetNewChatNumber(int userId)
@@ -115,12 +118,8 @@ namespace BirdyAPI.Services
         public void KickUser(int chatAdminId, int chatNumber, int userId)
         {
             Guid chatId = GetChatIdByChatNumberAndUserId(chatAdminId, chatNumber);
-            ChatUser currentUser = _context.ChatUsers.SingleOrDefault(k => k.UserInChatID == userId && k.ChatID == chatId);
-            if(currentUser == null)
-                throw new DataNotFoundException("User not found");
+            ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatID == chatId);
 
-            if(currentUser.Status != ChatStatus.User)
-                throw new InsufficientRightsException("User haven't got permission for this action");
             currentUser.Status = ChatStatus.Kicked;
             _context.ChatUsers.Update(currentUser);
             _context.SaveChanges();

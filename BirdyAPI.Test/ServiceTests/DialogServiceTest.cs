@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;

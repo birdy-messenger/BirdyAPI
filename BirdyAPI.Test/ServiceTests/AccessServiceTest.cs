@@ -62,7 +62,7 @@ namespace BirdyAPI.Test.ServiceTests
                 context.SaveChanges();
 
                 AccessService accessService = new AccessService(context);
-                accessService.CheckChatUserAccess(currentChatUser.UserInChatID, currentChatUser.ChatNumber,
+                accessService.CheckChatUserAccess(currentChatUser.ChatID, currentChatUser.UserInChatID,
                     ChatStatus.Admin);
             }
         }
