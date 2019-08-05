@@ -23,5 +23,12 @@ namespace BirdyAPI.Test.Factories
             };
             return user;
         }
+
+        public static Message GetMessage(int authorId, Guid conversationId, string text, DateTime messageTime)
+        {
+            Message message = Message.Create(authorId, conversationId, text);
+            message.SendDate = messageTime;
+            return message;
+        }
     }
 }

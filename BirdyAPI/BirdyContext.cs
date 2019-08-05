@@ -13,6 +13,7 @@ namespace BirdyAPI
         public DbSet<Message> Messages { get; set; }
         public DbSet<ConfirmToken> ConfirmTokens { get; set; }
         public DbSet<DialogUser> DialogUsers { get; set; }
+
         public BirdyContext(DbContextOptions<BirdyContext> options)
             : base(options)
         { }

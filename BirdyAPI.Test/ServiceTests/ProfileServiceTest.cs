@@ -31,7 +31,7 @@ namespace BirdyAPI.Test.ServiceTests
             ProfileService profileService = new ProfileService(context);
 
             User user = DatabaseModelsFactory.GetRandomUser();
-            const string usedTag = "testTag";
+            string usedTag = RandomValuesFactory.GetRandomString();
             user.UniqueTag = usedTag;
 
             context.Users.Add(user);
@@ -50,6 +50,7 @@ namespace BirdyAPI.Test.ServiceTests
             User user = DatabaseModelsFactory.GetRandomUser();
             context.Users.Add(user);
             context.SaveChanges();
+
             string newTag = RandomValuesFactory.GetRandomString();
             profileService.SetUniqueTag(user.Id, newTag);
 
