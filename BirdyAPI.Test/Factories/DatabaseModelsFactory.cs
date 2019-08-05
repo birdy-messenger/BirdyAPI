@@ -30,5 +30,25 @@ namespace BirdyAPI.Test.Factories
             message.SendDate = messageTime;
             return message;
         }
+
+        public static ChatUser GetRandomChatUserAdmin()
+        {
+            return new ChatUser
+            {
+                ChatID = RandomValuesFactory.GetRandomGuid(),
+                ChatNumber = RandomValuesFactory.GetRandomInt(),
+                UserInChatID = RandomValuesFactory.GetRandomInt(),
+                Status = ChatStatus.Admin
+            };
+        }
+
+        public static UserSession GetRandomUserSession()
+        {
+            return new UserSession
+            {
+                Token = RandomValuesFactory.GetRandomGuid(),
+                UserId = RandomValuesFactory.GetRandomInt()
+            };
+        }
     }
 }

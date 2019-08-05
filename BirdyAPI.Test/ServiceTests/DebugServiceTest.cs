@@ -16,8 +16,11 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void GetUsers_Ok()
         {
-            DebugService debugService = new DebugService(ContextFactory.GetContext());
-            debugService.GetAllUsers();
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                DebugService debugService = new DebugService(context);
+                debugService.GetAllUsers();
+            }
         }
     }
 }

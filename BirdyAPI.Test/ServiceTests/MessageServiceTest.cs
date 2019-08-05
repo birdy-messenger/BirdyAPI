@@ -15,13 +15,15 @@ namespace BirdyAPI.Test.ServiceTests
             int user = RandomValuesFactory.GetRandomInt();
             string message = RandomValuesFactory.GetRandomString();
 
-            BirdyContext context = ContextFactory.GetContext();
-            MessageService messageService = new MessageService(context);
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                MessageService messageService = new MessageService(context);
 
-            messageService.SendMessageToChat(user, conversationId, message);
-            var insertedValue = context.Messages.SingleOrDefault(k => k.Text == message && k.ConversationID == conversationId && k.AuthorID == user);
+                messageService.SendMessageToChat(user, conversationId, message);
 
-            Assert.NotNull(insertedValue);
+                Assert.NotNull(context.Messages.SingleOrDefault(k =>
+                    k.Text == message && k.ConversationID == conversationId && k.AuthorID == user));
+            }
         }
 
         [Fact]
@@ -31,13 +33,14 @@ namespace BirdyAPI.Test.ServiceTests
             int secondUserId = RandomValuesFactory.GetRandomInt();
             string message = RandomValuesFactory.GetRandomString();
 
-            BirdyContext context = ContextFactory.GetContext();
-            MessageService messageService = new MessageService(context);
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                MessageService messageService = new MessageService(context);
 
-            messageService.SendMessageToUser(userId, secondUserId, message);
-            var sentMessage = context.Messages.SingleOrDefault(k => k.Text == message && k.AuthorID == userId);
+                messageService.SendMessageToUser(userId, secondUserId, message);
 
-            Assert.NotNull(sentMessage);
+                Assert.NotNull(context.Messages.SingleOrDefault(k => k.Text == message && k.AuthorID == userId));
+            }
         }
     }
 }

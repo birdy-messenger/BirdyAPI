@@ -1,5 +1,6 @@
 ﻿using System;
 using BirdyAPI.DataBaseModels;
+using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Test.Factories;
 using BirdyAPI.Types;
@@ -12,41 +13,48 @@ namespace BirdyAPI.Test.ServiceTests
         [Fact]
         public void SendInvalidUserTag_ArgumentException()
         {
-            UserService userService = new UserService(ContextFactory.GetContext());
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                UserService userService = new UserService(context);
 
-            Assert.Throws<ArgumentException>(() => userService.GetUserIdByUniqueTag(null));
+                Assert.Throws<ArgumentException>(() => userService.GetUserIdByUniqueTag(null));
+            }
         }
         [Fact]
         public void SendValidUserTag_UserId()
         {
             User user = DatabaseModelsFactory.GetRandomUser();
 
-            BirdyContext context = ContextFactory.GetContext();
-            context.Users.Add(user);
-            context.SaveChanges();
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                context.Users.Add(user);
+                context.SaveChanges();
 
-            UserService userService = new UserService(context);
+                UserService userService = new UserService(context);
 
-            Assert.Equal(user.Id, userService.GetUserIdByUniqueTag(user.UniqueTag));
+                Assert.Equal(user.Id, userService.GetUserIdByUniqueTag(user.UniqueTag));
+            }
         }
 
         [Fact]
         public void SendUserId_UserInfo()
         {
-            BirdyContext context = ContextFactory.GetContext();
-
             User user = DatabaseModelsFactory.GetRandomUser();
 
-            context.Users.Add(user);
-            context.SaveChanges();
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                context.Users.Add(user);
+                context.SaveChanges();
 
-            UserService userService = new UserService(context);
+                UserService userService = new UserService(context);
 
-            var searchedAccount = userService.GetUserInfo(user.Id);
-            var expected = (user.RegistrationDate, user.UniqueTag);
-            var actual = (searchedAccount.RegistrationDate, searchedAccount.UniqueTag);
+                UserAccountDto searchedAccount = userService.GetUserInfo(user.Id);
 
-            Assert.Equal(expected, actual);
+                var expected = (user.RegistrationDate, user.UniqueTag);
+                var actual = (searchedAccount.RegistrationDate, searchedAccount.UniqueTag);
+
+                Assert.Equal(expected, actual);
+            }
         }
     }
 }
