@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Authentication;
 using BirdyAPI.DataBaseModels;
 using BirdyAPI.Tools.Exceptions;
@@ -16,13 +17,6 @@ namespace BirdyAPI.Services
             _context = context;
         }
 
-        public void CheckChatUserAccess(int userId, int chatNumber, ChatStatus statusToCheck)
-        {
-            ChatUser currentUserChat = _context.ChatUsers.SingleOrDefault(k => k.ChatNumber == chatNumber && k.UserInChatID == userId);
-
-            if (currentUserChat == null || currentUserChat.Status < statusToCheck)
-                throw new InsufficientRightsException("User haven't got permission for this action");
-        }
         public void CheckChatUserAccess(Guid chatId, int userId, ChatStatus statusToCheck)
         {
             ChatUser currentUserChat = _context.ChatUsers.SingleOrDefault(k => k.ChatID == chatId && k.UserInChatID == userId);
@@ -39,6 +33,11 @@ namespace BirdyAPI.Services
                 throw new AuthenticationException("Invalid session");
 
             return currentSession.UserId;
+        }
+
+        public bool CheckUniqueTagAvailable(string uniqueTag)
+        {
+           return _context.Users.SingleOrDefault(k => k.UniqueTag == uniqueTag) == null ? true : false;
         }
     }
 }

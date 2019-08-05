@@ -35,13 +35,10 @@ namespace BirdyAPI.Services
                 .Add(UserSession.Create(currentUser.Id)).Entity; 
             _context.SaveChanges();
 
-            if (currentUser.CurrentStatus == UserStatus.NeverUsed)
-                throw new UnfinishedAccountException(currentSession.Token.ToString());
-
             return new SimpleAnswerDto {Result = currentSession.Token.ToString()};
         }
 
-        public void GetUserNeverUsed(string email, Guid token)
+        public void GetUserConfirmed(string email, Guid token)
         {
             ConfirmToken currentConfirmToken = _context.ConfirmTokens.Find(email);
 
@@ -58,7 +55,7 @@ namespace BirdyAPI.Services
 
 
             User confirmedUser = _context.Users.Single(k => k.Email == email);
-            confirmedUser.CurrentStatus = UserStatus.NeverUsed;
+            confirmedUser.CurrentStatus = UserStatus.Confirmed;
             _context.Users.Update(confirmedUser);
             _context.ConfirmTokens.Remove(currentConfirmToken);
             _context.SaveChanges();

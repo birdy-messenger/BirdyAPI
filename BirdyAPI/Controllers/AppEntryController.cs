@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Security.Authentication;
 using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Tools.Exceptions;
-using BirdyAPI.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BirdyAPI.Controllers
@@ -25,14 +25,12 @@ namespace BirdyAPI.Controllers
         /// User authentication
         /// </summary>
         /// <response code = "200">Return user token</response>
-        /// <response code = "206">User need to choose uniqueTag</response>
         /// <response code = "401">User need to confirm email</response>
         /// <response code = "404">Invalid login or password</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         [HttpPost]
         [Route("auth")]
         [ProducesResponseType(statusCode: 200, type:typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode: 206, type: typeof(SimpleAnswerDto))]
         [ProducesResponseType(statusCode: 401, type: typeof(void))]
         [ProducesResponseType(statusCode: 404, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
@@ -50,10 +48,6 @@ namespace BirdyAPI.Controllers
             {
                 return NotFound();
             }
-            catch (UnfinishedAccountException ex)
-            {
-                return PartialContent(new SimpleAnswerDto{Result = ex.Message});
-            }
         }
 
         /// <summary>
@@ -62,21 +56,30 @@ namespace BirdyAPI.Controllers
         /// <response code = "200">Confirm message sent</response>
         /// <response code = "500">Unexpected Exception (only for debug)</response>
         /// <response code = "409">Duplicate account</response>
+        /// <response code = "403">Duplicate unique tag</response>
         [HttpPost]
         [Route("reg")]
         [ProducesResponseType(statusCode: 200, type: typeof(void))]
         [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
+        [ProducesResponseType(statusCode: 403, type: typeof(void))]
         [ProducesResponseType(statusCode: 409, type: typeof(void))]
         public IActionResult UserRegistration([FromBody]RegistrationDto user)
         {
             try
             {
+                if (!CheckUniqueTagAvailable(user.UniqueTag))
+                    throw new DuplicateNameException();
+
                 _appEntryService.CreateNewAccount(user);
                 return Ok();
             }
-            catch(DuplicateAccountException)
+            catch (DuplicateAccountException)
             {
                 return Conflict();
+            }
+            catch (DuplicateNameException)
+            {
+                return Forbid();
             }
         }
 
@@ -89,7 +92,7 @@ namespace BirdyAPI.Controllers
         {
             try
             {
-                _appEntryService.GetUserNeverUsed(email, token);
+                _appEntryService.GetUserConfirmed(email, token);
                 return Ok("CurrentStatus = 1");
             }
             catch (ArgumentException)

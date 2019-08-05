@@ -45,7 +45,7 @@ namespace BirdyAPI.Test.ServiceTests
                 AccessService accessService = new AccessService(context);
 
                 Assert.Throws<InsufficientRightsException>(() =>
-                    accessService.CheckChatUserAccess(RandomValuesFactory.GetRandomInt(),
+                    accessService.CheckChatUserAccess(RandomValuesFactory.GetRandomGuid(),
                         RandomValuesFactory.GetRandomInt(), ChatStatus.User));
             }
         }

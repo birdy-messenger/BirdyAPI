@@ -1,5 +1,4 @@
 ﻿using System;
-using BirdyAPI.Dto;
 using BirdyAPI.Services;
 using BirdyAPI.Types;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +13,6 @@ namespace BirdyAPI.Controllers
             _accessService = new AccessService(context);
         }
         public ExtendedController() { }
-        protected ObjectResult InternalServerError(ExceptionDto exception)
-        {
-            return StatusCode(500, exception);
-        }
-
-        protected ObjectResult PartialContent(SimpleAnswerDto answer)
-        {
-            return StatusCode(206, answer);
-        }
 
         protected int ValidateToken(Guid token)
         {
@@ -32,6 +22,11 @@ namespace BirdyAPI.Controllers
         protected void CheckChatAccess(Guid chatId, int userId, ChatStatus status)
         {
             _accessService.CheckChatUserAccess(chatId, userId, status);
+        }
+
+        protected bool CheckUniqueTagAvailable(string uniqueTag)
+        {
+            return _accessService.CheckUniqueTagAvailable(uniqueTag);
         }
     }
 }

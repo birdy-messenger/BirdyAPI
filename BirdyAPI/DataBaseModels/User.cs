@@ -19,12 +19,12 @@ namespace BirdyAPI.DataBaseModels
         public string AvatarReference { get; set; }
         public User() { }
 
-        private User(string email, string firstName, string passwordHash)
+        private User(string email, string firstName, string passwordHash, string uniqueTag)
         {
             Email = email;
             PasswordHash = passwordHash;
             FirstName = firstName;
-            UniqueTag = null;
+            UniqueTag = uniqueTag;
             RegistrationDate = DateTime.Now;
             CurrentStatus = UserStatus.Unconfirmed;
             AvatarReference = null; //Нада дефолтную какую-нибудь сделать
@@ -32,7 +32,7 @@ namespace BirdyAPI.DataBaseModels
 
         public static User Create(RegistrationDto registrationData)
         {
-            return new User(registrationData.Email, registrationData.FirstName, registrationData.PasswordHash);
+            return new User(registrationData.Email, registrationData.FirstName, registrationData.PasswordHash, registrationData.UniqueTag);
         }
     }
 }

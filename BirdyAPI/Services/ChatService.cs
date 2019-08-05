@@ -130,7 +130,7 @@ namespace BirdyAPI.Services
             ChatUser currentUser = _context.ChatUsers.Single(k => k.UserInChatID == currentUserId && k.ChatNumber == chatNumber);
             if(currentUser.Status == ChatStatus.Admin)
             {
-                ChatUser newAdmin = GetNewChatAdmin(currentUser.ChatID);
+                ChatUser newAdmin = GetNewChatAdmin(currentUser.ChatID, currentUserId);
                 newAdmin.Status = ChatStatus.Admin;
                 _context.Update(newAdmin);
                 _context.SaveChanges();
@@ -145,9 +145,9 @@ namespace BirdyAPI.Services
             return _context.ChatUsers.Single(k => k.UserInChatID == userId && k.ChatNumber == chatNumber).ChatID;
         }
 
-        private ChatUser GetNewChatAdmin(Guid chatId)
+        private ChatUser GetNewChatAdmin(Guid chatId, int oldAdminId)
         {
-            return _context.ChatUsers.Where(k => k.ChatID == chatId).ToList().RandomItem();
+            return _context.ChatUsers.Where(k => k.ChatID == chatId).ToList().RandomItem(oldAdminId);
         }
     }
 }

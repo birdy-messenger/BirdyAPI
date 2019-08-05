@@ -3,7 +3,6 @@
     public enum UserStatus
     {
         Unconfirmed = 1,
-        NeverUsed = 2,
-        Confirmed = 3
+        Confirmed = 2
     }
 }
