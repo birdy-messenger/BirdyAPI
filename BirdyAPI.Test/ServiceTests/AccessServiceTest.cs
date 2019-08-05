@@ -66,5 +66,32 @@ namespace BirdyAPI.Test.ServiceTests
                     ChatStatus.Admin);
             }
         }
+
+        [Fact]
+        public void CheckTagAvailable_True()
+        {
+            string newTag = RandomValuesFactory.GetRandomString();
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                AccessService accessService = new AccessService(context);
+                Assert.True(accessService.CheckUniqueTagAvailable(newTag));
+            }
+        }
+        [Fact]
+        public void CheckTagAvailable_False()
+        {
+            string newTag = RandomValuesFactory.GetRandomString();
+            string sameTag = newTag;
+            using (BirdyContext context = ContextFactory.GetContext())
+            {
+                User user = DatabaseModelsFactory.GetRandomUser();
+                user.UniqueTag = newTag;
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                AccessService accessService = new AccessService(context);
+                Assert.False(accessService.CheckUniqueTagAvailable(sameTag));
+            }
+        }
     }
 }

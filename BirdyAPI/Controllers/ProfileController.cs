@@ -48,38 +48,6 @@ namespace BirdyAPI.Controllers
         }
 
         /// <summary>
-        /// Set user unique tag for first auth
-        /// </summary>
-        /// <response code = "200">Tag set</response>
-        /// <response code = "500">Unexpected Exception (only for debug)</response>
-        /// <response code = "401">Invalid token</response>
-        /// <response code = "403">Tag is not unique</response>
-        [HttpPost]
-        [Route("uniqueTag")]
-        [ProducesResponseType(statusCode: 200, type: typeof(SimpleAnswerDto))]
-        [ProducesResponseType(statusCode: 500, type: typeof(ExceptionDto))]
-        [ProducesResponseType(statusCode: 401, type: typeof(void))]
-        [ProducesResponseType(statusCode: 403, type: typeof(void))]
-        public IActionResult CreateUniqueTag([FromHeader] Guid token, [FromBody] string uniqueTag)
-        {
-            try
-            {
-                int currentUserId = ValidateToken(token);
-                _profileService.SetUniqueTag(currentUserId, uniqueTag);
-                _appEntryService.GetUserConfirmed(currentUserId);
-                return Ok();
-            }
-            catch (AuthenticationException)
-            {
-                return Unauthorized();
-            }
-            catch (DuplicateNameException)
-            {
-                return Forbid();
-            }
-        }
-
-        /// <summary>
         /// Set user unique tag
         /// </summary>
         /// <response code = "200">Tag changed</response>
