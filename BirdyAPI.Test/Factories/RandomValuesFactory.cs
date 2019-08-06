@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BirdyAPI.Dto;
 
 namespace BirdyAPI.Test.Factories
 {
@@ -39,6 +40,17 @@ namespace BirdyAPI.Test.Factories
         public static DateTime GetDateTime()
         {
             return DateTime.Now;
+        }
+
+        public static RegistrationDto GetRandomRegistrationData()
+        {
+            return new RegistrationDto
+            {
+                Email = GetRandomString(),
+                FirstName = GetRandomString(),
+                PasswordHash = GetRandomString(),
+                UniqueTag = GetRandomString()
+            };
         }
     }
 }

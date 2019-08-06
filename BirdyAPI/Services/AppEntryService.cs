@@ -113,7 +113,7 @@ namespace BirdyAPI.Services
             _context.SaveChanges();
         }
 
-        public void TerminateSession(int userId)
+        public void TerminateAllSessions(int userId)
         {
             foreach (var session in _context.UserSessions.Where(k => k.UserId == userId))
             {
@@ -140,14 +140,6 @@ namespace BirdyAPI.Services
             string plainTextContent = htmlMessage; // Когда сообщение обрастет стилями и т.д. надо будет сделать нормально
             return MailHelper.CreateSingleEmail(birdyAddress, userAddress, messageTopic,
                 plainTextContent, htmlMessage);
-        }
-
-        public void GetUserConfirmed(int userId)
-        {
-            User currentUser = _context.Users.Find(userId);
-            currentUser.CurrentStatus = UserStatus.Confirmed;
-            _context.Users.Update(currentUser);
-            _context.SaveChanges();
         }
     }
 }

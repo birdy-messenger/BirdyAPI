@@ -14,12 +14,10 @@ namespace BirdyAPI.Controllers
     public class ProfileController : ExtendedController
     {
         private readonly ProfileService _profileService;
-        private readonly AppEntryService _appEntryService;
 
         public ProfileController(BirdyContext context)
         {
             _profileService = new ProfileService(context);
-            _appEntryService = new AppEntryService(context);
         }
 
 

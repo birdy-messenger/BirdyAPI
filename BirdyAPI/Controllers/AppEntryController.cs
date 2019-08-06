@@ -152,7 +152,7 @@ namespace BirdyAPI.Controllers
             try
             {
                 int currentUserId = ValidateToken(token);
-                _appEntryService.TerminateSession(currentUserId);
+                _appEntryService.TerminateAllSessions(currentUserId);
                 return Ok();
             }
             catch (AuthenticationException)
