@@ -99,6 +99,7 @@ namespace BirdyAPI.Services
             {
                 currentUser.PasswordHash = passwordChanges.NewPasswordHash;
                 _context.Users.Update(currentUser);
+                _context.SaveChanges();
             }
             else
             {
