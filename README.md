@@ -1,3 +1,1 @@
-# BirdyAPI
-REST API ASP .NET CORE
-https://birdyapi.azurewebsites.net/swagger/index.html
+Идея переехала в https://github.com/hrrrrustic/JustR
